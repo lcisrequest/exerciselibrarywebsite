@@ -62,7 +62,7 @@ jwt:
   auth-path: user/login/v1         #认证请求的路径
   admin-auth-path: admin/login/v1  #后台管理登录请求路径
   md5-key: randomKey      #md5加密混淆key
-  url-scheme: /admin/promoteManager/exportPromoteIncome
+  url-scheme: /user/register
   #url白名单
 
 logging:
