@@ -1,0 +1,88 @@
+server:
+  port: 8000 #项目端口
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    use-forward-headers: true
+    protocolHeaderHttpsValue: https
+higu:
+  file-upload-path: /var/data/higu/resource/img  #文件上传目录(不配置的话为java.io.tmpdir目录)
+  img-url-path: /img
+  swagger-open: true #api 文档开关
+  agreement-path: /var/data/higu/resource/agreement/   #协议html文件目录
+
+rest:
+  auth-open: true #jwt鉴权机制是否开启(true或者false)
+  sign-open: false #签名机制是否开启(true或false)
+
+
+
+spring:
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+  datasource:
+      url: jdbc:mysql://127.0.0.1:3306/lc?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+  #    url: jdbc:mysql://47.52.202.88:3306/higu_v2?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+  #    url: jdbc:mysql://47.52.202.88:3306/higu-dev1.2?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+      username: root
+  #    password: Higo2017-12-14
+      password: root
+      driver-class-name: com.mysql.jdbc.Driver
+      platform: mysql
+      type: com.alibaba.druid.pool.DruidDataSource
+      # 下面为连接池的补充设置，应用到上面所有数据源中
+      # 初始化大小，最小，最大
+      initialSize: 1
+      minIdle: 3
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 30000
+      validationQuery: select 'x'
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+#      filters: stat,wall,slf4j
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+#      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      # 合并多个DruidDataSource的监控数据
+      #useGlobalDataSourceStat: true
+jwt:
+  header: Authorization   #http请求头所需要的字段
+  secret: mySecret        #jwt秘钥
+  expiration: 604800      #7天 单位:秒
+  auth-path: user/login/v1         #认证请求的路径
+  admin-auth-path: admin/login/v1  #后台管理登录请求路径
+  md5-key: randomKey      #md5加密混淆key
+  url-scheme: /admin/promoteManager/exportPromoteIncome
+  #url白名单
+
+logging:
+  level.root: info
+  level.com.itspeed: info
+  path: logs/
+  file: higu-rest.log
+
+#mybatis配置
+mybatis-plus:
+#  mapper-locations: classpath*:com/itspeed/higu/modular/admin/persistence/dao/mapping/*.xml,classpath*:com/itspeed/higu/modular/app/persistence/dao/mapping/*.xml
+  mapper-locations: classpath*:com/example/lcdemo/modular/admin/dao/mapping/*.xml
+  typeAliasesPackage: com.example.lcdemo.modular.admin.model
+  global-config:
+    id-type: 0  #0:数据库ID自增   1:用户输入id  2:全局唯一id(IdWorker)  3:全局唯一ID(uuid)
+    db-column-underline: false
+    refresh-mapper: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false #配置的缓存的全局开关
+    lazyLoadingEnabled: true #延时加载的开关
+    multipleResultSetsEnabled: true #开启的话，延时加载一个属性时会加载该对象全部属性，否则按需加载属性
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql语句,调试用
