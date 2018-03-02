@@ -2,11 +2,14 @@ package com.example.lcdemo.modular.admin.model;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
+
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
- * 
+ * <p>
  * </p>
  *
  * @author itspeed
@@ -135,16 +138,59 @@ public class Subject extends Model<Subject> {
     @Override
     public String toString() {
         return "Subject{" +
-        ", id=" + id +
-        ", problem=" + problem +
-        ", img=" + img +
-        ", answerOne=" + answerOne +
-        ", answerTwo=" + answerTwo +
-        ", answerThree=" + answerThree +
-        ", answerFour=" + answerFour +
-        ", answerFive=" + answerFive +
-        ", rightKey=" + rightKey +
-        ", problemType=" + problemType +
-        "}";
+                ", id=" + id +
+                ", problem=" + problem +
+                ", img=" + img +
+                ", answerOne=" + answerOne +
+                ", answerTwo=" + answerTwo +
+                ", answerThree=" + answerThree +
+                ", answerFour=" + answerFour +
+                ", answerFive=" + answerFive +
+                ", rightKey=" + rightKey +
+                ", problemType=" + problemType +
+                "}";
+    }
+
+    /**
+     * 获取map
+     * @return
+     */
+    public Map<String, Object> getMap() {
+        Map<String, Object> mapSubject = new HashMap<>();
+        mapSubject.put("id", this.getId());
+        mapSubject.put("problem", this.getProblem());
+        if (this.getAnswerOne() != null || "".equals(this.getAnswerOne())) {
+            mapSubject.put("answerOne", this.getAnswerOne());
+        } else {
+            mapSubject.put("answerOne", "");
+        }
+        if (this.getAnswerTwo() != null || "".equals(this.getAnswerTwo())) {
+            mapSubject.put("answerTwo", this.getAnswerTwo());
+        } else {
+            mapSubject.put("answerTwo", "");
+        }
+        if (this.getAnswerThree() != null || "".equals(this.getAnswerThree())) {
+            mapSubject.put("answerThree", this.getAnswerThree());
+        } else {
+            mapSubject.put("answerThree", "");
+        }
+        if (this.getAnswerFour() != null || "".equals(this.getAnswerFour())) {
+            mapSubject.put("answerFour", this.getAnswerFour());
+        } else {
+            mapSubject.put("answerFour", "");
+        }
+        if (this.getAnswerFive() != null || "".equals(this.getAnswerFive())) {
+            mapSubject.put("answerFive", this.getAnswerFive());
+        } else {
+            mapSubject.put("answerFive", "");
+        }
+        if (this.getImg() != null || "".equals(this.getImg())) {
+            mapSubject.put("img", this.getImg());
+        } else {
+            mapSubject.put("img", "");
+        }
+        mapSubject.put("rightKey", this.getRightKey());
+        mapSubject.put("problemType", this.getProblemType());
+        return mapSubject;
     }
 }

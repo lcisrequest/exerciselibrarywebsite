@@ -1,6 +1,7 @@
 package com.example.lcdemo.modular.controller;
 
 
+import com.example.lcdemo.base.controller.BaseController;
 import com.example.lcdemo.base.tips.SuccessTip;
 import com.example.lcdemo.modular.admin.model.UserInfo;
 import com.example.lcdemo.modular.admin.service.UserInfoService;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends BaseController {
     @Autowired
     UserInfoService userInfoService;
 
@@ -29,5 +30,7 @@ public class UserController {
             return ResponseEntity.ok(SuccessTip.create("注册失败"));
         }
     }
+
+
 
 }

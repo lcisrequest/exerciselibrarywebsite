@@ -33,6 +33,8 @@ public enum LcExceptionEnum {
 	OTHER_ERROR(201, "您的网络有问题,请稍后重试"),
 	PARAM_ERROR(201,"参数错误"),
 	TEST_IS_NOT_EXIST(201,"该测试不存在"),
+    SUBJECT_IS_NOT_EXIST(201,"该习题不存在"),
+	SUBJECCT_IS_NULL(201,"该类型习题库为空"),
 	PARAM_NULL(201,"参数为空");
 
 	LcExceptionEnum(int code, String message) {

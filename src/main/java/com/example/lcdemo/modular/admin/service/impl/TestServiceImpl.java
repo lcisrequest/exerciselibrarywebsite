@@ -10,7 +10,6 @@ import com.example.lcdemo.modular.admin.model.Test;
 import com.example.lcdemo.modular.admin.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,10 +53,11 @@ public class TestServiceImpl implements TestService {
         String subjects = test.getTestSubject();
         if(subjects!=null||"".equals(subjects)){
             String allSubject[] = subjects.split(","); //拆分题目id
-            List<Subject> list = new ArrayList<>();
+            List< Map<String,Object>> list = new ArrayList<>();
             for (String subjectId :allSubject) {
                 Subject subject = subjectMapper.selectById(subjectId); //根据题目id得到题目信息
-                list.add(subject);
+                Map<String,Object> mapSubject = subject.getMap();
+                list.add(mapSubject);
             }
             map.put("testSubject",list);
         }else {
@@ -65,4 +65,5 @@ public class TestServiceImpl implements TestService {
         }
         return map;
     }
+
 }
