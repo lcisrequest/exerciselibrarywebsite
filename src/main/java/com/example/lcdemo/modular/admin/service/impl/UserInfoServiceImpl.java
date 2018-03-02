@@ -36,4 +36,6 @@ public class UserInfoServiceImpl implements UserInfoService {
         user.setLastLoginTime(DateUtil.getTime());
         return userInfoMapper.insert(user)>0;
     }
+
+
 }

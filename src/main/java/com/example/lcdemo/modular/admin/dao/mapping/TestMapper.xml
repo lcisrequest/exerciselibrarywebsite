@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.lcdemo.modular.admin.dao.TestMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.lcdemo.modular.admin.model.Test">
+        <id column="id" property="id" />
+        <result column="img" property="img" />
+        <result column="test_name" property="testName" />
+        <result column="test_content" property="testContent" />
+        <result column="test_time" property="testTime" />
+        <result column="test_fraction" property="testFraction" />
+        <result column="test_subject" property="testSubject" />
+        <result column="test_difficulty" property="testDifficulty" />
+        <result column="test_result" property="testResult" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+    </resultMap>
+
+</mapper>
