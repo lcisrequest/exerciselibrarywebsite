@@ -3,6 +3,7 @@ package com.example.lcdemo.modular.admin.controller;
 
 import com.example.lcdemo.base.controller.BaseController;
 import com.example.lcdemo.base.tips.SuccessTip;
+import com.example.lcdemo.base.util.Base64Util;
 import com.example.lcdemo.base.util.DateUtil;
 import com.example.lcdemo.config.properties.HiguProperties;
 import com.example.lcdemo.modular.admin.dao.ImgMapper;
@@ -10,14 +11,12 @@ import com.example.lcdemo.modular.admin.dto.Base64DTO;
 import com.example.lcdemo.modular.admin.model.Img;
 import com.example.lcdemo.modular.admin.model.UserInfo;
 import com.example.lcdemo.modular.admin.service.UserInfoService;
-import com.itspeed.higu.base.util.Base64Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.io.File;
 import java.util.UUID;
 
@@ -75,14 +74,14 @@ public class UserController extends BaseController {
         }catch (Exception e){
             e.printStackTrace();
             System.out.println(base64.substring(base64.indexOf(",") + 1));
-            return ResponseEntity.ok(com.itspeed.higu.base.tips.SuccessTip.create(e.toString(), "上传出错"));
+            return ResponseEntity.ok(SuccessTip.create(e.toString(), "上传出错"));
         }
         String pictureUrl = higuProperties.getImgUrlPath() + "/" + pictureName;
         Img img = new Img();
         img.setPath(pictureUrl);
         img.setTime(DateUtil.getTime());
         imgMapper.insert(img);
-        return ResponseEntity.ok(com.itspeed.higu.base.tips.SuccessTip.create(pictureUrl, "上传成功"));
+        return ResponseEntity.ok(SuccessTip.create(pictureUrl, "上传成功"));
     }
 
 }
