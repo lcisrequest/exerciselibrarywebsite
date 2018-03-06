@@ -3,6 +3,8 @@ package com.example.lcdemo.modular.admin.model;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -52,7 +54,7 @@ public class Test extends Model<Test> {
     @TableField("test_difficulty")
     private Integer testDifficulty;
     /**
-     * 测试结果
+     * 测试类型
      */
     @TableField("test_result")
     private String testResult;
@@ -176,5 +178,19 @@ public class Test extends Model<Test> {
         ", startTime=" + startTime +
         ", endTime=" + endTime +
         "}";
+    }
+
+    public Map<String, Object> getMap() {
+        Map<String, Object> mapSubject = new HashMap<>();
+        mapSubject.put("id", this.id);
+        mapSubject.put("img", this.img);
+        mapSubject.put("testName", this.testName);
+        mapSubject.put("testContent", this.testContent);
+        mapSubject.put("testTime", this.testTime);
+        mapSubject.put("testFraction", this.testFraction);
+        mapSubject.put("testSubject", this.testSubject);
+        mapSubject.put("testDifficulty", this.testDifficulty);
+        mapSubject.put("testResult", this.testResult);
+        return mapSubject;
     }
 }

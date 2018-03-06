@@ -1,5 +1,7 @@
 package com.example.lcdemo.modular.backend.service.impl;
 
+import com.example.lcdemo.base.exception.LcException;
+import com.example.lcdemo.base.exception.LcExceptionEnum;
 import com.example.lcdemo.base.util.DateUtil;
 import com.example.lcdemo.config.properties.HiguProperties;
 import com.example.lcdemo.modular.backend.dao.KnowledgeMapper;
@@ -60,6 +62,9 @@ public class KnowledgeServiceImpl implements KnowledgeService {
      */
     @Override
     public boolean deleteKnowledge(int knowledgeId) {
+        if (knowledgeId == 0) {
+            throw new LcException(LcExceptionEnum.PARAM_ERROR);
+        }
         int num = knowledgeMapper.deleteById(knowledgeId);
         if (num > 0) {
             return true;
