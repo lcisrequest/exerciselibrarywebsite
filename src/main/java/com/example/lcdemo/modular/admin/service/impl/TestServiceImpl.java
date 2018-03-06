@@ -10,6 +10,7 @@ import com.example.lcdemo.modular.admin.model.Test;
 import com.example.lcdemo.modular.admin.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,47 +22,50 @@ public class TestServiceImpl implements TestService {
     TestMapper testMapper;
     @Autowired
     SubjectMapper subjectMapper;
+
     /**
      * 得到所有测试信息
      */
-    public void getAllTest(){}
+    public void getAllTest() {
+    }
 
 
     /**
      * 根据测试id获取测试信息
+     *
      * @param id
      * @return
      */
     @Override
-    public Map<String, Object> getTestById(int id){
+    public Map<String, Object> getTestById(int id) {
         Test test = testMapper.selectById(id); //根据id找到测试信息
-        if(test==null){
+        if (test == null) {
             throw new LcException(LcExceptionEnum.TEST_IS_NOT_EXIST);
         }
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",id);
-        if(test.getImg()==null||"".equals(test.getImg())){
-            map.put("img","");
-        }else{
-            map.put("img",test.getImg());
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        if (test.getImg() == null || "".equals(test.getImg())) {
+            map.put("img", "");
+        } else {
+            map.put("img", test.getImg());
         }
-        map.put("testName",test.getTestName());
-        map.put("testContent",test.getTestContent());
-        map.put("testTime",test.getTestTime());
-        map.put("testFraction",test.getTestFraction());
-        map.put("testDifficulty",test.getTestDifficulty());
+        map.put("testName", test.getTestName());
+        map.put("testContent", test.getTestContent());
+        map.put("testTime", test.getTestTime());
+        map.put("testFraction", test.getTestFraction());
+        map.put("testDifficulty", test.getTestDifficulty());
         String subjects = test.getTestSubject();
-        if(subjects!=null||"".equals(subjects)){
+        if (subjects != null || "".equals(subjects)) {
             String allSubject[] = subjects.split(","); //拆分题目id
-            List< Map<String,Object>> list = new ArrayList<>();
-            for (String subjectId :allSubject) {
+            List<Map<String, Object>> list = new ArrayList<>();
+            for (String subjectId : allSubject) {
                 Subject subject = subjectMapper.selectById(subjectId); //根据题目id得到题目信息
-                Map<String,Object> mapSubject = subject.getMap();
+                Map<String, Object> mapSubject = subject.getMap();
                 list.add(mapSubject);
             }
-            map.put("testSubject",list);
-        }else {
-            map.put("testSubject","");
+            map.put("testSubject", list);
+        } else {
+            map.put("testSubject", "");
         }
         return map;
     }

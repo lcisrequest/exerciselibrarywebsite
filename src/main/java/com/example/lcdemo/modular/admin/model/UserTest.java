@@ -54,7 +54,11 @@ public class UserTest extends Model<UserTest> {
      */
     @TableField("test_result")
     private String testResult;
-
+    /**
+     * 模拟练习id
+     */
+    @TableField("test_id")
+    private int testId;
 
     public Integer getId() {
         return id;
@@ -118,6 +122,14 @@ public class UserTest extends Model<UserTest> {
 
     public void setTestResult(String testResult) {
         this.testResult = testResult;
+    }
+
+    public int getTestId() {
+        return testId;
+    }
+
+    public void setTestId(int testId) {
+        this.testId = testId;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.lcdemo.modular.controller;
+package com.example.lcdemo.modular.admin.controller;
 
 
 import com.example.lcdemo.base.controller.BaseController;

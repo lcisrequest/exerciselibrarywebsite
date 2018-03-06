@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
  * MybatisPlus配置
  *
  */
-@Configuration
-@MapperScan(basePackages = {"com.example.lcdemo.modular.admin.dao"})
+@Configuration                              //这里只能扫描dao层，扫描service层会出错
+@MapperScan(basePackages = {"com.example.lcdemo.modular.admin.dao","com.example.lcdemo.modular.backend.dao"})
 public class MybatisPlusConfig {
     @Autowired
     DruidProperties druidProperties;

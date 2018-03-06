@@ -25,7 +25,6 @@ import java.util.List;
 
 /**
  * 对客户端请求的jwt token验证过滤器
- *
  */
 public class AuthFilter extends OncePerRequestFilter {
 
@@ -43,16 +42,16 @@ public class AuthFilter extends OncePerRequestFilter {
 
     protected String getClientIp(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
-        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
-        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-        return ip.equals("0:0:0:0:0:0:0:1")?"127.0.0.1":ip;
+        return ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
     }
 
     @Override
@@ -60,6 +59,11 @@ public class AuthFilter extends OncePerRequestFilter {
         String clientIp = getClientIp(request);
         //登录路径过滤
         if (request.getServletPath().equals("/" + jwtProperties.getAuthPath())) {
+            chain.doFilter(request, response);
+            return;
+        }
+        //后台管理员登陆过滤
+        if (request.getServletPath().startsWith("/admin")) {
             chain.doFilter(request, response);
             return;
         }
@@ -79,8 +83,7 @@ public class AuthFilter extends OncePerRequestFilter {
         String authToken = null;
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
             authToken = requestHeader.substring(9);
-            authToken = authToken.replace("}","");
-
+            authToken = authToken.replace("}", "");
             // 验证token是否过期,包含了验证jwt是否正确
             try {
                 boolean flag = jwtTokenUtil.isTokenExpired(authToken);
@@ -93,19 +96,12 @@ public class AuthFilter extends OncePerRequestFilter {
                 RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
                 return;
             }
-
-
         } else {
             //header没有带Bearer字段
             RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
             return;
         }
-
         Claims tokenClaims = jwtTokenUtil.getClaimFromToken(authToken);
-
-        // issuer is ssid of session
-        String issuer = tokenClaims.getIssuer();
-        String usernametoken = tokenClaims.getSubject();
         chain.doFilter(request, response);
     }
 }

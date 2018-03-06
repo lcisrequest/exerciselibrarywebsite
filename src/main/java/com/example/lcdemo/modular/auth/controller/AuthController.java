@@ -11,6 +11,8 @@ import com.example.lcdemo.modular.admin.model.UserInfo;
 import com.example.lcdemo.modular.auth.controller.dto.AuthRequest;
 import com.example.lcdemo.modular.auth.controller.dto.AuthResponse;
 import com.example.lcdemo.modular.auth.util.JwtTokenUtil;
+import com.example.lcdemo.modular.backend.dao.AdminMapper;
+import com.example.lcdemo.modular.backend.model.Admin;
 import com.itspeed.higu.base.exception.HiguException;
 import com.itspeed.higu.base.exception.HiguExceptionEnum;
 import io.jsonwebtoken.Claims;
@@ -19,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
@@ -33,19 +34,22 @@ import java.util.Map;
  */
 @RestController
 public class AuthController {
-
     @Autowired
     private JwtProperties jwtProperties;
-
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private UserInfoMapper userInfoMapper;
+    @Autowired
+    AdminMapper adminMapper;
 
     @RequestMapping(value = "${jwt.auth-path}")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody UserInfo userInfo) {
         String username = userInfo.getUsername();
         String password = userInfo.getPassword();
+        if(username==null||"".equals(username)||password==null||"".equals(password)){
+            throw new LcException(LcExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
+        }
         UserInfo user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
@@ -60,18 +64,30 @@ public class AuthController {
 
             return ResponseEntity.ok(com.itspeed.higu.base.tips.SuccessTip.create(new AuthResponse(tokenMapper.get("token").toString(), randomKey), null));
         } else {
-            throw new HiguException(HiguExceptionEnum.PASSWORD_NOT_VALIDATE);
+            throw new LcException(LcExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
         }
     }
 
     /**
      * 管理员登录
-     * @param authRequest
+     * @param admin
      * @return
      */
     @RequestMapping(value = "${jwt.admin-auth-path}")
-    public ResponseEntity<?> adminLogin(@RequestBody AuthRequest authRequest) {
-        return ResponseEntity.ok("");
+    public ResponseEntity<?> adminLogin(@RequestBody Admin admin) {
+        String username = admin.getUsername();
+        String password = admin.getPassword();
+        if(username==null||"".equals(username)||password==null||"".equals(password)){
+            throw new LcException(LcExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
+        }
+        admin = adminMapper.selectOne(admin);
+        if (admin!=null) {
+            final String adminrandomKey = jwtTokenUtil.getRandomKey();
+            final Map<String, Object> tokenMapper = jwtTokenUtil.generateToken(admin.getId() + "", adminrandomKey);
+            return ResponseEntity.ok(com.itspeed.higu.base.tips.SuccessTip.create(new AuthResponse(tokenMapper.get("token").toString(), adminrandomKey), null));
+        } else {
+            throw new LcException(LcExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
+        }
     }
 
     @RequestMapping(value = "/auth/logout/v1")

@@ -5,7 +5,7 @@ server:
     use-forward-headers: true
     protocolHeaderHttpsValue: https
 higu:
-  file-upload-path: /var/data/higu/resource/img  #文件上传目录(不配置的话为java.io.tmpdir目录)
+  file-upload-path:  F:\www1\a1026008745-0b44449e61e11b440161e60e402e014a\img\  #文件上传目录(不配置的话为java.io.tmpdir目录)
   img-url-path: /img
   swagger-open: true #api 文档开关
   agreement-path: /var/data/higu/resource/agreement/   #协议html文件目录
@@ -22,12 +22,13 @@ spring:
       enabled: true
       additional-paths: src/main/java
   datasource:
-      url: jdbc:mysql://127.0.0.1:3306/lc?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
-  #    url: jdbc:mysql://47.52.202.88:3306/higu_v2?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+  #    url: jdbc:mysql://127.0.0.1:3306/lc?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+      url: jdbc:mysql://43.247.68.17:3306/sq_lxtvn310872?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
   #    url: jdbc:mysql://47.52.202.88:3306/higu-dev1.2?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
-      username: root
-  #    password: Higo2017-12-14
-      password: root
+  #    username: root
+      username: sq_lxtvn310872
+      password: gwj5104
+  #    password: root
       driver-class-name: com.mysql.jdbc.Driver
       platform: mysql
       type: com.alibaba.druid.pool.DruidDataSource
@@ -62,7 +63,7 @@ jwt:
   auth-path: user/login/v1         #认证请求的路径
   admin-auth-path: admin/login/v1  #后台管理登录请求路径
   md5-key: randomKey      #md5加密混淆key
-  url-scheme: /user/register
+  url-scheme: /user/register,
   #url白名单
 
 logging:

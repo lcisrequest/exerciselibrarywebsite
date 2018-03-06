@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SubjectServiceImpl implements SubjectService{
+public class SubjectServiceImpl implements SubjectService {
     @Autowired
     SubjectMapper subjectMapper;
 
@@ -18,15 +18,15 @@ public class SubjectServiceImpl implements SubjectService{
      * 判断该习题答案是否正确
      */
     @Override
-    public boolean subjectIsRight(int subjectId, int answerId){
+    public boolean subjectIsRight(int subjectId, int answerId) {
         Subject subject = subjectMapper.selectById(subjectId);
-        if(subject==null){
-            throw  new LcException(LcExceptionEnum.SUBJECT_IS_NOT_EXIST);
+        if (subject == null) {
+            throw new LcException(LcExceptionEnum.SUBJECT_IS_NOT_EXIST);
         }
         int answer = subject.getRightKey();
-        if(answer==answerId){
+        if (answer == answerId) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

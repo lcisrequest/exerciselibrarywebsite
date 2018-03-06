@@ -57,7 +57,7 @@ public class EntityGenerator {
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
 //        strategy.setInclude(new String[]{"strategy_config"});//数据库表名
 //        strategy.setInclude(new String[]{"admin_role"});//数据库表名
-        strategy.setInclude(new String[]{"test"});
+        strategy.setInclude(new String[]{"comment"});
         mpg.setStrategy(strategy);
 
         // 包配置

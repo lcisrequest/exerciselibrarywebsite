@@ -1,4 +1,4 @@
-package com.example.lcdemo.modular.controller;
+package com.example.lcdemo.modular.admin.controller;
 
 import com.example.lcdemo.base.controller.BaseController;
 import com.example.lcdemo.base.tips.SuccessTip;
@@ -21,11 +21,25 @@ public class UserTestController extends BaseController {
 
     /**
      * 生成一套指定类型的顺序练习
+     * @param testNum
+     * @param courseType
      * @return
      */
     @RequestMapping("/getOrderTest")
     public ResponseEntity getAOrderTest(int testNum,String courseType){
         List<Map<String,Object>> list = userTestService.getAOrderTest(getUserId(),testNum,courseType);
+        return ResponseEntity.ok(SuccessTip.create(list,"请求成功"));
+    }
+
+    /**
+     * 生成一套指定类型的随机练习
+     * @param testNum
+     * @param courseType
+     * @return
+     */
+    @RequestMapping("/getRandomTest")
+    public ResponseEntity getARandomTest(int testNum, String courseType){
+        List<Map<String,Object>> list = userTestService.getARandomTest(testNum,courseType);
         return ResponseEntity.ok(SuccessTip.create(list,"请求成功"));
     }
 

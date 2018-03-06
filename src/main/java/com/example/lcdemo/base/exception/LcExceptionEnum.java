@@ -30,11 +30,13 @@ public enum LcExceptionEnum {
 	HAS_REGISTER(201, "用户已注册"),
 	HAS_NOT_USER(201, "您登录的用户不存在" ),
 	PASSWORD_NOT_VALIDATE(201, "密码错误,请重新输入"),
+	USERNAME_OR_PASSWORD_ERROR(201,"用户名或密码错误"),
 	OTHER_ERROR(201, "您的网络有问题,请稍后重试"),
 	PARAM_ERROR(201,"参数错误"),
 	TEST_IS_NOT_EXIST(201,"该测试不存在"),
     SUBJECT_IS_NOT_EXIST(201,"该习题不存在"),
 	SUBJECCT_IS_NULL(201,"该类型习题库为空"),
+	ANSWER_NUM_IS_WRONG(201,"答案数量与题目数量不匹配"),
 	PARAM_NULL(201,"参数为空");
 
 	LcExceptionEnum(int code, String message) {

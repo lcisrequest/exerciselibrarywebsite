@@ -3,11 +3,12 @@ package com.example.lcdemo.modular.admin.model;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+
 import java.io.Serializable;
 
 /**
  * <p>
- * 
+ * <p>
  * </p>
  *
  * @author itspeed
@@ -26,7 +27,7 @@ public class UserInfo extends Model<UserInfo> {
     private String createTime;
     @TableField("last_login_time")
     private String lastLoginTime;
-
+    private String userimg;
 
     public Integer getId() {
         return id;
@@ -76,6 +77,14 @@ public class UserInfo extends Model<UserInfo> {
         this.lastLoginTime = lastLoginTime;
     }
 
+    public String getUserimg() {
+        return userimg;
+    }
+
+    public void setUserimg(String userimg) {
+        this.userimg = userimg;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -84,12 +93,12 @@ public class UserInfo extends Model<UserInfo> {
     @Override
     public String toString() {
         return "UserInfo{" +
-        ", id=" + id +
-        ", username=" + username +
-        ", password=" + password +
-        ", nickname=" + nickname +
-        ", createTime=" + createTime +
-        ", lastLoginTime=" + lastLoginTime +
-        "}";
+                ", id=" + id +
+                ", username=" + username +
+                ", password=" + password +
+                ", nickname=" + nickname +
+                ", createTime=" + createTime +
+                ", lastLoginTime=" + lastLoginTime +
+                "}";
     }
 }

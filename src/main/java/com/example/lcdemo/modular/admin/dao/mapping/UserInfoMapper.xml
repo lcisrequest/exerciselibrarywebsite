@@ -10,6 +10,7 @@
         <result column="nickname" property="nickname" />
         <result column="create_time" property="createTime" />
         <result column="last_login_time" property="lastLoginTime" />
+        <result column="userimg" property="userimg" />
     </resultMap>
 
 </mapper>
