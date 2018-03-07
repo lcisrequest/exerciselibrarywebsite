@@ -12,7 +12,7 @@
         <result column="test_fraction" property="testFraction" />
         <result column="test_subject" property="testSubject" />
         <result column="test_difficulty" property="testDifficulty" />
-        <result column="test_result" property="testResult" />
+        <result column="problem_type" property="problemType" />
         <result column="start_time" property="startTime" />
         <result column="end_time" property="endTime" />
     </resultMap>

@@ -7,7 +7,7 @@
         <id column="id" property="id" />
         <result column="user_id" property="userId" />
         <result column="test_type" property="testType" />
-        <result column="course_type" property="courseType" />
+        <result column="problem_type" property="problemType" />
         <result column="subject_id" property="subjectId" />
         <result column="subject_num" property="subjectNum" />
         <result column="start_time" property="startTime" />

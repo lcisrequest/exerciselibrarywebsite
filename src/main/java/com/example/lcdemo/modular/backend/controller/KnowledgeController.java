@@ -88,15 +88,15 @@ public class KnowledgeController extends BaseController {
     /**
      * 分页获取指定类型的考试大纲或课本知识
      * @param type
-     * @param kind
+     * @param problemType
      * @param page
      * @param limit
      * @return
      */
     @RequestMapping("/getKnowledge")
-    public ResponseEntity getKnowledge(int type, String kind, int page, int limit) {
-        List<Knowledge> list = knowledgeService.getKnowledge(type, kind, page, limit);
-        int count = knowledgeService.getKnowledgeNum(type, kind);
+    public ResponseEntity getKnowledge(int type, String problemType, int page, int limit) {
+        List<Knowledge> list = knowledgeService.getKnowledge(type, problemType, page, limit);
+        int count = knowledgeService.getKnowledgeNum(type, problemType);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", list);
         jsonObject.put("count", count);

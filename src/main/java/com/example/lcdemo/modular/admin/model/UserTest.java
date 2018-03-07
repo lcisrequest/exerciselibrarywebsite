@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author itspeed
@@ -30,10 +30,10 @@ public class UserTest extends Model<UserTest> {
     @TableField("test_type")
     private String testType;
     /**
-     * 课程内容
+     * 题目类型
      */
-    @TableField("course_type")
-    private String courseType;
+    @TableField("problem_type")
+    private String problemType;
     /**
      * 习题id
      */
@@ -84,12 +84,12 @@ public class UserTest extends Model<UserTest> {
         this.testType = testType;
     }
 
-    public String getCourseType() {
-        return courseType;
+    public String getProblemType() {
+        return problemType;
     }
 
-    public void setCourseType(String courseType) {
-        this.courseType = courseType;
+    public void setProblemType(String problemType) {
+        this.problemType = problemType;
     }
 
     public String getSubjectId() {
@@ -143,7 +143,7 @@ public class UserTest extends Model<UserTest> {
         ", id=" + id +
         ", userId=" + userId +
         ", testType=" + testType +
-        ", courseType=" + courseType +
+        ", problemType=" + problemType +
         ", subjectId=" + subjectId +
         ", subjectNum=" + subjectNum +
         ", startTime=" + startTime +

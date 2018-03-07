@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.lcdemo.modular.admin.dao.ErrorSubjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.lcdemo.modular.admin.model.ErrorSubject">
+        <id column="id" property="id" />
+        <result column="subject_id" property="subjectId" />
+        <result column="user_id" property="userId" />
+    </resultMap>
+
+    <select id="getMyError" resultMap="BaseResultMap">
+        SELECT es.id,es.subject_id,es.user_id FROM error_subject es,subject s WHERE s.problem_type LIKE #{problemType} AND s.id = es.subject_id
+        And es.user_id =  #{userId}
+        LIMIT #{offset},#{limit}
+    </select>
+</mapper>

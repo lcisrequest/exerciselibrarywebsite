@@ -188,7 +188,7 @@ public class BackendTestServiceImpl implements BackendTestService {
     public List<Map<String, Object>> getTest(String courseType, int page, int limit) {
         Wrapper<Test> wrapper = new EntityWrapper<>();
         if (!courseType.equals("all")) {                      //当类型为all时，为不指定类型
-            wrapper.eq("test_result", courseType);                       //指定题目类型
+            wrapper.eq("problem_type", courseType);                       //指定题目类型
         }
         RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);//分页
         List<Test> list = testMapper.selectPage(rowBounds, wrapper);
@@ -218,7 +218,7 @@ public class BackendTestServiceImpl implements BackendTestService {
     public int getTestNum(String courseType) {
         Wrapper<Test> wrapper = new EntityWrapper<>();
         if (!courseType.equals("all")) {                      //当类型为all时，为不指定类型
-            wrapper.eq("test_result", courseType);                       //指定题目类型
+            wrapper.eq("problem_type", courseType);                       //指定题目类型
         }
         int count = testMapper.selectCount(wrapper);
         return count;

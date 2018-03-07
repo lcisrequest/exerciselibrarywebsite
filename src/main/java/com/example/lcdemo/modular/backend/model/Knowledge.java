@@ -4,11 +4,12 @@ import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
+
 import java.io.Serializable;
 
 /**
  * <p>
- * 
+ * <p>
  * </p>
  *
  * @author itspeed
@@ -55,14 +56,18 @@ public class Knowledge extends Model<Knowledge> {
      */
     private String filepath;
 
-    private String kind;
+    /**
+     * 题目类型
+     */
+    @TableField("problem_type")
+    private String problemType;
 
-    public String getKind() {
-        return kind;
+    public String getProblemType() {
+        return problemType;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setProblemType(String problemType) {
+        this.problemType = problemType;
     }
 
     public Integer getId() {
@@ -145,15 +150,15 @@ public class Knowledge extends Model<Knowledge> {
     @Override
     public String toString() {
         return "Knowledge{" +
-        ", id=" + id +
-        ", title=" + title +
-        ", body=" + body +
-        ", type=" + type +
-        ", description=" + description +
-        ", imgs=" + imgs +
-        ", createTime=" + createTime +
-        ", updateTime=" + updateTime +
-        ", filepath=" + filepath +
-        "}";
+                ", id=" + id +
+                ", title=" + title +
+                ", body=" + body +
+                ", type=" + type +
+                ", description=" + description +
+                ", imgs=" + imgs +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", filepath=" + filepath +
+                "}";
     }
 }

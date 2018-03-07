@@ -90,7 +90,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
     public List<Knowledge> getKnowledge(int type, String kind, int page, int limit) {
         Wrapper<Knowledge> wrapper = new EntityWrapper<>();
         if (!kind.equals("all")) {                      //当类型为all时，为不指定类型
-            wrapper.eq("kind", kind);                       //指定题目类型
+            wrapper.eq("problem_type", kind);                       //指定题目类型
         }
         if (type != 0) {
             wrapper.eq("type", type);                       //指定知识类型
@@ -110,7 +110,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
     public int getKnowledgeNum(int type,String kind){
         Wrapper<Knowledge> wrapper = new EntityWrapper<>();
         if (!kind.equals("all")) {                      //当类型为all时，为不指定类型
-            wrapper.eq("kind", kind);                       //指定题目类型
+            wrapper.eq("problem_type", kind);                       //指定题目类型
         }
         if (type != 0) {
             wrapper.eq("type", type);                       //指定知识类型

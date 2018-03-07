@@ -82,15 +82,15 @@ public class BackendTestController extends BaseController {
     /**
      * 分页获取指定类型的题目
      *
-     * @param courseType
+     * @param problemType
      * @param page
      * @param limit
      * @return
      */
     @RequestMapping("/getSubject")
-    public ResponseEntity getSubject(String courseType, int page, int limit) {
-        List<Map<String, Object>> list = backendTestService.getSubject(courseType, page, limit);
-        int count = backendTestService.getSubjectNum(courseType);
+    public ResponseEntity getSubject(String problemType, int page, int limit) {
+        List<Map<String, Object>> list = backendTestService.getSubject(problemType, page, limit);
+        int count = backendTestService.getSubjectNum(problemType);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", list);
         jsonObject.put("count", count);
@@ -147,15 +147,15 @@ public class BackendTestController extends BaseController {
     /**
      * 分页获取指定类型的模拟练习
      *
-     * @param courseType
+     * @param problemType
      * @param page
      * @param limit
      * @return
      */
     @RequestMapping("/getTest")
-    public ResponseEntity getTest(String courseType, int page, int limit) {
-        List<Map<String, Object>> list = backendTestService.getTest(courseType, page, limit);
-        int count = backendTestService.getTestNum(courseType);
+    public ResponseEntity getTest(String problemType, int page, int limit) {
+        List<Map<String, Object>> list = backendTestService.getTest(problemType, page, limit);
+        int count = backendTestService.getTestNum(problemType);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", list);
         jsonObject.put("count", count);

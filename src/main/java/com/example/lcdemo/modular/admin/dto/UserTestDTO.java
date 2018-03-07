@@ -1,17 +1,17 @@
 package com.example.lcdemo.modular.admin.dto;
 
 public class UserTestDTO {
-    private String courseType;
+    private String problemType;
     private String testType;
     private String subjectIds;
     private String answers;
 
-    public String getCourseType() {
-        return courseType;
+    public String getProblemType() {
+        return problemType;
     }
 
-    public void setCourseType(String courseType) {
-        this.courseType = courseType;
+    public void setProblemType(String problemType) {
+        this.problemType = problemType;
     }
 
     public String getTestType() {

@@ -54,10 +54,10 @@ public class Test extends Model<Test> {
     @TableField("test_difficulty")
     private Integer testDifficulty;
     /**
-     * 测试类型
+     * 题目类型
      */
-    @TableField("test_result")
-    private String testResult;
+    @TableField("problem_type")
+    private String problemType;
     /**
      * 开始时间
      */
@@ -134,12 +134,12 @@ public class Test extends Model<Test> {
         this.testDifficulty = testDifficulty;
     }
 
-    public String getTestResult() {
-        return testResult;
+    public String getProblemType() {
+        return problemType;
     }
 
-    public void setTestResult(String testResult) {
-        this.testResult = testResult;
+    public void setProblemType(String problemType) {
+        this.problemType = problemType;
     }
 
     public String getStartTime() {
@@ -174,7 +174,7 @@ public class Test extends Model<Test> {
         ", testFraction=" + testFraction +
         ", testSubject=" + testSubject +
         ", testDifficulty=" + testDifficulty +
-        ", testResult=" + testResult +
+        ", problemType=" + problemType +
         ", startTime=" + startTime +
         ", endTime=" + endTime +
         "}";
@@ -190,7 +190,7 @@ public class Test extends Model<Test> {
         mapSubject.put("testFraction", this.testFraction);
         mapSubject.put("testSubject", this.testSubject);
         mapSubject.put("testDifficulty", this.testDifficulty);
-        mapSubject.put("testResult", this.testResult);
+        mapSubject.put("problemType", this.problemType);
         return mapSubject;
     }
 }

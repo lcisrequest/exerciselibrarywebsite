@@ -13,7 +13,7 @@
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="filepath" property="filepath" />
-        <result column="kind" property="kind" />
+        <result column="problem_type" property="problemType" />
     </resultMap>
 
 </mapper>
