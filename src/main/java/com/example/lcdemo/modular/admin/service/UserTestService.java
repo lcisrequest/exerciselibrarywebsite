@@ -27,4 +27,8 @@ public interface UserTestService {
     void deleteError(int subjectId, int userId);
 
     List<Boolean> submitErrorSubject(UserTestDTO userTestDTO, int userId);
+
+    List<Map<String, Object>> getAllUserTest(String problemType, int page, int limit);
+
+    int getTestNum(String problemType);
 }

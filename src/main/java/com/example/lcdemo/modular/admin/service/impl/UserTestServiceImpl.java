@@ -14,6 +14,7 @@ import com.example.lcdemo.modular.admin.dto.UserTestDTO;
 import com.example.lcdemo.modular.admin.model.*;
 import com.example.lcdemo.modular.admin.service.SubjectService;
 import com.example.lcdemo.modular.admin.service.UserTestService;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +45,7 @@ public class UserTestServiceImpl implements UserTestService {
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
         Wrapper<Subject> wrapper = new EntityWrapper<>();
-        if(!testType.equals("all")){
+        if (!testType.equals("all")) {
             wrapper.eq("problem_type", testType);
         }
         List<Subject> list = subjectMapper.selectList(wrapper);//获取该类型的所有题目
@@ -110,7 +111,7 @@ public class UserTestServiceImpl implements UserTestService {
     @Override
     public Subject getARandomSubject(String testType) {
         Wrapper<Subject> wrapper = new EntityWrapper<>();
-        if(!testType.equals("all")){
+        if (!testType.equals("all")) {
             wrapper.eq("problem_type", testType);
         }
         List<Subject> list = subjectMapper.selectList(wrapper); //得到该类型的所有题目
@@ -357,4 +358,61 @@ public class UserTestServiceImpl implements UserTestService {
     }
 
 
+    /**
+     * 分页获取指定类型的模拟练习
+     *
+     * @param problemType
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getAllUserTest(String problemType, int page, int limit) {
+        Wrapper<Test> wrapper = new EntityWrapper<>();
+        if (!problemType.equals("all")) {                      //当类型为all时，为不指定类型
+            wrapper.eq("problem_type", problemType);                       //指定题目类型
+        }
+        RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);//分页
+        List<Test> list = testMapper.selectPage(rowBounds, wrapper);
+        List<Map<String, Object>> listMap = new ArrayList<>();
+        for (Test t : list) {
+            Map<String, Object> map = t.getMap();
+            String sId = t.getTestSubject();
+            String[] subjectIds = sId.split(",");//获取到该练习的所有题目id
+            List<Map<String, Object>> listSubject = new ArrayList<>();
+            for (String id : subjectIds) {
+                Map<String, Object> subjectMap = this.getSubjectById(Integer.valueOf(id));//根据题目id取得题目信息
+                listSubject.add(subjectMap);
+            }
+            map.put("subjectList", listSubject);
+            listMap.add(map);
+        }
+        return listMap;
+    }
+
+
+    /**
+     * 获取指定类型的模拟练习数量
+     *
+     * @param problemType
+     * @return
+     */
+    @Override
+    public int getTestNum(String problemType) {
+        Wrapper<Test> wrapper = new EntityWrapper<>();
+        if (!problemType.equals("all")) {                      //当类型为all时，为不指定类型
+            wrapper.eq("problem_type", problemType);                       //指定题目类型
+        }
+        int count = testMapper.selectCount(wrapper);
+        return count;
+    }
+
+    public Map<String, Object> getSubjectById(int subjectId) {
+        Subject subject = subjectMapper.selectById(subjectId);
+        if (subject == null) {
+            throw new LcException(LcExceptionEnum.PARAM_ERROR);
+        }
+        Map<String, Object> map = subject.getMap();
+        return map;
+    }
 }

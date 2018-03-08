@@ -108,4 +108,22 @@ public class UserTestController extends BaseController {
         List<Boolean> list = userTestService.submitErrorSubject(userTestDTO, getUserId());
         return ResponseEntity.ok(SuccessTip.create(list, "提交成功"));
     }
+
+    /**
+     * 分页获取指定类型的模拟练习
+     *
+     * @param problemType
+     * @param page
+     * @param limit
+     * @return
+     */
+    @RequestMapping("/selectTest")
+    public ResponseEntity selectTest(String problemType, int page, int limit) {
+        List<Map<String, Object>> list = userTestService.getAllUserTest(problemType, page, limit);
+        int count = userTestService.getTestNum(problemType);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("list", list);
+        jsonObject.put("count", count);
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
+    }
 }
