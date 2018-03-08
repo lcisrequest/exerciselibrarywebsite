@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -99,7 +100,7 @@ public class BackendTestController extends BaseController {
 
 
     /**
-     * 新增模拟练习
+     * 新增模拟练习+
      *
      * @param test
      * @return
@@ -162,4 +163,37 @@ public class BackendTestController extends BaseController {
         return ResponseEntity.ok(SuccessTip.create(jsonObject, "获取成功"));
     }
 
+    /**
+     * 分页搜索指定类型或指定科目或指定用户的练习记录
+     *
+     * @param testType
+     * @param problemType
+     * @param username
+     * @param page
+     * @param limit
+     * @return
+     */
+    @RequestMapping("/selectUserTest")
+    public ResponseEntity selectUserTest(@RequestParam(value = "testType", required = false, defaultValue = "all") String testType,
+                                         @RequestParam(value = "problemType", required = false, defaultValue = "all") String problemType,
+                                         @RequestParam(value = "username", required = false, defaultValue = "") String username, int page, int limit) {
+        List<Map<String, Object>> list = backendTestService.selectUserTest(testType, problemType, username, page, limit);
+        int count = backendTestService.selectUserTestCount(testType, problemType, username);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("list", list);
+        jsonObject.put("count", count);
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "获取成功"));
+    }
+
+    /**
+     * 删除指定的用户练习记录
+     *
+     * @param userTestId
+     * @return
+     */
+    @RequestMapping("/deleteUserTest")
+    public ResponseEntity deleteUserTest(int userTestId) {
+        backendTestService.deleteUserTest(userTestId);
+        return ResponseEntity.ok(SuccessTip.create("删除成功"));
+    }
 }

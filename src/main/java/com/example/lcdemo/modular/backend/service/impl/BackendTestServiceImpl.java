@@ -6,6 +6,7 @@ import com.example.lcdemo.base.exception.LcException;
 import com.example.lcdemo.base.exception.LcExceptionEnum;
 import com.example.lcdemo.modular.admin.dao.SubjectMapper;
 import com.example.lcdemo.modular.admin.dao.TestMapper;
+import com.example.lcdemo.modular.admin.dao.UserTestMapper;
 import com.example.lcdemo.modular.admin.model.Subject;
 import com.example.lcdemo.modular.admin.model.Test;
 import com.example.lcdemo.modular.backend.service.BackendTestService;
@@ -23,6 +24,8 @@ public class BackendTestServiceImpl implements BackendTestService {
     SubjectMapper subjectMapper;
     @Autowired
     TestMapper testMapper;
+    @Autowired
+    UserTestMapper userTestMapper;
 
     /**
      * 新增题目
@@ -222,5 +225,63 @@ public class BackendTestServiceImpl implements BackendTestService {
         }
         int count = testMapper.selectCount(wrapper);
         return count;
+    }
+
+
+    /**
+     * 分页搜索用户练习记录
+     *
+     * @param testType
+     * @param problemType
+     * @param username
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> selectUserTest(String testType, String problemType, String username, int page, int limit) {
+        if (testType.equals("all")) {
+            testType = "%";
+        }
+        if (problemType.equals("all")) {
+            problemType = "%";
+        }
+        if (username.equals("")) {
+            username = "%";
+        }
+        List<Map<String, Object>> listmap = userTestMapper.selectUserTest(testType, problemType, username, (page - 1) * limit, limit);
+        return listmap;
+    }
+
+    /**
+     * 搜索用户练习记录总数
+     *
+     * @param testType
+     * @param problemType
+     * @param username
+     * @return
+     */
+    @Override
+    public Integer selectUserTestCount(String testType, String problemType, String username) {
+        if (testType.equals("all")) {
+            testType = "%";
+        }
+        if (problemType.equals("all")) {
+            problemType = "%";
+        }
+        if (username.equals("")) {
+            username = "%";
+        }
+        return userTestMapper.selectUserTestCount(testType, problemType, username);
+    }
+
+    /**
+     * 删除指定的用户练习记录1
+     *
+     * @param userTestId
+     */
+    @Override
+    public void deleteUserTest(int userTestId) {
+        userTestMapper.deleteById(userTestId);
     }
 }

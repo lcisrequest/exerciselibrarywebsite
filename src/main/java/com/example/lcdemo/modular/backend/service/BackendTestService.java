@@ -28,4 +28,10 @@ public interface BackendTestService {
     List<Map<String, Object>> getTest(String courseType, int page, int limit);
 
     int getTestNum(String courseType);
+
+    List<Map<String, Object>> selectUserTest(String testType, String problemType, String username, int page, int limit);
+
+    Integer selectUserTestCount(String testType, String problemType, String username);
+
+    void deleteUserTest(int userTestId);
 }
