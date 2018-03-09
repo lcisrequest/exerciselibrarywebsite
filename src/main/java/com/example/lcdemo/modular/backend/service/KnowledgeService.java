@@ -17,4 +17,10 @@ public interface KnowledgeService {
     List<Knowledge> getKnowledge(int type, String kind, int page, int limit);
 
     int getKnowledgeNum(int type,String kind);
+
+    String addKnowledgeCollect(int knowledgeId, int userId);
+
+    List<Knowledge> getAllMyCollectKnowledge(int type, int userId, int page, int limit);
+
+    Integer getAllMyCollectKnowledgeCount(int type, int userId);
 }

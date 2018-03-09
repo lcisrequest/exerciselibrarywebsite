@@ -4,6 +4,8 @@ package com.example.lcdemo.modular.backend.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.example.lcdemo.base.controller.BaseController;
 import com.example.lcdemo.base.tips.SuccessTip;
+import com.example.lcdemo.modular.admin.model.Homepage;
+import com.example.lcdemo.modular.admin.service.HomepageService;
 import com.example.lcdemo.modular.backend.model.Knowledge;
 import com.example.lcdemo.modular.backend.service.KnowledgeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ import java.util.List;
 public class KnowledgeController extends BaseController {
     @Autowired
     KnowledgeService knowledgeService;
+    @Autowired
+    HomepageService homepageService;
 
     /**
      * 文件上传
@@ -87,6 +91,7 @@ public class KnowledgeController extends BaseController {
 
     /**
      * 分页获取指定类型的考试大纲或课本知识
+     *
      * @param type
      * @param problemType
      * @param page
@@ -103,4 +108,59 @@ public class KnowledgeController extends BaseController {
         return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
     }
 
+    /**
+     * 新增首页信息
+     *
+     * @param homepage
+     * @return
+     */
+    @RequestMapping("/addHomePage")
+    public ResponseEntity addHomePage(@RequestBody Homepage homepage) {
+        homepageService.addHomePage(homepage);
+        return ResponseEntity.ok(SuccessTip.create("请求成功"));
+    }
+
+    /**
+     * 删除首页信息
+     *
+     * @param homepageId
+     * @return
+     */
+    @RequestMapping("/deleteHomePage")
+    public ResponseEntity deleteHomePage(int homepageId) {
+        homepageService.deleteHomePage(homepageId);
+        return ResponseEntity.ok(SuccessTip.create("请求成功"));
+    }
+
+    /**
+     * 更改首页信息
+     *
+     * @param homepage
+     * @return
+     */
+    @RequestMapping("/updateHomePage")
+    public ResponseEntity updateHomePage(@RequestBody Homepage homepage) {
+        homepageService.updateHomePage(homepage);
+        return ResponseEntity.ok(SuccessTip.create("请求成功"));
+    }
+
+
+    /**
+     * 后台分页获取首页信息
+     *
+     * @param infoType
+     * @param title
+     * @param page
+     * @param limit
+     * @return
+     */
+    @RequestMapping("/getHomepage")
+    public ResponseEntity getHomePage(String infoType, String title, int page, int limit) {
+        List<Homepage> list = homepageService.getHomePage(infoType, title, page, limit);
+        int count = homepageService.getHomePageCount(infoType, title);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("list", list);
+        jsonObject.put("count", count);
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
+    }
 }

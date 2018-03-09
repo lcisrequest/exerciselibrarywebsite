@@ -6,6 +6,8 @@ import com.example.lcdemo.base.exception.LcException;
 import com.example.lcdemo.base.exception.LcExceptionEnum;
 import com.example.lcdemo.base.util.DateUtil;
 import com.example.lcdemo.config.properties.HiguProperties;
+import com.example.lcdemo.modular.admin.dao.CollectMapper;
+import com.example.lcdemo.modular.admin.model.Collect;
 import com.example.lcdemo.modular.backend.dao.KnowledgeMapper;
 import com.example.lcdemo.modular.backend.model.Knowledge;
 import com.example.lcdemo.modular.backend.service.KnowledgeService;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +28,8 @@ public class KnowledgeServiceImpl implements KnowledgeService {
     KnowledgeMapper knowledgeMapper;
     @Autowired
     private HiguProperties higuProperties;
+    @Autowired
+    CollectMapper collectMapper;
 
     /**
      * 新增考试大纲或课本知识
@@ -80,6 +85,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
     /**
      * 分页获取指定类型的考试大纲或课本知识
+     *
      * @param type
      * @param kind
      * @param page
@@ -102,12 +108,13 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
     /**
      * 获取指定类型的考试大纲或课本知识的数量
+     *
      * @param type
      * @param kind
      * @return
      */
     @Override
-    public int getKnowledgeNum(int type,String kind){
+    public int getKnowledgeNum(int type, String kind) {
         Wrapper<Knowledge> wrapper = new EntityWrapper<>();
         if (!kind.equals("all")) {                      //当类型为all时，为不指定类型
             wrapper.eq("problem_type", kind);                       //指定题目类型
@@ -153,6 +160,106 @@ public class KnowledgeServiceImpl implements KnowledgeService {
             System.out.println("上传失败，因为文件是空的");
             return null;
         }
+    }
+
+    /**
+     * 对知识添加收藏或取消收藏
+     *
+     * @param knowledgeId
+     * @param userId
+     * @return
+     */
+    @Override
+    public String addKnowledgeCollect(int knowledgeId, int userId) {
+        Collect collect = new Collect();
+        collect.setProblemType("knowledge");
+        collect.setUserId(userId);
+        collect.setSubjectId(knowledgeId);
+        Collect c = collectMapper.selectOne(collect); //判断该用户是否收藏了该知识
+        if (c == null) {
+            collectMapper.insert(collect);         //若没有收藏则添加收藏
+            return "收藏成功";
+        } else {
+            collectMapper.deleteById(c.getId());   //若收藏了则取消收藏
+            return "取消成功";
+        }
+
+    }
+
+    /**
+     * 分页分类获取收藏的知识
+     *
+     * @param type
+     * @param userId
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<Knowledge> getAllMyCollectKnowledge(int type, int userId, int page, int limit) {
+        Wrapper<Collect> wrapper = new EntityWrapper<>();
+        wrapper.eq("problem_type", "knowledge"); //problem_type为knowledge时，为收藏的知识
+        wrapper.eq("user_id", userId);
+        boolean notKind = false;
+        if (type == 0) {        //若type为0
+            notKind = true;  //则取出全部
+        }
+        List<Collect> listCollect = collectMapper.selectList(wrapper);
+        List<Knowledge> list = new ArrayList<>();
+        for (Collect c : listCollect) {
+            Knowledge knowledge = knowledgeMapper.selectById(c.getSubjectId());
+            if (notKind) {
+                list.add(knowledge);
+            } else {
+                if (knowledge.getType() == type) {
+                    list.add(knowledge);
+                }
+            }
+        }
+        int flag = 0;
+        int count = 0;
+        int offset = (page - 1) * limit;
+        List<Knowledge> listKnowledge = new ArrayList<>();
+        for (Knowledge k : list) {  //算法分页
+            if (flag >= offset) {
+                if (count < limit) {
+                    listKnowledge.add(k);
+                }
+                count++;
+            }
+            flag++;
+        }
+        return listKnowledge;
+    }
+
+    /**
+     * 分页分类获取我的收藏数量
+     * @param type
+     * @param userId
+     * @return
+     */
+    @Override
+    public  Integer getAllMyCollectKnowledgeCount(int type, int userId){
+        Wrapper<Collect> wrapper = new EntityWrapper<>();
+        wrapper.eq("problem_type", "knowledge"); //problem_type为knowledge时，为收藏的知识
+        wrapper.eq("user_id", userId);
+        boolean notKind = false;
+        if (type == 0) {        //若type为0
+            notKind = true;  //则取出全部
+        }
+        List<Collect> listCollect = collectMapper.selectList(wrapper);
+        List<Knowledge> list = new ArrayList<>();
+        for (Collect c : listCollect) {
+            Knowledge knowledge = knowledgeMapper.selectById(c.getSubjectId());
+            if (notKind) {
+                list.add(knowledge);
+            } else {
+                if (knowledge.getType() == type) {
+                    list.add(knowledge);
+                }
+            }
+        }
+        return list.size();
     }
 
 }

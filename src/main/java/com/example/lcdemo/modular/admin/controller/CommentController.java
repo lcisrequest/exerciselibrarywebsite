@@ -9,6 +9,8 @@ import com.example.lcdemo.modular.admin.model.Comment;
 import com.example.lcdemo.modular.admin.model.Reply;
 import com.example.lcdemo.modular.admin.service.CollectService;
 import com.example.lcdemo.modular.admin.service.CommentService;
+import com.example.lcdemo.modular.backend.model.Knowledge;
+import com.example.lcdemo.modular.backend.service.KnowledgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +28,8 @@ public class CommentController extends BaseController {
     private CommentService commentService;
     @Autowired
     CollectService collectService;
+    @Autowired
+    KnowledgeService knowledgeService;
 
     /**
      * 新增评论
@@ -128,6 +132,36 @@ public class CommentController extends BaseController {
         jsonObject.put("list", list);
         jsonObject.put("count", count);
         return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
+    }
+
+    /**
+     * 分页获取我的收藏知识
+     *
+     * @param type
+     * @param page
+     * @param limit
+     * @return
+     */
+    @RequestMapping("/getAllMyCollectKnowledge")
+    public ResponseEntity getAllMyCollectKnowledge(int type, int page, int limit) {
+        List<Knowledge> list = knowledgeService.getAllMyCollectKnowledge(type, getUserId(), page, limit);
+        int count = knowledgeService.getAllMyCollectKnowledgeCount(type, getUserId());
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("list", list);
+        jsonObject.put("count", count);
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
+    }
+
+    /**
+     * 添加知识收藏或取消收藏
+     *
+     * @param knowledgeId
+     * @return
+     */
+    @RequestMapping("/addKnowledgeCollect")
+    public ResponseEntity addKnowledgeCollect(int knowledgeId) {
+        String str = knowledgeService.addKnowledgeCollect(knowledgeId, getUserId());
+        return ResponseEntity.ok(SuccessTip.create(str));
     }
 }
 
