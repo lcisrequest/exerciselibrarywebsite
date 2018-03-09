@@ -6,10 +6,7 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.example.lcdemo.base.exception.LcException;
 import com.example.lcdemo.base.exception.LcExceptionEnum;
 import com.example.lcdemo.base.util.DateUtil;
-import com.example.lcdemo.modular.admin.dao.ErrorSubjectMapper;
-import com.example.lcdemo.modular.admin.dao.SubjectMapper;
-import com.example.lcdemo.modular.admin.dao.TestMapper;
-import com.example.lcdemo.modular.admin.dao.UserTestMapper;
+import com.example.lcdemo.modular.admin.dao.*;
 import com.example.lcdemo.modular.admin.dto.UserTestDTO;
 import com.example.lcdemo.modular.admin.model.*;
 import com.example.lcdemo.modular.admin.service.SubjectService;
@@ -18,10 +15,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class UserTestServiceImpl implements UserTestService {
@@ -35,6 +29,8 @@ public class UserTestServiceImpl implements UserTestService {
     TestMapper testMapper;
     @Autowired
     ErrorSubjectMapper errorSubjectMapper;
+    @Autowired
+    UserInfoMapper userInfoMapper;
 
     /**
      * 获取一套顺序测试
@@ -169,15 +165,8 @@ public class UserTestServiceImpl implements UserTestService {
         if (aNum != idNum) {
             throw new LcException(LcExceptionEnum.ANSWER_NUM_IS_WRONG);//若答案数与习题数不同，则抛出异常
         }
-        userTest.setUserId(userId);
-        userTest.setProblemType(userTestDTO.getProblemType());
-        userTest.setTestType(userTestDTO.getTestType());
-        userTest.setSubjectId(userTestDTO.getSubjectIds());
-        userTest.setTestResult(userTestDTO.getAnswers());
-        userTest.setSubjectNum(idNum);
-        userTest.setStartTime(DateUtil.getTime());
-        userTestMapper.insert(userTest);            //新增练习记录
         List<Boolean> listbool = new ArrayList<>();
+        int isRightNum = 0;
         for (int x = 0; x < idNum; x++) {
             int subjectid = Integer.valueOf(ids[x]); //获取习题id
             int answer = Integer.valueOf(answersNum[x]);//获取答案
@@ -185,8 +174,22 @@ public class UserTestServiceImpl implements UserTestService {
             listbool.add(isRight);
             if (!isRight) {          //若不正确
                 this.addToErrorSubject(subjectid, userId); //则添加到错题
+            } else {
+                isRightNum++;
             }
         }
+        double rightRate = (double) isRightNum / (double) aNum; //计算出正确率
+        double score = (double) 100 * rightRate;             //计算出最终得分
+
+        userTest.setUserId(userId);
+        userTest.setProblemType(userTestDTO.getProblemType());
+        userTest.setTestType(userTestDTO.getTestType());
+        userTest.setSubjectId(userTestDTO.getSubjectIds());
+        userTest.setTestResult(userTestDTO.getAnswers());
+        userTest.setSubjectNum(idNum);
+        userTest.setScore(score + "");
+        userTest.setStartTime(DateUtil.getTime());
+        userTestMapper.insert(userTest);            //新增练习记录
         return listbool;
     }
 
@@ -212,16 +215,7 @@ public class UserTestServiceImpl implements UserTestService {
         if (aNum != idNum) {
             throw new LcException(LcExceptionEnum.ANSWER_NUM_IS_WRONG);//若答案数与习题数不同，则抛出异常
         }
-        UserTest userTest = new UserTest();
-        userTest.setUserId(userId);
-        userTest.setProblemType(test.getProblemType());
-        userTest.setTestType("mock");
-        userTest.setSubjectId(subjectIds);
-        userTest.setTestResult(answers);
-        userTest.setSubjectNum(idNum);
-        userTest.setStartTime(DateUtil.getTime());
-        userTest.setTestId(testId);
-        userTestMapper.insert(userTest);            //新增练习记录
+
         List<Boolean> listbool = new ArrayList<>();
         int rightNum = 0;
         for (int x = 0; x < idNum; x++) {
@@ -235,8 +229,8 @@ public class UserTestServiceImpl implements UserTestService {
                 rightNum++;
             }
         }
-        double rightRate = (double) rightNum / (double) aNum;
-        double Score = Double.valueOf(test.getTestFraction()) * rightRate;
+        double rightRate = (double) rightNum / (double) aNum;           //计算出正确率
+        double Score = Double.valueOf(test.getTestFraction()) * rightRate; //计算出最终得分
         StringBuilder returnStr = new StringBuilder();
         returnStr.append("您在模拟练习中答对了").append(rightNum).append("道题,您的准确率为").append(rightRate).append(",该模拟测试的总分为")
                 .append(test.getTestFraction()).append("分,您的成绩为").append(Score).append("分");
@@ -245,6 +239,17 @@ public class UserTestServiceImpl implements UserTestService {
         } else {
             returnStr.append(",请继续努力！");
         }
+        UserTest userTest = new UserTest();
+        userTest.setUserId(userId);
+        userTest.setProblemType(test.getProblemType());
+        userTest.setTestType("mock");
+        userTest.setSubjectId(subjectIds);
+        userTest.setTestResult(answers);
+        userTest.setSubjectNum(idNum);
+        userTest.setScore(Score + "");
+        userTest.setStartTime(DateUtil.getTime());
+        userTest.setTestId(testId);
+        userTestMapper.insert(userTest);            //新增练习记录
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", listbool);
         jsonObject.put("str", returnStr);
@@ -334,14 +339,7 @@ public class UserTestServiceImpl implements UserTestService {
         if (aNum != idNum) {
             throw new LcException(LcExceptionEnum.ANSWER_NUM_IS_WRONG);//若答案数与习题数不同，则抛出异常
         }
-        userTest.setUserId(userId);
-        userTest.setProblemType(userTestDTO.getProblemType());
-        userTest.setTestType("error");
-        userTest.setSubjectId(userTestDTO.getSubjectIds());
-        userTest.setTestResult(userTestDTO.getAnswers());
-        userTest.setSubjectNum(idNum);
-        userTest.setStartTime(DateUtil.getTime());
-        userTestMapper.insert(userTest);            //新增练习记录
+        int rightNum = 0;
         List<Boolean> listbool = new ArrayList<>();
         for (int x = 0; x < idNum; x++) {
             int subjectid = Integer.valueOf(ids[x]); //获取习题id
@@ -352,8 +350,20 @@ public class UserTestServiceImpl implements UserTestService {
                 this.addToErrorSubject(subjectid, userId); //则添加到错题
             } else {                 //若正确
                 this.deleteError(subjectid, userId);       //则从错题删除
+                rightNum++;
             }
         }
+        double rightRate = (double) rightNum / (double) aNum;           //计算出正确率
+        double score = (double) 100 * rightRate; //计算出最终得分
+        userTest.setUserId(userId);
+        userTest.setProblemType(userTestDTO.getProblemType());
+        userTest.setTestType("error");
+        userTest.setSubjectId(userTestDTO.getSubjectIds());
+        userTest.setTestResult(userTestDTO.getAnswers());
+        userTest.setSubjectNum(idNum);
+        userTest.setScore(score + "");
+        userTest.setStartTime(DateUtil.getTime());
+        userTestMapper.insert(userTest);            //新增练习记录
         return listbool;
     }
 
@@ -414,5 +424,94 @@ public class UserTestServiceImpl implements UserTestService {
         }
         Map<String, Object> map = subject.getMap();
         return map;
+    }
+
+    /**
+     * 分页获取我的指定类型的练习记录
+     *
+     * @param problemType
+     * @param page
+     * @param limit
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<UserTest> selectMyUserTest(String problemType, int page, int limit, int userId) {
+        Wrapper<UserTest> wrapper = new EntityWrapper<>();
+        if (!problemType.equals("all")) {
+            wrapper.eq("problem_type", problemType);
+        }
+        wrapper.eq("user_id", userId);
+        wrapper.orderBy("start_time", false);
+        RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);//分页
+        List<UserTest> listUT = userTestMapper.selectPage(rowBounds, wrapper);
+        return listUT;
+    }
+
+    /**
+     * 获取到我的指定类型的练习数量
+     *
+     * @param problemType
+     * @param userId
+     * @return
+     */
+    @Override
+    public Integer selectMyUserTestCount(String problemType, int userId) {
+        Wrapper<UserTest> wrapper = new EntityWrapper<>();
+        if (!problemType.equals("all")) {
+            wrapper.eq("problem_type", problemType);
+        }
+        wrapper.eq("user_id", userId);
+        return userTestMapper.selectCount(wrapper);
+    }
+
+    /**
+     * 获取指定模拟练习的排行榜
+     * @param testId
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getRankForTest(int testId) {
+        Wrapper<UserTest> wrapper = new EntityWrapper<>();
+        wrapper.eq("test_id", testId);
+        wrapper.orderBy("score",false);
+        RowBounds rowBounds = new RowBounds(0, 10);//分页
+        List<UserTest> list = userTestMapper.selectPage(rowBounds,wrapper);
+        List<Map<String,Object>> listMap = new ArrayList<>();
+        for (UserTest ut:list) {
+            Map<String,Object> map = new HashMap<>();
+            int userId = ut.getUserId();
+            UserInfo user = userInfoMapper.selectById(userId);
+            map.put("username",user.getUsername());
+            map.put("userimg",user.getUserimg());
+            map.put("startTime",ut.getStartTime());
+            map.put("score",ut.getScore());
+            listMap.add(map);
+        }
+        return listMap;
+    }
+
+
+    /**
+     * 获取指定模拟练习的今日排行榜
+     * @param testId
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getTodayRankForTest(int testId){
+        String time = DateUtil.getDay()+" 00:00:00";  //取到今日的时间
+        List<UserTest> listMap = userTestMapper.selectUserTestRank(testId,time);
+        List<Map<String,Object>> list = new ArrayList<>();
+        for (UserTest ut:listMap) {
+            Map<String,Object> map = new HashMap<>();
+            int userId = ut.getUserId();
+            UserInfo user = userInfoMapper.selectById(userId);
+            map.put("username",user.getUsername());
+            map.put("userimg",user.getUserimg());
+            map.put("startTime",ut.getStartTime());
+            map.put("score",ut.getScore());
+            list.add(map);
+        }
+        return list;
     }
 }

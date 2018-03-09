@@ -3,6 +3,7 @@ package com.example.lcdemo.modular.admin.service;
 import com.alibaba.fastjson.JSONObject;
 import com.example.lcdemo.modular.admin.dto.UserTestDTO;
 import com.example.lcdemo.modular.admin.model.Subject;
+import com.example.lcdemo.modular.admin.model.UserTest;
 
 import java.util.List;
 import java.util.Map;
@@ -31,4 +32,12 @@ public interface UserTestService {
     List<Map<String, Object>> getAllUserTest(String problemType, int page, int limit);
 
     int getTestNum(String problemType);
+
+    List<UserTest> selectMyUserTest(String problemType, int page, int limit, int userId);
+
+    Integer selectMyUserTestCount(String problemType, int userId);
+
+    List<Map<String, Object>> getRankForTest(int testId);
+
+    List<Map<String, Object>> getTodayRankForTest(int testId);
 }

@@ -50,7 +50,7 @@ public class UserTest extends Model<UserTest> {
     @TableField("start_time")
     private String startTime;
     /**
-     * 测试结果
+     * 测试答案
      */
     @TableField("test_result")
     private String testResult;
@@ -59,6 +59,16 @@ public class UserTest extends Model<UserTest> {
      */
     @TableField("test_id")
     private int testId;
+
+    private String score;
+
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
+    }
 
     public Integer getId() {
         return id;

@@ -23,4 +23,6 @@ public interface UserTestMapper extends BaseMapper<UserTest> {
             , @Param("offset") int offset, @Param("limit") int limit);
 
     Integer selectUserTestCount(@Param("testType") String testType, @Param("problemType") String problemType, @Param("username") String username);
+
+    List<UserTest> selectUserTestRank(@Param("testId") int testId,@Param("startTime") String startTime);
 }

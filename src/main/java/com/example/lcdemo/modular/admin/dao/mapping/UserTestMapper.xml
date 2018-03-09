@@ -13,10 +13,11 @@
         <result column="start_time" property="startTime" />
         <result column="test_result" property="testResult" />
         <result column="test_id" property="testId" />
+        <result column="score" property="score" />
     </resultMap>
 
     <select id="selectUserTest"  resultType="java.util.Map">
-        SELECT ut.id,ut.user_id,ut.test_type,ut.problem_type,ut.subject_id,ut.subject_num,ut.start_time,ut.test_result,ut.test_id,ui.username,ui.userimg
+        SELECT ut.id,ut.user_id,ut.test_type,ut.problem_type,ut.subject_id,ut.subject_num,ut.start_time,ut.test_result,ut.test_id,ut.score,ui.username,ui.userimg
         FROM user_test ut,user_info ui WHERE ut.test_type LIKE  #{testType} AND ut.problem_type LIKE  #{problemType} AND ui.username LIKE  #{username}
         AND ui.id = ut.user_id LIMIT #{offset}, #{limit}
     </select>
@@ -24,5 +25,9 @@
         SELECT COUNT(*)
           FROM user_test ut,user_info ui WHERE ut.test_type LIKE  #{testType} AND ut.problem_type LIKE  #{problemType} AND ui.username LIKE  #{username}
         AND ui.id = ut.user_id
+    </select>
+
+    <select id="selectUserTestRank" resultMap="BaseResultMap">
+        SELECT id,user_id,score,start_time FROM user_test WHERE test_id LIKE  #{testId} AND start_time >  #{startTime} ORDER BY score DESC LIMIT 0,10
     </select>
 </mapper>

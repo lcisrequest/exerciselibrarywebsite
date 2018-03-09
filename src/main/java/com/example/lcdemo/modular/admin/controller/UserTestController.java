@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.lcdemo.base.controller.BaseController;
 import com.example.lcdemo.base.tips.SuccessTip;
 import com.example.lcdemo.modular.admin.dto.UserTestDTO;
+import com.example.lcdemo.modular.admin.model.UserTest;
 import com.example.lcdemo.modular.admin.service.UserTestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -118,12 +120,55 @@ public class UserTestController extends BaseController {
      * @return
      */
     @RequestMapping("/selectTest")
-    public ResponseEntity selectTest(String problemType, int page, int limit) {
+    public ResponseEntity selectTest(@RequestParam(value = "problemType", required = false, defaultValue = "all") String problemType, int page, int limit) {
         List<Map<String, Object>> list = userTestService.getAllUserTest(problemType, page, limit);
         int count = userTestService.getTestNum(problemType);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", list);
         jsonObject.put("count", count);
         return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
+    }
+
+    /**
+     * 分页获取我的指定类型的练习记录
+     *
+     * @param problemType
+     * @param page
+     * @param limit
+     * @return
+     */
+    @RequestMapping("/selectMyUserTest")
+    public ResponseEntity selectMyUserTest(@RequestParam(value = "problemType", required = false, defaultValue = "all") String problemType, int page, int limit) {
+        List<UserTest> list = userTestService.selectMyUserTest(problemType, page, limit, getUserId());
+        int count = userTestService.selectMyUserTestCount(problemType, getUserId());
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("list", list);
+        jsonObject.put("count", count);
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
+    }
+
+
+    /**
+     * 获取指定模拟练习的排行榜
+     *
+     * @param testId
+     * @return
+     */
+    @RequestMapping("/getTestRank")
+    public ResponseEntity getTestRank(int testId) {
+        List<Map<String, Object>> list = userTestService.getRankForTest(testId);
+        return ResponseEntity.ok(SuccessTip.create(list, "请求成功"));
+    }
+
+
+    /**
+     * 获取指定模拟练习的今日排行榜
+     * @param testId
+     * @return
+     */
+    @RequestMapping("/getTodayTestRank")
+    public ResponseEntity getTodayTestRank(int testId){
+        List<Map<String, Object>> list = userTestService.getTodayRankForTest(testId);
+        return ResponseEntity.ok(SuccessTip.create(list, "请求成功"));
     }
 }
