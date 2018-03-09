@@ -1,5 +1,7 @@
 package com.example.lcdemo.modular.admin.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.example.lcdemo.base.exception.LcException;
 import com.example.lcdemo.base.exception.LcExceptionEnum;
 import com.example.lcdemo.modular.admin.dao.HomepageMapper;
@@ -86,5 +88,16 @@ public class HomePageServiceImpl implements HomepageService {
             title = "%";
         }
         return homepageMapper.selectTitleHomePageCount(infoType,title);
+    }
+
+    /**
+     * 获取所有首页信息
+     * @return
+     */
+    @Override
+    public List<Homepage> getAllHomepage(){
+        Wrapper<Homepage> wrapper = new EntityWrapper<>();
+        List<Homepage> list = homepageMapper.selectList(wrapper);
+        return list;
     }
 }

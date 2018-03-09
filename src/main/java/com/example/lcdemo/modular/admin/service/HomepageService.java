@@ -14,4 +14,6 @@ public interface HomepageService {
     List<Homepage> getHomePage(String infoType, String title, int page, int limit);
 
     Integer getHomePageCount(String infoType, String title);
+
+    List<Homepage> getAllHomepage();
 }
