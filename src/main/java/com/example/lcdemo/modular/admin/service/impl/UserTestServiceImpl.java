@@ -302,6 +302,22 @@ public class UserTestServiceImpl implements UserTestService {
         return list;
     }
 
+
+    /**
+     * 获取我的指定类型的错题数量
+     * @param courseType
+     * @param userId
+     * @return
+     */
+    @Override
+    public Integer getAllMyErrorSubjectNum(String courseType, int userId) {
+        if (courseType.equals("all")) {
+            courseType = "%";
+        }
+        Integer num  = errorSubjectMapper.getMyErrorNum(courseType, userId);
+        return num ;
+    }
+
     /**
      * 删除错题
      *
@@ -467,6 +483,7 @@ public class UserTestServiceImpl implements UserTestService {
 
     /**
      * 获取指定模拟练习的排行榜
+     *
      * @param testId
      * @return
      */
@@ -474,18 +491,18 @@ public class UserTestServiceImpl implements UserTestService {
     public List<Map<String, Object>> getRankForTest(int testId) {
         Wrapper<UserTest> wrapper = new EntityWrapper<>();
         wrapper.eq("test_id", testId);
-        wrapper.orderBy("score",false);
+        wrapper.orderBy("score", false);
         RowBounds rowBounds = new RowBounds(0, 10);//分页
-        List<UserTest> list = userTestMapper.selectPage(rowBounds,wrapper);
-        List<Map<String,Object>> listMap = new ArrayList<>();
-        for (UserTest ut:list) {
-            Map<String,Object> map = new HashMap<>();
+        List<UserTest> list = userTestMapper.selectPage(rowBounds, wrapper);
+        List<Map<String, Object>> listMap = new ArrayList<>();
+        for (UserTest ut : list) {
+            Map<String, Object> map = new HashMap<>();
             int userId = ut.getUserId();
             UserInfo user = userInfoMapper.selectById(userId);
-            map.put("username",user.getUsername());
-            map.put("userimg",user.getUserimg());
-            map.put("startTime",ut.getStartTime());
-            map.put("score",ut.getScore());
+            map.put("nickname", user.getNickname());
+            map.put("userimg", user.getUserimg());
+            map.put("startTime", ut.getStartTime());
+            map.put("score", ut.getScore());
             listMap.add(map);
         }
         return listMap;
@@ -494,22 +511,23 @@ public class UserTestServiceImpl implements UserTestService {
 
     /**
      * 获取指定模拟练习的今日排行榜
+     *
      * @param testId
      * @return
      */
     @Override
-    public List<Map<String, Object>> getTodayRankForTest(int testId){
-        String time = DateUtil.getDay()+" 00:00:00";  //取到今日的时间
-        List<UserTest> listMap = userTestMapper.selectUserTestRank(testId,time);
-        List<Map<String,Object>> list = new ArrayList<>();
-        for (UserTest ut:listMap) {
-            Map<String,Object> map = new HashMap<>();
+    public List<Map<String, Object>> getTodayRankForTest(int testId) {
+        String time = DateUtil.getDay() + " 00:00:00";  //取到今日的时间
+        List<UserTest> listMap = userTestMapper.selectUserTestRank(testId, time);
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (UserTest ut : listMap) {
+            Map<String, Object> map = new HashMap<>();
             int userId = ut.getUserId();
             UserInfo user = userInfoMapper.selectById(userId);
-            map.put("username",user.getUsername());
-            map.put("userimg",user.getUserimg());
-            map.put("startTime",ut.getStartTime());
-            map.put("score",ut.getScore());
+            map.put("nickname", user.getNickname());
+            map.put("userimg", user.getUserimg());
+            map.put("startTime", ut.getStartTime());
+            map.put("score", ut.getScore());
             list.add(map);
         }
         return list;

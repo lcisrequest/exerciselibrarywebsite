@@ -14,4 +14,9 @@
         And es.user_id =  #{userId}
         LIMIT #{offset},#{limit}
     </select>
+
+    <select id="getMyErrorNum"  resultType="java.lang.Integer">
+        SELECT count(*) FROM error_subject es,subject s
+        WHERE s.problem_type LIKE #{problemType} AND s.id = es.subject_id And es.user_id =  #{userId}
+    </select>
 </mapper>

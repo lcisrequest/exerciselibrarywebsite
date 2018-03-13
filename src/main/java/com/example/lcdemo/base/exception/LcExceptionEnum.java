@@ -25,6 +25,7 @@ public enum LcExceptionEnum {
     /**
      * 错误的请求
      */
+    TODAY_IS_HAVE_CLOCK(201,"今天已经打过卡了呦！"),
     ADMIN_NOT_EXIST(201,"该管理员不存在"),
     SUPERADMIN_CANNOT_DELETE(201, "超级管理员不能删除"),
     DONNOT_HAVE_PAWER(201, "您的权限不足，只有超级管理员拥有添加和删除管理员的权限"),

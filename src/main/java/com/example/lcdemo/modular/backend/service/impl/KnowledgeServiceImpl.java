@@ -233,7 +233,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
     }
 
     /**
-     * 分页分类获取我的收藏数量
+     * 分类获取我的收藏数量
      * @param type
      * @param userId
      * @return

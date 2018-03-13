@@ -18,4 +18,6 @@ import java.util.List;
 @Repository
 public interface ErrorSubjectMapper extends BaseMapper<ErrorSubject> {
     List<ErrorSubject> getMyError(@Param("problemType") String problemType,@Param("userId") int userId,@Param("offset") int offset,@Param("limit") int limit);
+
+    Integer getMyErrorNum(@Param("problemType") String problemType,@Param("userId") int userId);
 }

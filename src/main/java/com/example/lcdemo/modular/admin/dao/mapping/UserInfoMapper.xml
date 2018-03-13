@@ -11,6 +11,9 @@
         <result column="create_time" property="createTime" />
         <result column="last_login_time" property="lastLoginTime" />
         <result column="userimg" property="userimg" />
+        <result column="level" property="level" />
+        <result column="xp" property="xp" />
+        <result column="gold" property="gold" />
     </resultMap>
 
 </mapper>

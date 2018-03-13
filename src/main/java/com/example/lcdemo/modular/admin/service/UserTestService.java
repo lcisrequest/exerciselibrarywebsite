@@ -40,4 +40,6 @@ public interface UserTestService {
     List<Map<String, Object>> getRankForTest(int testId);
 
     List<Map<String, Object>> getTodayRankForTest(int testId);
+
+    Integer getAllMyErrorSubjectNum(String courseType, int userId);
 }
