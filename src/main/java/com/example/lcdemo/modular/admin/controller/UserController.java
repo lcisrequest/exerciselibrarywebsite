@@ -156,4 +156,15 @@ public class UserController extends BaseController {
         return ResponseEntity.ok(SuccessTip.create(list, "请求成功"));
     }
 
+    /**
+     * 修改昵称
+     * @param nickName
+     * @return
+     */
+    @RequestMapping("/updateNickname")
+    public ResponseEntity updateNickname(String nickName){
+        userInfoService.updateNickName(nickName,getUserId());
+        return ResponseEntity.ok(SuccessTip.create("修改成功"));
+    }
+
 }
