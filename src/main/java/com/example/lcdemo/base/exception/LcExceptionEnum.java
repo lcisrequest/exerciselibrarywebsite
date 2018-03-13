@@ -25,6 +25,8 @@ public enum LcExceptionEnum {
     /**
      * 错误的请求
      */
+    MIN_BIGTHAN_MAX(201,"最大值不能比最小值小！"),
+    DB_DATA_ERROR(201,"数据库初始数据设置出错！"),
     TODAY_IS_HAVE_CLOCK(201,"今天已经打过卡了呦！"),
     ADMIN_NOT_EXIST(201,"该管理员不存在"),
     SUPERADMIN_CANNOT_DELETE(201, "超级管理员不能删除"),

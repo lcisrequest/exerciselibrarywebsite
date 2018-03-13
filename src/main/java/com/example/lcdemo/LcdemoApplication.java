@@ -17,11 +17,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 @SpringBootApplication
 public class LcdemoApplication  extends SpringBootServletInitializer {
 
-
-    /**
+/*
+    *//**
      * 自定义异步线程池
      * @return
-     */
+     *//*
     @Bean
     public AsyncTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -41,12 +41,12 @@ public class LcdemoApplication  extends SpringBootServletInitializer {
         // executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
 
         return executor;
-    }
+    }*/
     public static void main(String[] args) {
         SpringApplication.run(LcdemoApplication.class, args);
     }
-    @Override
+ /*   @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(LcdemoApplication.class);
-    }
+    }*/
 }
