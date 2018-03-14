@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * <p>
@@ -16,7 +14,7 @@ import java.util.Map;
  * @author itspeed
  * @since 2018-03-14
  */
-public class Reply extends Model<Reply> {
+public class Forums extends Model<Forums> {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,30 +25,36 @@ public class Reply extends Model<Reply> {
      */
     @TableField("user_id")
     private Integer userId;
-    private String content;
     /**
-     * 评论id
+     * 内容
      */
-    @TableField("comment_id")
-    private Integer commentId;
+    private String content;
     /**
      * 图片
      */
     private String img;
     /**
-     * 时间
+     * 点赞数
+     */
+    private Integer like;
+    /**
+     * 回复数量
+     */
+    private Integer reply;
+    /**
+     * 创建时间
      */
     @TableField("create_time")
     private String createTime;
     /**
-     * 讨论的id
+     * 标题
      */
-    @TableField("forums_id")
-    private Integer forumsId;
+    private String title;
     /**
-     * 回复类型
+     * 是否置顶
      */
-    private String type;
+    @TableField("is_top")
+    private String isTop;
 
 
     public Integer getId() {
@@ -77,20 +81,28 @@ public class Reply extends Model<Reply> {
         this.content = content;
     }
 
-    public Integer getCommentId() {
-        return commentId;
-    }
-
-    public void setCommentId(Integer commentId) {
-        this.commentId = commentId;
-    }
-
     public String getImg() {
         return img;
     }
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public Integer getLike() {
+        return like;
+    }
+
+    public void setLike(Integer like) {
+        this.like = like;
+    }
+
+    public Integer getReply() {
+        return reply;
+    }
+
+    public void setReply(Integer reply) {
+        this.reply = reply;
     }
 
     public String getCreateTime() {
@@ -101,20 +113,20 @@ public class Reply extends Model<Reply> {
         this.createTime = createTime;
     }
 
-    public Integer getForumsId() {
-        return forumsId;
+    public String getTitle() {
+        return title;
     }
 
-    public void setForumsId(Integer forumsId) {
-        this.forumsId = forumsId;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getType() {
-        return type;
+    public String getIsTop() {
+        return isTop;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setIsTop(String isTop) {
+        this.isTop = isTop;
     }
 
     @Override
@@ -124,31 +136,16 @@ public class Reply extends Model<Reply> {
 
     @Override
     public String toString() {
-        return "Reply{" +
+        return "Forums{" +
         ", id=" + id +
         ", userId=" + userId +
         ", content=" + content +
-        ", commentId=" + commentId +
         ", img=" + img +
+        ", like=" + like +
+        ", reply=" + reply +
         ", createTime=" + createTime +
-        ", forumsId=" + forumsId +
-        ", type=" + type +
+        ", title=" + title +
+        ", isTop=" + isTop +
         "}";
-    }
-
-    public Map<String, Object> getMap(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",this.id);
-        map.put("content",this.content);
-        map.put("createTime",this.createTime);
-        map.put("img",this.img);
-        if(this.img==null){
-            map.put("img","");
-        }
-        map.put("userId",this.userId);
-        map.put("commentId",this.commentId);
-        map.put("type",this.type);
-        map.put("forumsId",this.forumsId);
-        return map;
     }
 }

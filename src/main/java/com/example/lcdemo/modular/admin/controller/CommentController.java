@@ -105,7 +105,7 @@ public class CommentController extends BaseController {
     }
 
     /**
-     * 添加收藏或取消收藏
+     * 添加收藏或取消收藏题目
      *
      * @param subjectId
      * @return

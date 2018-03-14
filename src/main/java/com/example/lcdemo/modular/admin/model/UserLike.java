@@ -1,10 +1,10 @@
 package com.example.lcdemo.modular.admin.model;
 
-import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
 
 /**
@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author itspeed
- * @since 2018-03-05
+ * @since 2018-03-14
  */
 @TableName("user_like")
 public class UserLike extends Model<UserLike> {
@@ -32,6 +32,15 @@ public class UserLike extends Model<UserLike> {
      */
     @TableField("comment_id")
     private Integer commentId;
+    /**
+     * 讨论id
+     */
+    @TableField("forums_id")
+    private Integer forumsId;
+    /**
+     * 点赞类型
+     */
+    private String type;
 
 
     public Integer getId() {
@@ -58,6 +67,22 @@ public class UserLike extends Model<UserLike> {
         this.commentId = commentId;
     }
 
+    public Integer getForumsId() {
+        return forumsId;
+    }
+
+    public void setForumsId(Integer forumsId) {
+        this.forumsId = forumsId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -65,10 +90,12 @@ public class UserLike extends Model<UserLike> {
 
     @Override
     public String toString() {
-        return "Like{" +
+        return "UserLike{" +
         ", id=" + id +
         ", userId=" + userId +
         ", commentId=" + commentId +
+        ", forumsId=" + forumsId +
+        ", type=" + type +
         "}";
     }
 }

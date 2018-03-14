@@ -106,6 +106,7 @@ public class CommentServiceImpl implements CommentService {
     public void addReply(Reply reply,int userId){
         reply.setCreateTime(DateUtil.getTime());
         reply.setUserId(userId);
+        reply.setType("comment"); //类型设置为评论的回复
         replyMapper.insert(reply);
     }
 
@@ -167,11 +168,13 @@ public class CommentServiceImpl implements CommentService {
         UserLike like = new UserLike();
         like.setUserId(userId);
         like.setCommentId(commentId);
+        like.setType("comment");
         UserLike flag = userLikeMapper.selectOne(like);
         if(flag!=null){
             Wrapper<UserLike> wrapper = new EntityWrapper<>();
             wrapper.eq("user_id",userId);
             wrapper.eq("comment_id",commentId);
+            wrapper.eq("type","comment");
             userLikeMapper.delete(wrapper); //若点过赞,则取消点赞
             comment.setLike(likeNum-1);
             commentMapper.updateById(comment);//点赞数减一

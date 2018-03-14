@@ -163,12 +163,26 @@ public class UserTestController extends BaseController {
 
     /**
      * 获取指定模拟练习的今日排行榜
+     *
      * @param testId
      * @return
      */
     @RequestMapping("/getTodayTestRank")
-    public ResponseEntity getTodayTestRank(int testId){
+    public ResponseEntity getTodayTestRank(int testId) {
         List<Map<String, Object>> list = userTestService.getTodayRankForTest(testId);
         return ResponseEntity.ok(SuccessTip.create(list, "请求成功"));
+    }
+
+    /**
+     * 可根据练习类型和课程类型获取平均分，总分，总练习数，总题目数
+     *
+     * @param problemType
+     * @param testType
+     * @return
+     */
+    @RequestMapping("/getMyTestAllScore")
+    public ResponseEntity getTestScore(String problemType, String testType) {
+        JSONObject jsonObject = userTestService.getMyTestNum(problemType, testType, getUserId());
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
     }
 }

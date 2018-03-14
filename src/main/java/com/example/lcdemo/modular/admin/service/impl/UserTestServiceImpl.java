@@ -15,6 +15,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 @Service
@@ -180,7 +181,8 @@ public class UserTestServiceImpl implements UserTestService {
         }
         double rightRate = (double) isRightNum / (double) aNum; //计算出正确率
         double score = (double) 100 * rightRate;             //计算出最终得分
-
+        DecimalFormat df = new DecimalFormat("#.0");
+        score = Double.valueOf(df.format(score));
         userTest.setUserId(userId);
         userTest.setProblemType(userTestDTO.getProblemType());
         userTest.setTestType(userTestDTO.getTestType());
@@ -231,6 +233,8 @@ public class UserTestServiceImpl implements UserTestService {
         }
         double rightRate = (double) rightNum / (double) aNum;           //计算出正确率
         double Score = Double.valueOf(test.getTestFraction()) * rightRate; //计算出最终得分
+        DecimalFormat df = new DecimalFormat("#.0");
+        Score = Double.valueOf(df.format(Score));                       //精确到小数点后一位
         StringBuilder returnStr = new StringBuilder();
         returnStr.append("您在模拟练习中答对了").append(rightNum).append("道题,您的准确率为").append(rightRate).append(",该模拟测试的总分为")
                 .append(test.getTestFraction()).append("分,您的成绩为").append(Score).append("分");
@@ -305,6 +309,7 @@ public class UserTestServiceImpl implements UserTestService {
 
     /**
      * 获取我的指定类型的错题数量
+     *
      * @param courseType
      * @param userId
      * @return
@@ -314,8 +319,8 @@ public class UserTestServiceImpl implements UserTestService {
         if (courseType.equals("all")) {
             courseType = "%";
         }
-        Integer num  = errorSubjectMapper.getMyErrorNum(courseType, userId);
-        return num ;
+        Integer num = errorSubjectMapper.getMyErrorNum(courseType, userId);
+        return num;
     }
 
     /**
@@ -370,7 +375,9 @@ public class UserTestServiceImpl implements UserTestService {
             }
         }
         double rightRate = (double) rightNum / (double) aNum;           //计算出正确率
-        double score = (double) 100 * rightRate; //计算出最终得分
+        double score = (double) 100 * rightRate;                        //计算出最终得分
+        DecimalFormat df = new DecimalFormat("#.0");            //精确到小数点后一位
+        score = Double.valueOf(df.format(score));
         userTest.setUserId(userId);
         userTest.setProblemType(userTestDTO.getProblemType());
         userTest.setTestType("error");
@@ -531,5 +538,37 @@ public class UserTestServiceImpl implements UserTestService {
             list.add(map);
         }
         return list;
+    }
+
+    /**
+     * 可根据练习类型和课程类型获取平均分，总分，总练习数，总题目数
+     * @param problemType
+     * @param userId
+     * @return
+     */
+    public JSONObject getMyTestNum(String problemType,String testType, int userId) {
+        Wrapper<UserTest> wrapper = new EntityWrapper<>();
+        wrapper.eq("user_id", userId);
+        if(!problemType.equals("all")){             //当值为all时，表示获取所有
+            wrapper.eq("problem_type", problemType);
+        }
+        if(!testType.equals(testType)){             //当值为all时，表示获取所有
+            wrapper.eq("test_type",testType);
+        }
+        List<UserTest> list = userTestMapper.selectList(wrapper);
+        int testCount = list.size();                //练习总数
+        double allscore = 0;                        //总分数
+        int subjectCount = 0;                       //题目总数
+        for (UserTest ut : list) {
+            allscore = Double.valueOf(ut.getScore()) + allscore;
+            subjectCount = ut.getSubjectNum() + subjectCount;
+        }
+        double average = allscore / testCount;      //计算出平均分
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("testCount", testCount);
+        jsonObject.put("allscore", allscore);
+        jsonObject.put("subjectCount", subjectCount);
+        jsonObject.put("average", average);
+        return jsonObject;
     }
 }

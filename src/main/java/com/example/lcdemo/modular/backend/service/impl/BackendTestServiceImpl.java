@@ -139,6 +139,7 @@ public class BackendTestServiceImpl implements BackendTestService {
      */
     @Override
     public boolean addTest(Test test) {
+        test.setTestFraction(100+"");   //分数恒定为100
         int num = testMapper.insert(test);
         if (num > 0) {
             return true;

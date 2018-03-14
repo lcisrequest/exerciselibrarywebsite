@@ -7,6 +7,8 @@
         <id column="id" property="id" />
         <result column="user_id" property="userId" />
         <result column="comment_id" property="commentId" />
+        <result column="forums_id" property="forumsId" />
+        <result column="type" property="type" />
     </resultMap>
 
 </mapper>
