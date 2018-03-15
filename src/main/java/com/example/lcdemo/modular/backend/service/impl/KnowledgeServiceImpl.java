@@ -7,7 +7,9 @@ import com.example.lcdemo.base.exception.LcExceptionEnum;
 import com.example.lcdemo.base.util.DateUtil;
 import com.example.lcdemo.config.properties.HiguProperties;
 import com.example.lcdemo.modular.admin.dao.CollectMapper;
+import com.example.lcdemo.modular.admin.dao.CourseMapper;
 import com.example.lcdemo.modular.admin.model.Collect;
+import com.example.lcdemo.modular.admin.model.Course;
 import com.example.lcdemo.modular.backend.dao.KnowledgeMapper;
 import com.example.lcdemo.modular.backend.model.Knowledge;
 import com.example.lcdemo.modular.backend.service.KnowledgeService;
@@ -30,6 +32,8 @@ public class KnowledgeServiceImpl implements KnowledgeService {
     private HiguProperties higuProperties;
     @Autowired
     CollectMapper collectMapper;
+    @Autowired
+    CourseMapper courseMapper;
 
     /**
      * 新增考试大纲或课本知识
@@ -41,7 +45,13 @@ public class KnowledgeServiceImpl implements KnowledgeService {
         knowledge.setCreateTime(DateUtil.getTime());
         knowledge.setUpdateTime(DateUtil.getTime());
         int num = knowledgeMapper.insert(knowledge);
+        String problemType = knowledge.getProblemType();
         if (num > 0) {
+            Course course = new Course();
+            course.setName(problemType);
+            course = courseMapper.selectOne(course);              //找到对应的课程信息
+            course.setKnowledgeNum(course.getKnowledgeNum() + 1); //知识点数量+1
+            courseMapper.updateById(course);                      //更新课程信息
             return true;
         } else {
             return false;
@@ -75,8 +85,15 @@ public class KnowledgeServiceImpl implements KnowledgeService {
         if (knowledgeId == 0) {
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
+        Knowledge k = knowledgeMapper.selectById(knowledgeId);
+        String problemType = k.getProblemType();
         int num = knowledgeMapper.deleteById(knowledgeId);
         if (num > 0) {
+            Course course = new Course();
+            course.setName(problemType);
+            course = courseMapper.selectOne(course);              //找到对应的课程信息
+            course.setKnowledgeNum(course.getKnowledgeNum() - 1); //知识点数量-1
+            courseMapper.updateById(course);                      //更新课程信息
             return true;
         } else {
             return false;
@@ -234,12 +251,13 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
     /**
      * 分类获取我的收藏数量
+     *
      * @param type
      * @param userId
      * @return
      */
     @Override
-    public  Integer getAllMyCollectKnowledgeCount(int type, int userId){
+    public Integer getAllMyCollectKnowledgeCount(int type, int userId) {
         Wrapper<Collect> wrapper = new EntityWrapper<>();
         wrapper.eq("problem_type", "knowledge"); //problem_type为knowledge时，为收藏的知识
         wrapper.eq("user_id", userId);

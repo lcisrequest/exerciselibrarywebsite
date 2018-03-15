@@ -18,4 +18,8 @@ public interface ForumsService {
     List<Map<String, Object>> getForumsAllReply(int page, int limit, int forumsId);
 
     Integer getForumsAllReplyNum(int forumsId);
+
+    List<Map<String, Object>> getAllForums(int page, int limit);
+
+    Integer getAllForumsNum();
 }

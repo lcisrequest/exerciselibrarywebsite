@@ -63,11 +63,10 @@ public class ForumsController extends BaseController {
      * 新增讨论的回复
      *
      * @param reply
-     * @param userId
      * @return
      */
     @RequestMapping("/addForumsReply")
-    public ResponseEntity addForumsReply(Reply reply, int userId) {
+    public ResponseEntity addForumsReply(Reply reply) {
         forumsService.addForumsReply(reply, getUserId());
         return ResponseEntity.ok(SuccessTip.create("请求成功"));
     }
@@ -84,6 +83,24 @@ public class ForumsController extends BaseController {
     public ResponseEntity getForumsAllReply(int page, int limit, int forumsId) {
         List<Map<String, Object>> list = forumsService.getForumsAllReply(page, limit, forumsId);
         int count = forumsService.getForumsAllReplyNum(forumsId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("list", list);
+        jsonObject.put("count", count);
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
+    }
+
+
+    /**
+     * 分页获取所有讨论
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    @RequestMapping("/getAllForums")
+    public ResponseEntity getAllForums(int page, int limit) {
+        List<Map<String, Object>> list = forumsService.getAllForums(page, limit);
+        int count = forumsService.getAllForumsNum();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", list);
         jsonObject.put("count", count);

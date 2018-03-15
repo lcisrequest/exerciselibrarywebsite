@@ -25,11 +25,14 @@ public enum LcExceptionEnum {
     /**
      * 错误的请求
      */
+    INTEREST_NOT_EXIST(201,"该兴趣不存在"),
+    COURSE_NOT_EXIST(201,"该课程不存在"),
     CANNOT_DELETE(201,"这不是你的，不能删除"),
     MIN_BIGTHAN_MAX(201,"最大值不能比最小值小！"),
     DB_DATA_ERROR(201,"数据库初始数据设置出错！"),
     TODAY_IS_HAVE_CLOCK(201,"今天已经打过卡了呦！"),
     ADMIN_NOT_EXIST(201,"该管理员不存在"),
+    COURSE_IS_EXIST(201,"该课程已存在"),
     SUPERADMIN_CANNOT_DELETE(201, "超级管理员不能删除"),
     DONNOT_HAVE_PAWER(201, "您的权限不足，只有超级管理员拥有添加和删除管理员的权限"),
     REQUEST_NULL(400, "请求有错误"),

@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.example.lcdemo.base.exception.LcException;
 import com.example.lcdemo.base.exception.LcExceptionEnum;
+import com.example.lcdemo.modular.admin.dao.CourseMapper;
 import com.example.lcdemo.modular.admin.dao.SubjectMapper;
 import com.example.lcdemo.modular.admin.dao.TestMapper;
 import com.example.lcdemo.modular.admin.dao.UserTestMapper;
+import com.example.lcdemo.modular.admin.model.Course;
 import com.example.lcdemo.modular.admin.model.Subject;
 import com.example.lcdemo.modular.admin.model.Test;
 import com.example.lcdemo.modular.backend.service.BackendTestService;
@@ -26,6 +28,8 @@ public class BackendTestServiceImpl implements BackendTestService {
     TestMapper testMapper;
     @Autowired
     UserTestMapper userTestMapper;
+    @Autowired
+    CourseMapper courseMapper;
 
     /**
      * 新增题目
@@ -36,7 +40,13 @@ public class BackendTestServiceImpl implements BackendTestService {
     @Override
     public boolean addSubject(Subject subject) {
         int num = subjectMapper.insert(subject);
+        String problemType = subject.getProblemType();
         if (num > 0) {
+            Course course = new Course();
+            course.setName(problemType);
+            course = courseMapper.selectOne(course);         //找到对应的课程信息
+            course.setSubjectNum(course.getSubjectNum() + 1);//题目数量+1
+            courseMapper.updateById(course);                 //更新课程信息
             return true;
         } else {
             return false;
@@ -67,8 +77,15 @@ public class BackendTestServiceImpl implements BackendTestService {
      */
     @Override
     public boolean deleteSubject(int subjectId) {
+        Subject subject = subjectMapper.selectById(subjectId);
+        String problemType = subject.getProblemType();
         int num = subjectMapper.deleteById(subjectId);
         if (num > 0) {
+            Course course = new Course();
+            course.setName(problemType);
+            course = courseMapper.selectOne(course);         //找到对应的课程信息
+            course.setSubjectNum(course.getSubjectNum() - 1);//题目数量-1
+            courseMapper.updateById(course);                 //更新课程信息
             return true;
         } else {
             return false;
@@ -139,9 +156,15 @@ public class BackendTestServiceImpl implements BackendTestService {
      */
     @Override
     public boolean addTest(Test test) {
-        test.setTestFraction(100+"");   //分数恒定为100
-        int num = testMapper.insert(test);
+        test.setTestFraction(100 + "");   //分数恒定为100
+        int num = testMapper.insert(test);  //新增练习
         if (num > 0) {
+            String problemType = test.getProblemType();
+            Course course = new Course();
+            course.setName(problemType);
+            course = courseMapper.selectOne(course); //找到对应的课程类型
+            course.setTestNum(course.getTestNum() + 1);//练习数量+1
+            courseMapper.updateById(course);         //更新课程信息
             return true;
         } else {
             return false;
@@ -172,8 +195,15 @@ public class BackendTestServiceImpl implements BackendTestService {
      */
     @Override
     public boolean deleteTest(int testId) {
+        Test test = testMapper.selectById(testId);
+        String problemType = test.getProblemType();
         int num = testMapper.deleteById(testId);
         if (num > 0) {
+            Course course = new Course();
+            course.setName(problemType);
+            course = courseMapper.selectOne(course);    //找到对应的课程类型
+            course.setTestNum(course.getTestNum() - 1); //练习数量-1
+            courseMapper.updateById(course);            //更新课程信息
             return true;
         } else {
             return false;

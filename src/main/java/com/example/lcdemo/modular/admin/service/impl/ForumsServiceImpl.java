@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -146,15 +147,54 @@ public class ForumsServiceImpl implements ForumsService {
     }
 
     /**
-     * 页获取指定讨论的回复数量
+     * 获取指定讨论的回复数量
+     *
      * @param forumsId
      * @return
      */
     @Override
-    public Integer getForumsAllReplyNum(int forumsId){
+    public Integer getForumsAllReplyNum(int forumsId) {
         Wrapper<Reply> wrapper = new EntityWrapper<>();
         wrapper.eq("forums_id", forumsId);
         wrapper.eq("type", "forums");
         return replyMapper.selectCount(wrapper);
     }
+
+    /**
+     * 分页获取所有讨论
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getAllForums(int page, int limit) {
+        Wrapper<Forums> wrapper = new EntityWrapper<>();
+        wrapper.orderBy("is_top", false);
+        RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
+        List<Forums> list = forumsMapper.selectPage(rowBounds, wrapper);
+        List<Map<String, Object>> listMap = new ArrayList<>();
+        for (Forums f : list) {
+            Map<String, Object> map = new HashMap<>();
+            int userId = f.getUserId();
+            UserInfo userInfo = userInfoMapper.selectById(userId);
+            map.put("nickName", userInfo.getNickname());
+            map.put("userImg", userInfo.getUserimg());
+            map.put("forums", f);
+            listMap.add(map);
+        }
+        return listMap;
+    }
+
+    /**
+     * 获取所有讨论的数量
+     * @return
+     */
+    @Override
+    public Integer getAllForumsNum() {
+        Wrapper<Forums> wrapper = new EntityWrapper<>();
+        return forumsMapper.selectCount(wrapper);
+    }
+
+
 }
