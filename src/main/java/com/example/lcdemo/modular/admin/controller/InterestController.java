@@ -1,11 +1,14 @@
 package com.example.lcdemo.modular.admin.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.lcdemo.base.controller.BaseController;
 import com.example.lcdemo.base.tips.SuccessTip;
 import com.example.lcdemo.modular.admin.dao.InterestMapper;
 import com.example.lcdemo.modular.admin.model.Interest;
+import com.example.lcdemo.modular.admin.model.Test;
 import com.example.lcdemo.modular.admin.service.InterestService;
+import com.example.lcdemo.modular.backend.model.Knowledge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,4 +56,18 @@ public class InterestController extends BaseController {
         List<Interest> list = interestService.getAllMyInterest(getUserId());
         return ResponseEntity.ok(SuccessTip.create(list, "请求成功"));
     }
+
+    /**
+     * 根据兴趣获取指定数量首页推荐练习和知识点
+     * @param num
+     * @return
+     */
+    @RequestMapping("/getHomepageRecommend")
+    public ResponseEntity getHomepageRecommend(int num){
+        List<Test> listTest = interestService.getHomePageTest(getUserId(),num);
+        List<Knowledge> listKnowledge = interestService.getHomePageKnowledge(getUserId(),num);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("listTest",listTest);
+        jsonObject.put("listKnowledge",listKnowledge);
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));    }
 }

@@ -6,13 +6,19 @@ import com.example.lcdemo.base.exception.LcException;
 import com.example.lcdemo.base.exception.LcExceptionEnum;
 import com.example.lcdemo.modular.admin.dao.CourseMapper;
 import com.example.lcdemo.modular.admin.dao.InterestMapper;
+import com.example.lcdemo.modular.admin.dao.TestMapper;
 import com.example.lcdemo.modular.admin.model.Course;
 import com.example.lcdemo.modular.admin.model.Interest;
+import com.example.lcdemo.modular.admin.model.Test;
 import com.example.lcdemo.modular.admin.service.InterestService;
+import com.example.lcdemo.modular.backend.dao.KnowledgeMapper;
+import com.example.lcdemo.modular.backend.model.Knowledge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class InterestServiceImpl implements InterestService {
@@ -20,6 +26,10 @@ public class InterestServiceImpl implements InterestService {
     InterestMapper interestMapper;
     @Autowired
     CourseMapper courseMapper;
+    @Autowired
+    KnowledgeMapper knowledgeMapper;
+    @Autowired
+    TestMapper testMapper;
 
     /**
      * 修改我的兴趣
@@ -90,5 +100,100 @@ public class InterestServiceImpl implements InterestService {
         wrapper.eq("user_id", userId);
         List<Interest> list = interestMapper.selectList(wrapper);
         return list;
+    }
+
+
+    /**
+     * 根据兴趣随机获得指定数量的知识点
+     * @param userId
+     * @param num
+     * @return
+     */
+    @Override
+    public List<Knowledge> getHomePageKnowledge(int userId, int num) {
+        List<Interest> list = this.getAllMyInterest(userId);
+        List<Knowledge> listKnowledge = new ArrayList<>();
+        if (list.size() == 0) { //若没有设置兴趣
+            for (int x = 0; x < num; x++) {
+                Knowledge k = this.getAKnowledgeByInterest("all");
+                listKnowledge.add(k);
+            }
+        } else {
+            int listNum = list.size();
+            Random rand = new Random();
+            for (int x = 0; x < num; x++) {
+                int randNum = rand.nextInt(listNum); //生成一个0-num的随机数
+                Interest interest = list.get(randNum);
+                Knowledge knowledge = this.getAKnowledgeByInterest(interest.getInterestType());
+                listKnowledge.add(knowledge);
+            }
+        }
+        return listKnowledge;
+    }
+
+    /**
+     * 根据兴趣随机获得指定数量的模拟练习
+     * @param userId
+     * @param num
+     * @return
+     */
+    @Override
+    public List<Test> getHomePageTest(int userId, int num){
+        List<Interest> list = this.getAllMyInterest(userId);
+        List<Test> listKnowledge = new ArrayList<>();
+        if (list.size() == 0) { //若没有设置兴趣
+            for (int x = 0; x < num; x++) {
+                Test t = this.getATestByInterest("all");
+                listKnowledge.add(t);
+            }
+        } else {
+            int listNum = list.size();
+            Random rand = new Random();
+            for (int x = 0; x < num; x++) {
+                int randNum = rand.nextInt(listNum); //生成一个0-num的随机数
+                Interest interest = list.get(randNum);
+                Test test = this.getATestByInterest(interest.getInterestType());
+                listKnowledge.add(test);
+            }
+        }
+        return listKnowledge;
+    }
+
+
+    /**
+     * 生成一个指定课程的知识点
+     *
+     * @param problemType
+     * @return
+     */
+    @Override
+    public Knowledge getAKnowledgeByInterest(String problemType) {
+        Wrapper<Knowledge> wrapper = new EntityWrapper<>();
+        if (!problemType.equals("all")) {
+            wrapper.eq("problem_type", problemType);
+        }
+        List<Knowledge> list = knowledgeMapper.selectList(wrapper); //获取该类型的所有知识点
+        int num = list.size();
+        Random rand = new Random();
+        int randNum = rand.nextInt(num); //生成一个0-num的随机数
+        return list.get(randNum);
+    }
+
+    /**
+     * 生成一个指定课程的模拟练习
+     * @param problemType
+     * @return
+     */
+    @Override
+    public Test getATestByInterest(String problemType) {
+        Wrapper<Test> wrapper = new EntityWrapper<>();
+        if (!problemType.equals("all")) {
+            wrapper.eq("problem_type", problemType);
+        }
+        List<Test> list = testMapper.selectList(wrapper); //获取该类型的所有模拟测试
+        int num = list.size();
+        Random rand = new Random();
+        int randNum = rand.nextInt(num); //生成一个0-num的随机数
+        return list.get(randNum);
     }
 }
