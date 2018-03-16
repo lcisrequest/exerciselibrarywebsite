@@ -66,17 +66,17 @@ public class CommentServiceImpl implements CommentService {
         wrapper.eq("subject_id", subjectId);
         RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
         List<Comment> list = commentMapper.selectPage(rowBounds, wrapper);//分页获取评论
-        List<Map<String,Object>> listmap = new ArrayList<>();
-        for (Comment c:list) {
-            Map<String,Object> map = c.getMap();
+        List<Map<String, Object>> listmap = new ArrayList<>();
+        for (Comment c : list) {
+            Map<String, Object> map = c.getMap();
             int userId = c.getUserId();
             UserInfo userInfo = userInfoMapper.selectById(userId); //得到用户信息
             String username = userInfo.getUsername();
             String img = userInfo.getUserimg();
-            map.put("username",username);       //得到用户名
-            map.put("userImg",img);             //得到用户头像
-            if(img==null){
-                map.put("userImg","");
+            map.put("username", username);       //得到用户名
+            map.put("userImg", img);             //得到用户头像
+            if (img == null) {
+                map.put("userImg", "");
             }
             listmap.add(map);
         }
@@ -99,41 +99,48 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * 新增回复
+     *
      * @param reply
      * @param userId
      */
     @Override
-    public void addReply(Reply reply,int userId){
+    public void addReply(Reply reply, int userId) {
         reply.setCreateTime(DateUtil.getTime());
         reply.setUserId(userId);
         reply.setType("comment"); //类型设置为评论的回复
+        reply.setIsRead(0);       //默认未读
+        int commentId = reply.getCommentId();
+        Comment comment = commentMapper.selectById(commentId);
+        int getUserId = comment.getUserId();
+        reply.setGetUserId(getUserId);
         replyMapper.insert(reply);
     }
 
     /**
      * 分页获取指定评论的所有回复
+     *
      * @param commentId
      * @param page
      * @param limit
      * @return
      */
     @Override
-    public List<Map<String, Object>> getReply(int commentId, int page, int limit){
+    public List<Map<String, Object>> getReply(int commentId, int page, int limit) {
         Wrapper<Reply> wrapper = new EntityWrapper<>();
         wrapper.eq("comment_id", commentId);
         RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
         List<Reply> list = replyMapper.selectPage(rowBounds, wrapper);//根据评论id查找回复
-        List<Map<String,Object>> listmap = new ArrayList<>();
-        for (Reply reply:list) {
-            Map<String,Object> map = reply.getMap();
+        List<Map<String, Object>> listmap = new ArrayList<>();
+        for (Reply reply : list) {
+            Map<String, Object> map = reply.getMap();
             int userId = reply.getUserId();  //得到用户id
             UserInfo userInfo = userInfoMapper.selectById(userId);
             String img = userInfo.getUserimg();
             String username = userInfo.getUsername();
-            map.put("username",username); //得到用户名
-            map.put("userImg",img);       //得到用户头像
-            if(img==null){
-                map.put("userImg","");
+            map.put("username", username); //得到用户名
+            map.put("userImg", img);       //得到用户头像
+            if (img == null) {
+                map.put("userImg", "");
             }
             listmap.add(map);
         }
@@ -142,11 +149,12 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * 获取指定评论的所有回复数量
+     *
      * @param commentId
      * @return
      */
     @Override
-    public int getReplyNum(int commentId){
+    public int getReplyNum(int commentId) {
         Wrapper<Reply> wrapper = new EntityWrapper<>();
         wrapper.eq("comment_id", commentId);
         int num = replyMapper.selectCount(wrapper);
@@ -155,13 +163,14 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * 新增点赞
+     *
      * @param commentId
      * @param userId
      */
     @Override
-    public synchronized void addLike(int commentId,int userId){
+    public synchronized void addLike(int commentId, int userId) {
         Comment comment = commentMapper.selectById(commentId);
-        if(comment==null){
+        if (comment == null) {
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
         int likeNum = comment.getLike();
@@ -170,20 +179,57 @@ public class CommentServiceImpl implements CommentService {
         like.setCommentId(commentId);
         like.setType("comment");
         UserLike flag = userLikeMapper.selectOne(like);
-        if(flag!=null){
+        if (flag != null) {
             Wrapper<UserLike> wrapper = new EntityWrapper<>();
-            wrapper.eq("user_id",userId);
-            wrapper.eq("comment_id",commentId);
-            wrapper.eq("type","comment");
+            wrapper.eq("user_id", userId);
+            wrapper.eq("comment_id", commentId);
+            wrapper.eq("type", "comment");
             userLikeMapper.delete(wrapper); //若点过赞,则取消点赞
-            comment.setLike(likeNum-1);
+            comment.setLike(likeNum - 1);
             commentMapper.updateById(comment);//点赞数减一
-        }else{
+        } else {
             userLikeMapper.insert(like);   //若没有点过赞，则新增点赞
-            comment.setLike(likeNum+1);
+            comment.setLike(likeNum + 1);
             commentMapper.updateById(comment);//点赞数加一
         }
     }
 
+    /**
+     * 获取我的所有未读回复
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getMyReply(int userId) {
+        Wrapper<Reply> wrapper = new EntityWrapper<>();
+        wrapper.eq("get_user_id", userId);
+        wrapper.eq("is_read", 0);
+        List<Reply> list = replyMapper.selectList(wrapper);
+        List<Map<String, Object>> listMap = new ArrayList<>();
+        for (Reply reply : list) {
+            Map<String, Object> map = reply.getMap();
+            int sendUserId = reply.getUserId();
+            UserInfo userInfo = userInfoMapper.selectById(sendUserId);
+            map.put("nickname", userInfo.getNickname());
+            map.put("userimg", userInfo.getUserimg());
+            listMap.add(map);
+        }
+        return listMap;
+    }
 
+    /**
+     * 将回复设置成已读
+     *
+     * @param replyId
+     */
+    @Override
+    public void MakeReplyIsRead(int replyId) {
+        Reply reply = replyMapper.selectById(replyId);
+        if (reply == null) {
+            throw new LcException(LcExceptionEnum.PARAM_ERROR);
+        }
+        reply.setIsRead(1);     //1为已读
+        replyMapper.updateById(reply);
+    }
 }

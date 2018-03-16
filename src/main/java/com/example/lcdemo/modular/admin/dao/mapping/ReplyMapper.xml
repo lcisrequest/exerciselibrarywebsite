@@ -12,6 +12,8 @@
         <result column="create_time" property="createTime" />
         <result column="forums_id" property="forumsId" />
         <result column="type" property="type" />
+        <result column="get_user_id" property="getUserId" />
+        <result column="is_read" property="isRead" />
     </resultMap>
 
 </mapper>

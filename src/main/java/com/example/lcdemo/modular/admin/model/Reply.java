@@ -4,13 +4,14 @@ import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * <p>
- * 
+ * <p>
  * </p>
  *
  * @author itspeed
@@ -51,7 +52,16 @@ public class Reply extends Model<Reply> {
      * 回复类型
      */
     private String type;
-
+    /**
+     * 收到回复的人的id
+     */
+    @TableField("get_user_id")
+    private Integer getUserId;
+    /**
+     * 是否已读
+     */
+    @TableField("is_read")
+    private Integer isRead;
 
     public Integer getId() {
         return id;
@@ -117,6 +127,22 @@ public class Reply extends Model<Reply> {
         this.type = type;
     }
 
+    public Integer getGetUserId() {
+        return getUserId;
+    }
+
+    public void setGetUserId(Integer getUserId) {
+        this.getUserId = getUserId;
+    }
+
+    public Integer getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(Integer isRead) {
+        this.isRead = isRead;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -125,30 +151,30 @@ public class Reply extends Model<Reply> {
     @Override
     public String toString() {
         return "Reply{" +
-        ", id=" + id +
-        ", userId=" + userId +
-        ", content=" + content +
-        ", commentId=" + commentId +
-        ", img=" + img +
-        ", createTime=" + createTime +
-        ", forumsId=" + forumsId +
-        ", type=" + type +
-        "}";
+                ", id=" + id +
+                ", userId=" + userId +
+                ", content=" + content +
+                ", commentId=" + commentId +
+                ", img=" + img +
+                ", createTime=" + createTime +
+                ", forumsId=" + forumsId +
+                ", type=" + type +
+                "}";
     }
 
-    public Map<String, Object> getMap(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",this.id);
-        map.put("content",this.content);
-        map.put("createTime",this.createTime);
-        map.put("img",this.img);
-        if(this.img==null){
-            map.put("img","");
+    public Map<String, Object> getMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", this.id);
+        map.put("content", this.content);
+        map.put("createTime", this.createTime);
+        map.put("img", this.img);
+        if (this.img == null) {
+            map.put("img", "");
         }
-        map.put("userId",this.userId);
-        map.put("commentId",this.commentId);
-        map.put("type",this.type);
-        map.put("forumsId",this.forumsId);
+        map.put("userId", this.userId);
+        map.put("commentId", this.commentId);
+        map.put("type", this.type);
+        map.put("forumsId", this.forumsId);
         return map;
     }
 }

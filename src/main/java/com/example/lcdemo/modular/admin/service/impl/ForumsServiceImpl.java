@@ -111,6 +111,11 @@ public class ForumsServiceImpl implements ForumsService {
         reply.setCreateTime(DateUtil.getTime());
         reply.setUserId(userId);
         reply.setType("forums"); //类型设置为讨论的回复
+        reply.setIsRead(0);      //默认为未读
+        int forumsId = reply.getForumsId();
+        Forums forums = forumsMapper.selectById(forumsId);
+        int getUserId = forums.getUserId();
+        reply.setGetUserId(getUserId);
         replyMapper.insert(reply);
     }
 
@@ -188,6 +193,7 @@ public class ForumsServiceImpl implements ForumsService {
 
     /**
      * 获取所有讨论的数量
+     *
      * @return
      */
     @Override

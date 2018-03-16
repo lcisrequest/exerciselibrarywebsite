@@ -56,8 +56,8 @@ public class UserTestController extends BaseController {
      */
     @RequestMapping("/submitTest")
     public ResponseEntity submitTest(@RequestBody UserTestDTO userTestDTO) {
-        List<Boolean> list = userTestService.submitTest(userTestDTO, getUserId());
-        return ResponseEntity.ok(SuccessTip.create(list, "请求成功"));
+        JSONObject jsonObject = userTestService.submitTest(userTestDTO, getUserId());
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
     }
 
     /**
@@ -107,8 +107,8 @@ public class UserTestController extends BaseController {
      */
     @RequestMapping("/submitError")
     public ResponseEntity submitError(@RequestBody UserTestDTO userTestDTO) {
-        List<Boolean> list = userTestService.submitErrorSubject(userTestDTO, getUserId());
-        return ResponseEntity.ok(SuccessTip.create(list, "提交成功"));
+        JSONObject jsonObject = userTestService.submitErrorSubject(userTestDTO, getUserId());
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "提交成功"));
     }
 
     /**
@@ -184,5 +184,18 @@ public class UserTestController extends BaseController {
     public ResponseEntity getTestScore(String problemType, String testType) {
         JSONObject jsonObject = userTestService.getMyTestNum(problemType, testType, getUserId());
         return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
+    }
+
+
+    /**
+     * 根据练习id获取用户练习详情
+     *
+     * @param userTestId
+     * @return
+     */
+    @RequestMapping("/getUserTestById")
+    public ResponseEntity getUserTestById(int userTestId) {
+        UserTest userTest = userTestService.getUserTestById(userTestId);
+        return ResponseEntity.ok(SuccessTip.create(userTest, "请求成功"));
     }
 }

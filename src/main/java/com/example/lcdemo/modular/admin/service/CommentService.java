@@ -20,4 +20,8 @@ public interface CommentService {
     int getReplyNum(int commentId);
 
     void addLike(int commentId,int userId);
+
+    List<Map<String, Object>> getMyReply(int userId);
+
+    void MakeReplyIsRead(int replyId);
 }

@@ -163,5 +163,33 @@ public class CommentController extends BaseController {
         String str = knowledgeService.addKnowledgeCollect(knowledgeId, getUserId());
         return ResponseEntity.ok(SuccessTip.create(str));
     }
+
+    /**
+     * 获取我的未读回复
+     *
+     * @return
+     */
+    @RequestMapping("/getNotReadReply")
+    public ResponseEntity getAllMyNotReadReply() {
+        List<Map<String, Object>> list = commentService.getMyReply(getUserId());
+        int count = list.size();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("list", list);
+        jsonObject.put("count", count);
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
+    }
+
+
+    /**
+     * 让回复变成已读
+     *
+     * @param replyId
+     * @return
+     */
+    @RequestMapping("/isReadReply")
+    public ResponseEntity letReplyIsRead(int replyId) {
+        commentService.MakeReplyIsRead(replyId);
+        return ResponseEntity.ok(SuccessTip.create("请求成功"));
+    }
 }
 

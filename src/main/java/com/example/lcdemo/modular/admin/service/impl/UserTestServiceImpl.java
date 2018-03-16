@@ -155,7 +155,7 @@ public class UserTestServiceImpl implements UserTestService {
      * @param userId
      */
     @Override
-    public List<Boolean> submitTest(UserTestDTO userTestDTO, int userId) {
+    public JSONObject submitTest(UserTestDTO userTestDTO, int userId) {
         UserTest userTest = new UserTest();
         String subjectIds = userTestDTO.getSubjectIds();
         String ids[] = subjectIds.split(","); //获取题目数组
@@ -192,7 +192,11 @@ public class UserTestServiceImpl implements UserTestService {
         userTest.setScore(score + "");
         userTest.setStartTime(DateUtil.getTime());
         userTestMapper.insert(userTest);            //新增练习记录
-        return listbool;
+        int newTestId = userTest.getId();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("list", listbool);
+        jsonObject.put("userTestId", newTestId);
+        return jsonObject;
     }
 
     /**
@@ -254,9 +258,11 @@ public class UserTestServiceImpl implements UserTestService {
         userTest.setStartTime(DateUtil.getTime());
         userTest.setTestId(testId);
         userTestMapper.insert(userTest);            //新增练习记录
+        int newTestId = userTest.getId();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", listbool);
         jsonObject.put("str", returnStr);
+        jsonObject.put("userTestId", newTestId);
         return jsonObject;
     }
 
@@ -349,7 +355,7 @@ public class UserTestServiceImpl implements UserTestService {
      * @return
      */
     @Override
-    public List<Boolean> submitErrorSubject(UserTestDTO userTestDTO, int userId) {
+    public JSONObject submitErrorSubject(UserTestDTO userTestDTO, int userId) {
         UserTest userTest = new UserTest();
         String subjectIds = userTestDTO.getSubjectIds();
         String ids[] = subjectIds.split(","); //获取题目数组
@@ -386,8 +392,11 @@ public class UserTestServiceImpl implements UserTestService {
         userTest.setSubjectNum(idNum);
         userTest.setScore(score + "");
         userTest.setStartTime(DateUtil.getTime());
-        userTestMapper.insert(userTest);            //新增练习记录
-        return listbool;
+        int newTestId = userTestMapper.insert(userTest);            //新增练习记录
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("list", listbool);
+        jsonObject.put("userTestId", newTestId);
+        return jsonObject;
     }
 
 
@@ -542,18 +551,19 @@ public class UserTestServiceImpl implements UserTestService {
 
     /**
      * 可根据练习类型和课程类型获取平均分，总分，总练习数，总题目数
+     *
      * @param problemType
      * @param userId
      * @return
      */
-    public JSONObject getMyTestNum(String problemType,String testType, int userId) {
+    public JSONObject getMyTestNum(String problemType, String testType, int userId) {
         Wrapper<UserTest> wrapper = new EntityWrapper<>();
         wrapper.eq("user_id", userId);
-        if(!problemType.equals("all")){             //当值为all时，表示获取所有
+        if (!problemType.equals("all")) {             //当值为all时，表示获取所有
             wrapper.eq("problem_type", problemType);
         }
-        if(!testType.equals(testType)){             //当值为all时，表示获取所有
-            wrapper.eq("test_type",testType);
+        if (!testType.equals(testType)) {             //当值为all时，表示获取所有
+            wrapper.eq("test_type", testType);
         }
         List<UserTest> list = userTestMapper.selectList(wrapper);
         int testCount = list.size();                //练习总数
@@ -570,5 +580,20 @@ public class UserTestServiceImpl implements UserTestService {
         jsonObject.put("subjectCount", subjectCount);
         jsonObject.put("average", average);
         return jsonObject;
+    }
+
+    /**
+     * 根据id获取用户练习详情
+     *
+     * @param userTestId
+     * @return
+     */
+    @Override
+    public UserTest getUserTestById(int userTestId) {
+        UserTest userTest = userTestMapper.selectById(userTestId);
+        if (userTest == null) {
+            throw new LcException(LcExceptionEnum.PARAM_ERROR);
+        }
+        return userTest;
     }
 }

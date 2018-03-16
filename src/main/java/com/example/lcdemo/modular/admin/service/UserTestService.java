@@ -15,7 +15,7 @@ public interface UserTestService {
 
     List<Integer> getAllMyOrderTest(int userId);
 
-    List<Boolean> submitTest(UserTestDTO userTestDTO, int userId);
+    JSONObject submitTest(UserTestDTO userTestDTO, int userId);
 
     JSONObject submitMock(int testId, String answers, int userId);
 
@@ -27,7 +27,7 @@ public interface UserTestService {
 
     void deleteError(int subjectId, int userId);
 
-    List<Boolean> submitErrorSubject(UserTestDTO userTestDTO, int userId);
+    JSONObject submitErrorSubject(UserTestDTO userTestDTO, int userId);
 
     List<Map<String, Object>> getAllUserTest(String problemType, int page, int limit);
 
@@ -44,4 +44,6 @@ public interface UserTestService {
     Integer getAllMyErrorSubjectNum(String courseType, int userId);
 
     JSONObject getMyTestNum(String problemType,String testType, int userId);
+
+    UserTest getUserTestById(int userTestId);
 }
