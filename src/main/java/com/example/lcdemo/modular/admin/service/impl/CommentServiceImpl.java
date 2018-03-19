@@ -8,12 +8,12 @@ import com.example.lcdemo.base.util.DateUtil;
 import com.example.lcdemo.modular.admin.dao.CommentMapper;
 import com.example.lcdemo.modular.admin.dao.ReplyMapper;
 import com.example.lcdemo.modular.admin.dao.UserInfoMapper;
-import com.example.lcdemo.modular.admin.dao.UserLikeMapper;
+import com.example.lcdemo.modular.admin.dao.LikeMapper;
 import com.example.lcdemo.modular.admin.dto.CommentDTO;
 import com.example.lcdemo.modular.admin.model.Comment;
 import com.example.lcdemo.modular.admin.model.Reply;
 import com.example.lcdemo.modular.admin.model.UserInfo;
-import com.example.lcdemo.modular.admin.model.UserLike;
+import com.example.lcdemo.modular.admin.model.Like;
 import com.example.lcdemo.modular.admin.service.CommentService;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     UserInfoMapper userInfoMapper;
     @Autowired
-    UserLikeMapper userLikeMapper;
+    LikeMapper userLikeMapper;
 
     /**
      * 添加评论
@@ -174,13 +174,13 @@ public class CommentServiceImpl implements CommentService {
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
         int likeNum = comment.getLike();
-        UserLike like = new UserLike();
+        Like like = new Like();
         like.setUserId(userId);
         like.setCommentId(commentId);
         like.setType("comment");
-        UserLike flag = userLikeMapper.selectOne(like);
+        Like flag = userLikeMapper.selectOne(like);
         if (flag != null) {
-            Wrapper<UserLike> wrapper = new EntityWrapper<>();
+            Wrapper<Like> wrapper = new EntityWrapper<>();
             wrapper.eq("user_id", userId);
             wrapper.eq("comment_id", commentId);
             wrapper.eq("type", "comment");

@@ -8,11 +8,11 @@ import com.example.lcdemo.base.util.DateUtil;
 import com.example.lcdemo.modular.admin.dao.ForumsMapper;
 import com.example.lcdemo.modular.admin.dao.ReplyMapper;
 import com.example.lcdemo.modular.admin.dao.UserInfoMapper;
-import com.example.lcdemo.modular.admin.dao.UserLikeMapper;
+import com.example.lcdemo.modular.admin.dao.LikeMapper;
 import com.example.lcdemo.modular.admin.model.Forums;
 import com.example.lcdemo.modular.admin.model.Reply;
 import com.example.lcdemo.modular.admin.model.UserInfo;
-import com.example.lcdemo.modular.admin.model.UserLike;
+import com.example.lcdemo.modular.admin.model.Like;
 import com.example.lcdemo.modular.admin.service.ForumsService;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class ForumsServiceImpl implements ForumsService {
     @Autowired
     ForumsMapper forumsMapper;
     @Autowired
-    UserLikeMapper userLikeMapper;
+    LikeMapper userLikeMapper;
     @Autowired
     ReplyMapper replyMapper;
     @Autowired
@@ -61,7 +61,7 @@ public class ForumsServiceImpl implements ForumsService {
             throw new LcException(LcExceptionEnum.CANNOT_DELETE);
         }
         forumsMapper.deleteById(forumsId);
-        Wrapper<UserLike> wrapper = new EntityWrapper<>();
+        Wrapper<Like> wrapper = new EntityWrapper<>();
         wrapper.eq("forums_id", forumsId);
         wrapper.eq("type", "forums");
         userLikeMapper.delete(wrapper);         //删除该讨论的所有点赞
@@ -85,11 +85,11 @@ public class ForumsServiceImpl implements ForumsService {
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
         int likeNum = forums.getLike();
-        UserLike userLike = new UserLike();
+        Like userLike = new Like();
         userLike.setType("forums");
         userLike.setUserId(userId);
         userLike.setForumsId(forumsId);
-        UserLike ul = userLikeMapper.selectOne(userLike);   //判断是否点过赞
+        Like ul = userLikeMapper.selectOne(userLike);   //判断是否点过赞
         if (ul == null) {   //若没点过
             userLikeMapper.insert(userLike);    //则新增点赞
             forums.setLike(likeNum + 1);          //点赞数加一
