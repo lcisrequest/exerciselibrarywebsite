@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.lcdemo.base.controller.BaseController;
 import com.example.lcdemo.base.tips.SuccessTip;
 import com.example.lcdemo.modular.admin.dto.CommentDTO;
-import com.example.lcdemo.modular.admin.model.Comment;
 import com.example.lcdemo.modular.admin.model.Reply;
 import com.example.lcdemo.modular.admin.service.CollectService;
 import com.example.lcdemo.modular.admin.service.CommentService;
@@ -25,7 +24,7 @@ import java.util.Map;
 @RequestMapping("/comment")
 public class CommentController extends BaseController {
     @Autowired
-    private CommentService commentService;
+    CommentService commentService;
     @Autowired
     CollectService collectService;
     @Autowired
