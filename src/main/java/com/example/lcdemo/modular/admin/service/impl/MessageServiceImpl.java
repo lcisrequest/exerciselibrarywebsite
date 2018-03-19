@@ -137,20 +137,4 @@ public class MessageServiceImpl implements MessageService {
         return false;
     }
 
-    /**
-     * 忘记密码通过验证码修改密码
-     * @param userId
-     * @param varcode
-     * @param newPassword
-     */
-    @Override
-    public void forgetPassword(int userId, String varcode, String newPassword) {
-        boolean isRight = this.VarCodeIsTrue(userId, varcode);
-        if (!isRight) {
-            throw new LcException(LcExceptionEnum.VAR_CODE_OVERTIME); //验证码超时
-        }
-        UserInfo user = userInfoMapper.selectById(userId);
-        user.setPassword(newPassword);
-        userInfoMapper.updateById(user);    //更改密码
-    }
 }

@@ -8,5 +8,4 @@ public interface MessageService {
 
     boolean sendInTime(int userId);
 
-    void forgetPassword(int userId, String varcode, String newPassword);
 }

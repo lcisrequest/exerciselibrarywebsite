@@ -111,5 +111,15 @@ public class UserInfoServiceImpl implements UserInfoService {
         return jsonObject;
     }
 
-
+    /**
+     * 修改密码
+     * @param newPassword
+     * @param userId
+     */
+    @Override
+    public void updatePassword(String newPassword,int userId){
+        UserInfo user = userInfoMapper.selectById(userId);
+        user.setPassword(newPassword);
+        userInfoMapper.updateById(user);    //更改密码
+    }
 }

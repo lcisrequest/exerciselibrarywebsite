@@ -3,6 +3,8 @@ package com.example.lcdemo.modular.admin.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.lcdemo.base.controller.BaseController;
+import com.example.lcdemo.base.exception.LcException;
+import com.example.lcdemo.base.exception.LcExceptionEnum;
 import com.example.lcdemo.base.tips.SuccessTip;
 import com.example.lcdemo.base.util.Base64Util;
 import com.example.lcdemo.base.util.DateUtil;
@@ -182,15 +184,30 @@ public class UserController extends BaseController {
 
 
     /**
-     * 通过验证码修改密码
+     * 判断验证码
      *
-     * @param VarCode
+     * @param varCode
+     * @param
+     * @return
+     */
+    @RequestMapping("/judgeVarCode")
+    public ResponseEntity judgeVarCode(String varCode) {
+        boolean isRight = messageService.VarCodeIsTrue(getUserId(), varCode);
+        if (!isRight) {
+            throw new LcException(LcExceptionEnum.VAR_CODE_OVERTIME); //验证码超时
+        }
+        return ResponseEntity.ok(SuccessTip.create(isRight, "请求成功"));
+    }
+
+    /**
+     * 修改密码
+     *
      * @param newPassword
      * @return
      */
-    @RequestMapping("/forgetPassword")
-    public ResponseEntity forgetPassword(String VarCode, String newPassword) {
-        messageService.forgetPassword(getUserId(), VarCode, newPassword);
+    @RequestMapping("/updatePassword")
+    public ResponseEntity updatePassword(String newPassword) {
+        userInfoService.updatePassword(newPassword, getUserId());
         return ResponseEntity.ok(SuccessTip.create("修改成功"));
     }
 }

@@ -11,4 +11,6 @@ public interface UserInfoService {
     void updateNickName(String nickName, int userId);
 
     JSONObject getAllMyNumInfo(int userId);
+
+    void updatePassword(String newPassword,int userId);
 }
