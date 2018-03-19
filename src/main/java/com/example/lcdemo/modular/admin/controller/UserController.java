@@ -9,12 +9,10 @@ import com.example.lcdemo.base.util.DateUtil;
 import com.example.lcdemo.config.properties.HiguProperties;
 import com.example.lcdemo.modular.admin.dao.ImgMapper;
 import com.example.lcdemo.modular.admin.dto.Base64DTO;
-import com.example.lcdemo.modular.admin.model.Clock;
-import com.example.lcdemo.modular.admin.model.Homepage;
-import com.example.lcdemo.modular.admin.model.Img;
-import com.example.lcdemo.modular.admin.model.UserInfo;
+import com.example.lcdemo.modular.admin.model.*;
 import com.example.lcdemo.modular.admin.service.ClockService;
 import com.example.lcdemo.modular.admin.service.HomepageService;
+import com.example.lcdemo.modular.admin.service.MessageService;
 import com.example.lcdemo.modular.admin.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +35,8 @@ public class UserController extends BaseController {
     HomepageService homepageService;
     @Autowired
     ClockService clockService;
+    @Autowired
+    MessageService messageService;
 
     /**
      * 用户注册
@@ -158,13 +158,39 @@ public class UserController extends BaseController {
 
     /**
      * 修改昵称
+     *
      * @param nickName
      * @return
      */
     @RequestMapping("/updateNickname")
-    public ResponseEntity updateNickname(String nickName){
-        userInfoService.updateNickName(nickName,getUserId());
+    public ResponseEntity updateNickname(String nickName) {
+        userInfoService.updateNickName(nickName, getUserId());
         return ResponseEntity.ok(SuccessTip.create("修改成功"));
     }
 
+    /**
+     * 发送验证码
+     *
+     * @param tel
+     * @return
+     */
+    @RequestMapping("/sendMessage")
+    public ResponseEntity sendMessage(String tel) {
+        messageService.sendMessage(tel, getUserId());
+        return ResponseEntity.ok(SuccessTip.create("请求成功"));
+    }
+
+
+    /**
+     * 通过验证码修改密码
+     *
+     * @param VarCode
+     * @param newPassword
+     * @return
+     */
+    @RequestMapping("/forgetPassword")
+    public ResponseEntity forgetPassword(String VarCode, String newPassword) {
+        messageService.forgetPassword(getUserId(), VarCode, newPassword);
+        return ResponseEntity.ok(SuccessTip.create("修改成功"));
+    }
 }

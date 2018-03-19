@@ -25,6 +25,11 @@ public enum LcExceptionEnum {
     /**
      * 错误的请求
      */
+    COUNT_IS_OVER(201,"每天只能发送五次验证码!"),
+    TIME_NOT_ENOUGH(201,"1分钟之内不可重复发送验证码!"),
+    VAR_CODE_IS_WRONG(201,"验证码错误!"),
+    VAR_CODE_OVERTIME(201,"验证码超时!"),
+    VARCODE_ERROR(201,"发送验证码发生错误，可能是余额不足"),
     INTEREST_NOT_EXIST(201,"该兴趣不存在"),
     COURSE_NOT_EXIST(201,"该课程不存在"),
     CANNOT_DELETE(201,"这不是你的，不能删除"),
