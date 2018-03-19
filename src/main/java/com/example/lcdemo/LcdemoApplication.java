@@ -45,8 +45,8 @@ public class LcdemoApplication  extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(LcdemoApplication.class, args);
     }
- /*   @Override
+    @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(LcdemoApplication.class);
-    }*/
+    }
 }
