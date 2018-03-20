@@ -59,9 +59,9 @@ public class UserTestServiceImpl implements UserTestService {
                 for (int id : orderSubIds) {
                     if (id == subId) {        //判断该习题我是否做过了
                         isDone = true;
-                    }
+                    }//若该习题没做过
                 }
-                if (!isDone) {                //若该习题没做过
+                if (!isDone) {
                     returnList.add(sub.getMap());    //则加入返回
                     num++;                  //习题数量+1
                 }
@@ -602,19 +602,19 @@ public class UserTestServiceImpl implements UserTestService {
         UserTest userTest = userTestMapper.selectById(userTestId);
         String subjectStr = userTest.getSubjectId();
         String answerStr = userTest.getTestResult();
-        String[] subjects = subjectStr.split(",");
-        String[] answers = answerStr.split(",");
+        String[] subjects = subjectStr.split(",");//获取所有题目id
+        String[] answers = answerStr.split(",");  //获取所有答案
         int flag = 0;
         int rightNum = 0;
         for (String subjectId : subjects) {
             Subject subject = subjectMapper.selectById(subjectId);
-            int rightAnswer = subject.getRightKey();
+            int rightAnswer = subject.getRightKey();        //获得正确答案
             int answer = Integer.valueOf(answers[flag++]);
-            if (answer == rightAnswer) {
+            if (answer == rightAnswer) {                    //判断答案是否正确
                 rightNum++;
             }
         }
-        return rightNum;
+        return rightNum;                                //得到正确总数
     }
 
     /**
