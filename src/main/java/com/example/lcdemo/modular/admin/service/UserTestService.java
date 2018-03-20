@@ -46,4 +46,6 @@ public interface UserTestService {
     JSONObject getMyTestNum(String problemType,String testType, int userId);
 
     UserTest getUserTestById(int userTestId);
+
+    int getRightNumByTestId(int userTestId);
 }

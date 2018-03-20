@@ -574,17 +574,47 @@ public class UserTestServiceImpl implements UserTestService {
         int testCount = list.size();                //练习总数
         double allscore = 0;                        //总分数
         int subjectCount = 0;                       //题目总数
+        int rightNum = 0;                           //正确的题目数量
         for (UserTest ut : list) {
             allscore = Double.valueOf(ut.getScore()) + allscore;
             subjectCount = ut.getSubjectNum() + subjectCount;
+            rightNum = rightNum + this.getRightNumByTestId(ut.getId()); //累加正确的题目数量
         }
         double average = allscore / testCount;      //计算出平均分
+        double rightRate = rightNum / subjectCount; //正确率 = 正确题目数 / 题目总数
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("testCount", testCount);
         jsonObject.put("allscore", allscore);
         jsonObject.put("subjectCount", subjectCount);
         jsonObject.put("average", average);
+        jsonObject.put("rightRate", rightRate);
         return jsonObject;
+    }
+
+    /**
+     * 根据用户练习id得到正确的题目数量
+     *
+     * @param userTestId
+     * @return
+     */
+    @Override
+    public int getRightNumByTestId(int userTestId) {
+        UserTest userTest = userTestMapper.selectById(userTestId);
+        String subjectStr = userTest.getSubjectId();
+        String answerStr = userTest.getTestResult();
+        String[] subjects = subjectStr.split(",");
+        String[] answers = answerStr.split(",");
+        int flag = 0;
+        int rightNum = 0;
+        for (String subjectId : subjects) {
+            Subject subject = subjectMapper.selectById(subjectId);
+            int rightAnswer = subject.getRightKey();
+            int answer = Integer.valueOf(answers[flag++]);
+            if (answer == rightAnswer) {
+                rightNum++;
+            }
+        }
+        return rightNum;
     }
 
     /**
