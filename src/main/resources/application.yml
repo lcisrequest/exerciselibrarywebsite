@@ -5,7 +5,7 @@ server:
     use-forward-headers: true
     protocolHeaderHttpsValue: http
 higu:
-  file-upload-path: /lc/img/ #文件上传目录(不配置的话为java.io.tmpdir目录)
+  file-upload-path: /lc/tomcat/apache-tomcat-8.0.50/webapps/img #文件上传目录(不配置的话为java.io.tmpdir目录)
   img-url-path: /img
   swagger-open: true #api 文档开关
   agreement-path: /var/data/higu/resource/agreement/   #协议html文件目录

@@ -150,6 +150,8 @@ public class UserTestServiceImpl implements UserTestService {
 
     /**
      * 提交练习（顺序练习和随机练习）
+     * <p>
+     * 。
      *
      * @param userTestDTO
      * @param userId
@@ -196,6 +198,7 @@ public class UserTestServiceImpl implements UserTestService {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", listbool);
         jsonObject.put("userTestId", newTestId);
+        jsonObject.put("score", score);
         return jsonObject;
     }
 
@@ -263,6 +266,7 @@ public class UserTestServiceImpl implements UserTestService {
         jsonObject.put("list", listbool);
         jsonObject.put("str", returnStr);
         jsonObject.put("userTestId", newTestId);
+        jsonObject.put("score", Score);
         return jsonObject;
     }
 
@@ -392,10 +396,11 @@ public class UserTestServiceImpl implements UserTestService {
         userTest.setSubjectNum(idNum);
         userTest.setScore(score + "");
         userTest.setStartTime(DateUtil.getTime());
-        int newTestId = userTestMapper.insert(userTest);            //新增练习记录
+        userTestMapper.insert(userTest);            //新增练习记录
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", listbool);
-        jsonObject.put("userTestId", newTestId);
+        jsonObject.put("userTestId", userTest.getId());
+        jsonObject.put("score", score);
         return jsonObject;
     }
 
