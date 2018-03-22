@@ -11,6 +11,8 @@ import com.example.lcdemo.modular.admin.dto.UserTestDTO;
 import com.example.lcdemo.modular.admin.model.*;
 import com.example.lcdemo.modular.admin.service.SubjectService;
 import com.example.lcdemo.modular.admin.service.UserTestService;
+import com.example.lcdemo.modular.backend.dao.ConfigMapper;
+import com.example.lcdemo.modular.backend.model.Config;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,8 @@ public class UserTestServiceImpl implements UserTestService {
     ErrorSubjectMapper errorSubjectMapper;
     @Autowired
     UserInfoMapper userInfoMapper;
+    @Autowired
+    ConfigMapper configMapper;
 
     /**
      * 获取一套顺序测试
@@ -630,5 +634,47 @@ public class UserTestServiceImpl implements UserTestService {
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
         return userTest;
+    }
+
+    /**
+     * 偷看题目答案
+     * @param userId
+     * @param subjectId
+     * @return
+     */
+    @Override
+    public Integer peek(int userId, int subjectId){
+        Subject subject = subjectMapper.selectById(subjectId);
+        if(subject==null){  //判断该题目是否存在
+            throw new LcException(LcExceptionEnum.SUBJECT_IS_NOT_EXIST);
+        }
+        this.ICanPeek(userId); //判断能否偷看，并减去偷看金币
+        return subject.getRightKey();
+    }
+
+    /**
+     * 判断能否偷看，并减去偷看金币
+     * @param userId
+     */
+    @Override
+    public void ICanPeek(int userId){
+        Config config = new Config();
+        config.setKey("peek_frice");
+        config = configMapper.selectOne(config);
+        if (config==null){
+            throw new LcException(LcExceptionEnum.CONFIG_DB_WRONG);
+        }
+        UserInfo userInfo = userInfoMapper.selectById(userId);
+        if(userInfo==null){
+            throw new LcException(LcExceptionEnum.PARAM_ERROR);
+        }
+        int peekPrice = Integer.valueOf(config.getValue()); //得到偷看的价格
+        int userGold = userInfo.getGold();
+        if(userGold<peekPrice){  //判断用户金币是否足够
+            throw new LcException(LcExceptionEnum.GOLD_NOT_ENOUGH);
+        }
+        userGold = userGold - peekPrice;//减去偷看所用金币
+        userInfo.setGold(userGold);
+        userInfoMapper.updateById(userInfo); //修改用户剩余金币
     }
 }

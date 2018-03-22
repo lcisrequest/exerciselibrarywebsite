@@ -1,8 +1,6 @@
 package com.example.lcdemo.common.dto;
 
-/**
- * Created by tsy
- */
+
 public class TodayTransactionResultDTO {
     private int jyje;
     private int jybs;

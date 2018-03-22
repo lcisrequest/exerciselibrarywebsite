@@ -48,4 +48,8 @@ public interface UserTestService {
     UserTest getUserTestById(int userTestId);
 
     int getRightNumByTestId(int userTestId);
+
+    Integer peek(int userId, int subjectId);
+
+    void ICanPeek(int userId);
 }

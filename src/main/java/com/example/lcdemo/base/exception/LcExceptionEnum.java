@@ -25,6 +25,8 @@ public enum LcExceptionEnum {
     /**
      * 错误的请求
      */
+    GOLD_NOT_ENOUGH(201,"您的金币不足!"),
+    CONFIG_DB_WRONG(201,"数据库配置表信息错误"),
     COUNT_IS_OVER(201,"每天只能发送五次验证码!"),
     TIME_NOT_ENOUGH(201,"1分钟之内不可重复发送验证码!"),
     VAR_CODE_IS_WRONG(201,"验证码错误!"),

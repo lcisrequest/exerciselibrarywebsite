@@ -198,4 +198,16 @@ public class UserTestController extends BaseController {
         UserTest userTest = userTestService.getUserTestById(userTestId);
         return ResponseEntity.ok(SuccessTip.create(userTest, "请求成功"));
     }
+
+
+    /**
+     * 偷看答案
+     * @param subjectId
+     * @return
+     */
+    @RequestMapping("/peek")
+    public ResponseEntity peekAnswer(int subjectId){
+        int rightKey = userTestService.peek(getUserId(),subjectId);
+        return ResponseEntity.ok(SuccessTip.create(rightKey,"偷看成功"));
+    }
 }
