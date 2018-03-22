@@ -1,12 +1,14 @@
 package com.example.lcdemo.modular.admin.controller;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.lcdemo.base.controller.BaseController;
 import com.example.lcdemo.base.tips.SuccessTip;
 import com.example.lcdemo.modular.admin.model.Forums;
 import com.example.lcdemo.modular.admin.model.Reply;
 import com.example.lcdemo.modular.admin.service.ForumsService;
+import com.example.lcdemo.modular.admin.service.UserTestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,11 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 讨论区，圈子
+ */
 @RestController
 @RequestMapping("/forums")
 public class ForumsController extends BaseController {
     @Autowired
     ForumsService forumsService;
+    @Autowired
+    UserTestService userTestService;
 
     /**
      * 新增讨论
@@ -105,5 +112,26 @@ public class ForumsController extends BaseController {
         jsonObject.put("list", list);
         jsonObject.put("count", count);
         return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
+    }
+
+    /**
+     * 获取全部题目数量的排行榜
+     *
+     * @return
+     */
+    @RequestMapping("/getSubjectRank")
+    public ResponseEntity getAllRank() {
+        JSONArray jsonArray = userTestService.getAllRank();
+        return ResponseEntity.ok(SuccessTip.create(jsonArray, "获取成功"));
+    }
+
+    /**
+     * 获取今日题目数量的排行榜
+     * @return
+     */
+    @RequestMapping("/getTodaySubjectRank")
+    public ResponseEntity getTodayAllRank(){
+        JSONArray jsonArray = userTestService.getTodayAllRank();
+        return ResponseEntity.ok(SuccessTip.create(jsonArray, "获取成功"));
     }
 }

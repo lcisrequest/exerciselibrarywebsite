@@ -1,5 +1,6 @@
 package com.example.lcdemo.modular.admin.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.lcdemo.modular.admin.dto.UserTestDTO;
 import com.example.lcdemo.modular.admin.model.Subject;
@@ -52,4 +53,8 @@ public interface UserTestService {
     Integer peek(int userId, int subjectId);
 
     void ICanPeek(int userId);
+
+    JSONArray getAllRank();
+
+    JSONArray getTodayAllRank();
 }

@@ -1,5 +1,6 @@
 package com.example.lcdemo.modular.admin.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
@@ -36,6 +37,8 @@ public class UserTestServiceImpl implements UserTestService {
     UserInfoMapper userInfoMapper;
     @Autowired
     ConfigMapper configMapper;
+    @Autowired
+    UserSubjectnumMapper userSubjectnumMapper;
 
     /**
      * 获取一套顺序测试
@@ -187,6 +190,7 @@ public class UserTestServiceImpl implements UserTestService {
         }
         double rightRate = (double) isRightNum / (double) aNum; //计算出正确率
         double score = (double) 100 * rightRate;             //计算出最终得分
+        this.updateUserRightNum(userId, isRightNum);   //更新用户正确数量
         DecimalFormat df = new DecimalFormat("#.0");
         score = Double.valueOf(df.format(score));
         userTest.setUserId(userId);
@@ -244,6 +248,7 @@ public class UserTestServiceImpl implements UserTestService {
         }
         double rightRate = (double) rightNum / (double) aNum;           //计算出正确率
         double Score = Double.valueOf(test.getTestFraction()) * rightRate; //计算出最终得分
+        this.updateUserRightNum(userId, rightNum);   //更新用户正确数量
         DecimalFormat df = new DecimalFormat("#.0");
         Score = Double.valueOf(df.format(Score));                       //精确到小数点后一位
         StringBuilder returnStr = new StringBuilder();
@@ -254,6 +259,11 @@ public class UserTestServiceImpl implements UserTestService {
         } else {
             returnStr.append(",请继续努力！");
         }
+        UserTest scoreTop = new UserTest();
+        scoreTop.setUserId(userId);
+        scoreTop.setTestId(testId);
+        scoreTop.setIsTopScore(1);
+        scoreTop = userTestMapper.selectOne(scoreTop);
         UserTest userTest = new UserTest();
         userTest.setUserId(userId);
         userTest.setProblemType(test.getProblemType());
@@ -264,6 +274,18 @@ public class UserTestServiceImpl implements UserTestService {
         userTest.setScore(Score + "");
         userTest.setStartTime(DateUtil.getTime());
         userTest.setTestId(testId);
+        if (scoreTop == null) {         //判断之前是否做过该练习
+            userTest.setIsTopScore(1);  //若没有，则设置现在成绩为最高成绩
+        } else {         //若做过该练习
+            double top = Double.valueOf(scoreTop.getScore());
+            if (Score > top) {  //判断现在成绩是否大于最高成绩
+                userTest.setIsTopScore(1);      //大于则设置现在成绩为最高成绩
+                scoreTop.setIsTopScore(0);      //取消过去的最高成绩
+                userTestMapper.updateById(scoreTop);
+            } else {
+                userTest.setIsTopScore(0); //否则不设置现在成绩为最高成绩
+            }
+        }
         userTestMapper.insert(userTest);            //新增练习记录
         int newTestId = userTest.getId();
         JSONObject jsonObject = new JSONObject();
@@ -390,6 +412,7 @@ public class UserTestServiceImpl implements UserTestService {
         }
         double rightRate = (double) rightNum / (double) aNum;           //计算出正确率
         double score = (double) 100 * rightRate;                        //计算出最终得分
+        this.updateUserRightNum(userId, rightNum);   //更新用户正确数量
         DecimalFormat df = new DecimalFormat("#.0");            //精确到小数点后一位
         score = Double.valueOf(df.format(score));
         userTest.setUserId(userId);
@@ -517,6 +540,7 @@ public class UserTestServiceImpl implements UserTestService {
         Wrapper<UserTest> wrapper = new EntityWrapper<>();
         wrapper.eq("test_id", testId);
         wrapper.orderBy("score", false);
+        wrapper.eq("is_top_score", 1);
         RowBounds rowBounds = new RowBounds(0, 10);//分页
         List<UserTest> list = userTestMapper.selectPage(rowBounds, wrapper);
         List<Map<String, Object>> listMap = new ArrayList<>();
@@ -638,14 +662,15 @@ public class UserTestServiceImpl implements UserTestService {
 
     /**
      * 偷看题目答案
+     *
      * @param userId
      * @param subjectId
      * @return
      */
     @Override
-    public Integer peek(int userId, int subjectId){
+    public Integer peek(int userId, int subjectId) {
         Subject subject = subjectMapper.selectById(subjectId);
-        if(subject==null){  //判断该题目是否存在
+        if (subject == null) {  //判断该题目是否存在
             throw new LcException(LcExceptionEnum.SUBJECT_IS_NOT_EXIST);
         }
         this.ICanPeek(userId); //判断能否偷看，并减去偷看金币
@@ -654,27 +679,99 @@ public class UserTestServiceImpl implements UserTestService {
 
     /**
      * 判断能否偷看，并减去偷看金币
+     *
      * @param userId
      */
     @Override
-    public void ICanPeek(int userId){
+    public void ICanPeek(int userId) {
         Config config = new Config();
         config.setKey("peek_frice");
         config = configMapper.selectOne(config);
-        if (config==null){
+        if (config == null) {
             throw new LcException(LcExceptionEnum.CONFIG_DB_WRONG);
         }
         UserInfo userInfo = userInfoMapper.selectById(userId);
-        if(userInfo==null){
+        if (userInfo == null) {
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
         int peekPrice = Integer.valueOf(config.getValue()); //得到偷看的价格
         int userGold = userInfo.getGold();
-        if(userGold<peekPrice){  //判断用户金币是否足够
+        if (userGold < peekPrice) {  //判断用户金币是否足够
             throw new LcException(LcExceptionEnum.GOLD_NOT_ENOUGH);
         }
         userGold = userGold - peekPrice;//减去偷看所用金币
         userInfo.setGold(userGold);
         userInfoMapper.updateById(userInfo); //修改用户剩余金币
+    }
+
+    /**
+     * 获取总题目排行榜的前十名
+     * @return
+     */
+    @Override
+    public JSONArray getAllRank() {
+        List<Map<String, Object>> listMap = userSubjectnumMapper.selectSubjectRank();
+        JSONArray jsonArray = new JSONArray();
+        for (Map<String, Object> map : listMap) { //遍历获取用户头像和昵称
+            int userId = (int) map.get("user_id");
+            UserInfo userInfo = userInfoMapper.selectById(userId);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("userSubjectNum", map);
+            jsonObject.put("userimg", userInfo.getUserimg());
+            jsonObject.put("nickname", userInfo.getNickname());
+            jsonArray.add(jsonObject);
+        }
+        return jsonArray;
+    }
+
+    /**
+     * 获取今日总题目排行榜的前十名
+     * @return
+     */
+    @Override
+    public JSONArray getTodayAllRank(){
+        String today = DateUtil.getDay()+" 00:00:00";
+        List<Map<String, Object>> listMap = userSubjectnumMapper.selectTodaySubhectRank(today);
+        JSONArray jsonArray = new JSONArray();
+        for (Map<String, Object> map : listMap) { //遍历获取用户头像和昵称
+            int userId = (int) map.get("user_id");
+            UserInfo userInfo = userInfoMapper.selectById(userId);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("userSubjectNum", map);
+            jsonObject.put("userimg", userInfo.getUserimg());
+            jsonObject.put("nickname", userInfo.getNickname());
+            jsonArray.add(jsonObject);
+        }
+        return jsonArray;
+    }
+
+    /**
+     * 更新用户的正确题目数量
+     *
+     * @param userId
+     * @param rightNum
+     */
+    public void updateUserRightNum(int userId, int rightNum) {
+     /*   UserSubjectnum userSubjectnum = new UserSubjectnum();
+        userSubjectnum.setUserId(userId);
+        userSubjectnum = userSubjectnumMapper.selectOne(userSubjectnum); //查询是否有做过题
+        if (userSubjectnum == null) {       //若没做过题
+            userSubjectnum = new UserSubjectnum();
+            userSubjectnum.setUserId(userId);
+            userSubjectnum.setCreateTime(DateUtil.getTime());
+            userSubjectnum.setSubjectNum(rightNum);
+            userSubjectnumMapper.insert(userSubjectnum);  //则新增记录
+        } else {
+            int num = userSubjectnum.getSubjectNum(); //取得过去的正确数量
+            num = num + rightNum;      //累加上这次的正确数量
+            userSubjectnum.setSubjectNum(num);
+            userSubjectnum.setCreateTime(DateUtil.getTime());
+            userSubjectnumMapper.updateById(userSubjectnum); //更新现在的正确数量
+        }*/
+        UserSubjectnum userSubjectnum = new UserSubjectnum();
+        userSubjectnum.setUserId(userId);
+        userSubjectnum.setCreateTime(DateUtil.getTime());
+        userSubjectnum.setSubjectNum(rightNum);
+        userSubjectnumMapper.insert(userSubjectnum);  //新增记录
     }
 }

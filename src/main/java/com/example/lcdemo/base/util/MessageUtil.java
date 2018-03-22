@@ -42,7 +42,8 @@ public class MessageUtil {
     public static String sendMessage(String tel) {
         String result = null;
         String url = "http://v.juhe.cn/sms/send";//请求接口地址
-        String tpl = "#code#=" + MessageUtil.getRandom();
+        String random =  MessageUtil.getRandom()+"";
+        String tpl = "#code#=" +random;
         System.out.println(tpl);
         Map params = new HashMap();//请求参数
         params.put("mobile", tel);//接收短信的手机号码
@@ -57,7 +58,7 @@ public class MessageUtil {
             JSONObject object = JSONObject.parseObject(result);
             if (object.getInteger("error_code") == 0) {
                 System.out.println(object.get("result"));
-                return tpl;
+                return random;
             } else {
                 System.out.println(object.get("error_code") + ":" + object.get("reason"));
                 return null;

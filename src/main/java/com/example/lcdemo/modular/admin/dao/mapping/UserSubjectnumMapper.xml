@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.lcdemo.modular.admin.dao.UserSubjectnumMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.lcdemo.modular.admin.model.UserSubjectnum">
+        <id column="id" property="id" />
+        <result column="subject_num" property="subjectNum" />
+        <result column="user_id" property="userId" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <select id="selectSubjectRank" resultType="java.util.Map">
+         SELECT id,SUM(subject_num),user_id,create_time FROM user_subjectnum GROUP BY user_id ORDER BY SUM(subject_num) DESC  LIMIT 0,10 ;
+    </select>
+
+    <select id="selectTodaySubhectRank" resultType="java.util.Map">
+        SELECT id,SUM(subject_num),user_id FROM user_subjectnum  WHERE   create_time > #{startTime}   GROUP BY user_id ORDER BY SUM(subject_num) DESC
+        LIMIT 0,10;
+    </select>
+</mapper>

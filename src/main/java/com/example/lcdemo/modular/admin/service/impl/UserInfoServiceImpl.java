@@ -5,7 +5,9 @@ import com.example.lcdemo.base.exception.LcException;
 import com.example.lcdemo.base.exception.LcExceptionEnum;
 import com.example.lcdemo.base.util.DateUtil;
 import com.example.lcdemo.modular.admin.dao.UserInfoMapper;
+import com.example.lcdemo.modular.admin.dao.UserSubjectnumMapper;
 import com.example.lcdemo.modular.admin.model.UserInfo;
+import com.example.lcdemo.modular.admin.model.UserSubjectnum;
 import com.example.lcdemo.modular.admin.service.ClockService;
 import com.example.lcdemo.modular.admin.service.CollectService;
 import com.example.lcdemo.modular.admin.service.UserInfoService;
@@ -28,6 +30,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     KnowledgeService knowledgeService;
     @Autowired
     ClockService clockService;
+    @Autowired
+    UserSubjectnumMapper userSubjectnumMapper;
 
     /**
      * 用户注册
@@ -100,6 +104,9 @@ public class UserInfoServiceImpl implements UserInfoService {
         int testNum = userTestService.selectMyUserTestCount("all", userId);  //获取我的所有练习数量
         int collectKnowledgeNum = knowledgeService.getAllMyCollectKnowledgeCount(0, userId); //获取我的收藏的课程的数量
         boolean isClock = clockService.todayIsClock(userId);//获取我今天是否已经打卡
+        UserSubjectnum userSubjectnum = new UserSubjectnum();
+        userSubjectnum.setUserId(userId);
+        userSubjectnum = userSubjectnumMapper.selectOne(userSubjectnum); //获取我的所有正确题目数量
         UserInfo userInfo = userInfoMapper.selectById(userId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("userInfo", userInfo);
@@ -108,6 +115,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         jsonObject.put("testNum", testNum);
         jsonObject.put("collectKnowledgeNum", collectKnowledgeNum);
         jsonObject.put("isClock", isClock);
+        jsonObject.put("rightSubjectNum",userSubjectnum.getSubjectNum());
         return jsonObject;
     }
 

@@ -3,11 +3,12 @@ package com.example.lcdemo.modular.admin.model;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+
 import java.io.Serializable;
 
 /**
  * <p>
- *
+ * <p>
  * </p>
  *
  * @author itspeed
@@ -59,6 +60,11 @@ public class UserTest extends Model<UserTest> {
      */
     @TableField("test_id")
     private int testId;
+    /**
+     * 是否是该练习的最高成绩
+     */
+    @TableField("is_top_score")
+    private Integer isTopScore;
 
     private String score;
 
@@ -142,6 +148,14 @@ public class UserTest extends Model<UserTest> {
         this.testId = testId;
     }
 
+    public Integer getIsTopScore() {
+        return isTopScore;
+    }
+
+    public void setIsTopScore(Integer isTopScore) {
+        this.isTopScore = isTopScore;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -150,14 +164,14 @@ public class UserTest extends Model<UserTest> {
     @Override
     public String toString() {
         return "UserTest{" +
-        ", id=" + id +
-        ", userId=" + userId +
-        ", testType=" + testType +
-        ", problemType=" + problemType +
-        ", subjectId=" + subjectId +
-        ", subjectNum=" + subjectNum +
-        ", startTime=" + startTime +
-        ", testResult=" + testResult +
-        "}";
+                ", id=" + id +
+                ", userId=" + userId +
+                ", testType=" + testType +
+                ", problemType=" + problemType +
+                ", subjectId=" + subjectId +
+                ", subjectNum=" + subjectNum +
+                ", startTime=" + startTime +
+                ", testResult=" + testResult +
+                "}";
     }
 }

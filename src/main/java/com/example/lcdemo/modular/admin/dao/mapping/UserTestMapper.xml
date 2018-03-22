@@ -14,6 +14,7 @@
         <result column="test_result" property="testResult" />
         <result column="test_id" property="testId" />
         <result column="score" property="score" />
+        <result column="is_top_score" property="isTopScore" />
     </resultMap>
 
     <select id="selectUserTest"  resultType="java.util.Map">
@@ -28,6 +29,6 @@
     </select>
 
     <select id="selectUserTestRank" resultMap="BaseResultMap">
-        SELECT id,user_id,score,start_time FROM user_test WHERE test_id LIKE  #{testId} AND start_time >  #{startTime} ORDER BY score DESC LIMIT 0,10
+        SELECT id,user_id,score,start_time FROM user_test WHERE test_id LIKE  #{testId} AND is_top_score = 1  AND start_time >  #{startTime} ORDER BY score DESC LIMIT 0,10
     </select>
 </mapper>
