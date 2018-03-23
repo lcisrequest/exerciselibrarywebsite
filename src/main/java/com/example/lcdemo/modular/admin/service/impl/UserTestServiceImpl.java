@@ -481,14 +481,6 @@ public class UserTestServiceImpl implements UserTestService {
         return count;
     }
 
-    public Map<String, Object> getSubjectById(int subjectId) {
-        Subject subject = subjectMapper.selectById(subjectId);
-        if (subject == null) {
-            throw new LcException(LcExceptionEnum.PARAM_ERROR);
-        }
-        Map<String, Object> map = subject.getMap();
-        return map;
-    }
 
     /**
      * 分页获取我的指定类型的练习记录
@@ -706,6 +698,7 @@ public class UserTestServiceImpl implements UserTestService {
 
     /**
      * 获取总题目排行榜的前十名
+     *
      * @return
      */
     @Override
@@ -726,11 +719,12 @@ public class UserTestServiceImpl implements UserTestService {
 
     /**
      * 获取今日总题目排行榜的前十名
+     *
      * @return
      */
     @Override
-    public JSONArray getTodayAllRank(){
-        String today = DateUtil.getDay()+" 00:00:00";
+    public JSONArray getTodayAllRank() {
+        String today = DateUtil.getDay() + " 00:00:00";
         List<Map<String, Object>> listMap = userSubjectnumMapper.selectTodaySubhectRank(today);
         JSONArray jsonArray = new JSONArray();
         for (Map<String, Object> map : listMap) { //遍历获取用户头像和昵称
@@ -774,4 +768,21 @@ public class UserTestServiceImpl implements UserTestService {
         userSubjectnum.setSubjectNum(rightNum);
         userSubjectnumMapper.insert(userSubjectnum);  //新增记录
     }
+
+    /**
+     * 根据题目id获取题目详情
+     *
+     * @param subjectId
+     * @return
+     */
+    @Override
+    public Map<String, Object> getSubjectById(int subjectId) {
+        Subject subject = subjectMapper.selectById(subjectId);
+        if (subject == null) {
+            throw new LcException(LcExceptionEnum.PARAM_ERROR);
+        }
+        Map<String, Object> map = subject.getMap();
+        return map;
+    }
+
 }

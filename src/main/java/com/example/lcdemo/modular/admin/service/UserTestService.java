@@ -57,4 +57,6 @@ public interface UserTestService {
     JSONArray getAllRank();
 
     JSONArray getTodayAllRank();
+
+    Map<String, Object> getSubjectById(int subjectId);
 }
