@@ -132,6 +132,7 @@ public class ForumsServiceImpl implements ForumsService {
         Wrapper<Reply> wrapper = new EntityWrapper<>();
         wrapper.eq("forums_id", forumsId);
         wrapper.eq("type", "forums");
+        wrapper.orderBy("create_time", false);
         RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
         List<Reply> list = replyMapper.selectPage(rowBounds, wrapper);//根据评论id查找回复
         List<Map<String, Object>> listmap = new ArrayList<>();
@@ -173,9 +174,10 @@ public class ForumsServiceImpl implements ForumsService {
      * @return
      */
     @Override
-    public List<Map<String, Object>> getAllForums(int page, int limit) {
+    public List<Map<String, Object>> getAllForums(int page, int limit, int myId) {
         Wrapper<Forums> wrapper = new EntityWrapper<>();
         wrapper.orderBy("is_top", false);
+        wrapper.orderBy("create_time", false);
         RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
         List<Forums> list = forumsMapper.selectPage(rowBounds, wrapper);
         List<Map<String, Object>> listMap = new ArrayList<>();
@@ -186,6 +188,17 @@ public class ForumsServiceImpl implements ForumsService {
             map.put("nickName", userInfo.getNickname());
             map.put("userImg", userInfo.getUserimg());
             map.put("forums", f);
+            int forumsId = f.getId();
+            Like like = new Like();
+            like.setType("forums");
+            like.setUserId(myId);
+            like.setForumsId(forumsId);
+            Like isLike = userLikeMapper.selectOne(like);
+            if (isLike == null) {
+                map.put("isLike", false);
+            } else {
+                map.put("isLike", true);
+            }
             listMap.add(map);
         }
         return listMap;
@@ -204,39 +217,60 @@ public class ForumsServiceImpl implements ForumsService {
 
     /**
      * 获取该用户发布的讨论数量
+     *
      * @param userId
      * @return
      */
     @Override
-    public Integer getUserForumsNum(int userId){
+    public Integer getUserForumsNum(int userId) {
         Wrapper<Forums> wrapper = new EntityWrapper<>();
-        wrapper.eq("user_id",userId);
+        wrapper.eq("user_id", userId);
         return forumsMapper.selectCount(wrapper);
     }
 
     /**
      * 获取该用户发布的所有讨论
+     *
      * @param userId
      * @return
      */
     @Override
-    public List<Forums> getTheUserForums(int userId){
+    public List<Forums> getTheUserForums(int userId, int myId) {
         Wrapper<Forums> wrapper = new EntityWrapper<>();
-        wrapper.eq("user_id",userId);
+        wrapper.eq("user_id", userId);
+        wrapper.orderBy("create_time", false);
         List<Forums> list = forumsMapper.selectList(wrapper);
+        List<Map<String, Object>> listMap = new ArrayList<>();
+        for (Forums f : list) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("forums", f);
+            int forumsId = f.getId();
+            Like like = new Like();
+            like.setType("forums");
+            like.setUserId(myId);
+            like.setForumsId(forumsId);
+            Like isLike = userLikeMapper.selectOne(like);
+            if (isLike == null) {
+                map.put("isLike", false);
+            } else {
+                map.put("isLike", true);
+            }
+        }
         return list;
     }
 
     /**
      * 获取该讨论的内容及所有回复
+     *
      * @param forumsId
      */
     @Override
-    public List<Map<String, Object>> getTheForums(int forumsId){
+    public List<Map<String, Object>> getTheForums(int forumsId) {
         Forums forums = forumsMapper.selectById(forumsId);
         Wrapper<Reply> wrapper = new EntityWrapper<>();
-        wrapper.eq("type","forums");
+        wrapper.eq("type", "forums");
         wrapper.eq("forums_id", forumsId);
+        wrapper.orderBy("create_time", false);
         List<Reply> list = replyMapper.selectList(wrapper);//根据评论id查找回复
         List<Map<String, Object>> listmap = new ArrayList<>();
         for (Reply reply : list) {

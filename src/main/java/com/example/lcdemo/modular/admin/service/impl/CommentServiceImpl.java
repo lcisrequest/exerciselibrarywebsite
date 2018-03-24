@@ -61,7 +61,7 @@ public class CommentServiceImpl implements CommentService {
      * @return
      */
     @Override
-    public List<Map<String, Object>> getComment(int subjectId, int page, int limit) {
+    public List<Map<String, Object>> getComment(int subjectId, int page, int limit, int myId) {
         Wrapper<Comment> wrapper = new EntityWrapper<>();
         wrapper.eq("subject_id", subjectId);
         wrapper.orderBy("create_time", false);
@@ -78,6 +78,18 @@ public class CommentServiceImpl implements CommentService {
             map.put("userImg", img);             //得到用户头像
             if (img == null) {
                 map.put("userImg", "");
+            }
+
+            int commentId = c.getId();
+            Like userLike = new Like();
+            userLike.setUserId(myId);
+            userLike.setCommentId(commentId);
+            userLike.setType("comment");
+            Like iLike = userLikeMapper.selectOne(userLike); //判断我是否对该评论点过赞
+            if (iLike == null) {
+                map.put("isLike", false); //没点过
+            } else {
+                map.put("isLike", true); //点过
             }
             listmap.add(map);
         }
@@ -206,6 +218,7 @@ public class CommentServiceImpl implements CommentService {
         Wrapper<Reply> wrapper = new EntityWrapper<>();
         wrapper.eq("get_user_id", userId);
         wrapper.eq("is_read", 0);
+        wrapper.orderBy("create_time", false);
         List<Reply> list = replyMapper.selectList(wrapper);
         List<Map<String, Object>> listMap = new ArrayList<>();
         for (Reply reply : list) {

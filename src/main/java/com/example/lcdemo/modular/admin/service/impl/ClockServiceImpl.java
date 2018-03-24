@@ -91,16 +91,18 @@ public class ClockServiceImpl implements ClockService {
     public List<Clock> getMyClockRecord(int userId) {
         Wrapper<Clock> wrapper = new EntityWrapper<>();
         wrapper.eq("user_id", userId);
+        wrapper.orderBy("create_time", false);
         return clockMapper.selectList(wrapper);
     }
 
     /**
      * 获取我的打开天数
+     *
      * @param userId
      * @return
      */
     @Override
-    public Integer getMyClockNum(int userId){
+    public Integer getMyClockNum(int userId) {
         Wrapper<Clock> wrapper = new EntityWrapper<>();
         wrapper.eq("user_id", userId);
         return clockMapper.selectCount(wrapper);

@@ -306,7 +306,7 @@ public class UserController extends BaseController {
      */
     @RequestMapping("/getTheUserForums")
     public ResponseEntity getTheUserForums(int userId) {
-        List<Forums> list = forumsService.getTheUserForums(userId);
+        List<Forums> list = forumsService.getTheUserForums(userId,getUserId());
         return ResponseEntity.ok(SuccessTip.create(list, "获取成功"));
     }
 

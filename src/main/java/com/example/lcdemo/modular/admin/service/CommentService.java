@@ -9,7 +9,7 @@ import java.util.Map;
 public interface CommentService {
     void addComment(CommentDTO comment, int userId);
 
-    List<Map<String, Object>> getComment(int subjectId, int page, int limit);
+    List<Map<String, Object>> getComment(int subjectId, int page, int limit,int userId);
 
     int getCommentNum(int subjectId);
 

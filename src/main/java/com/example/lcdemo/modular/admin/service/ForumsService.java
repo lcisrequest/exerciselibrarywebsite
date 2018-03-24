@@ -19,13 +19,13 @@ public interface ForumsService {
 
     Integer getForumsAllReplyNum(int forumsId);
 
-    List<Map<String, Object>> getAllForums(int page, int limit);
+    List<Map<String, Object>> getAllForums(int page, int limit,int myId);
 
     Integer getAllForumsNum();
 
     Integer getUserForumsNum(int userId);
 
-    List<Forums> getTheUserForums(int userId);
+    List<Forums> getTheUserForums(int userId,int myId);
 
     List<Map<String, Object>> getTheForums(int forumsId);
 }

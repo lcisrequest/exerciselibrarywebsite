@@ -53,7 +53,7 @@ public class CommentController extends BaseController {
      */
     @RequestMapping("/getComment")
     public ResponseEntity getComment(int subjectId, int page, int limit) {
-        List<Map<String, Object>> list = commentService.getComment(subjectId, page, limit);
+        List<Map<String, Object>> list = commentService.getComment(subjectId, page, limit,getUserId());
         int conut = commentService.getCommentNum(subjectId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", list);

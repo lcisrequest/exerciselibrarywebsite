@@ -106,7 +106,7 @@ public class ForumsController extends BaseController {
      */
     @RequestMapping("/getAllForums")
     public ResponseEntity getAllForums(int page, int limit) {
-        List<Map<String, Object>> list = forumsService.getAllForums(page, limit);
+        List<Map<String, Object>> list = forumsService.getAllForums(page, limit, getUserId());
         int count = forumsService.getAllForumsNum();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", list);
@@ -127,10 +127,11 @@ public class ForumsController extends BaseController {
 
     /**
      * 获取今日题目数量的排行榜
+     *
      * @return
      */
     @RequestMapping("/getTodaySubjectRank")
-    public ResponseEntity getTodayAllRank(){
+    public ResponseEntity getTodayAllRank() {
         JSONArray jsonArray = userTestService.getTodayAllRank();
         return ResponseEntity.ok(SuccessTip.create(jsonArray, "获取成功"));
     }
