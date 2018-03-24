@@ -22,4 +22,10 @@ public interface ForumsService {
     List<Map<String, Object>> getAllForums(int page, int limit);
 
     Integer getAllForumsNum();
+
+    Integer getUserForumsNum(int userId);
+
+    List<Forums> getTheUserForums(int userId);
+
+    List<Map<String, Object>> getTheForums(int forumsId);
 }

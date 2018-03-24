@@ -223,4 +223,16 @@ public class UserTestController extends BaseController {
         Map<String, Object> map = userTestService.getSubjectById(subjectId);
         return ResponseEntity.ok(SuccessTip.create(map, "获取成功"));
     }
+
+    /**
+     * 获取偷看的金币数量
+     * @return
+     */
+    @RequestMapping("/getPeekMoney")
+    public ResponseEntity getPeekMoney(){
+        String money = userTestService.getPeekMoney();
+        return ResponseEntity.ok(SuccessTip.create(money, "获取成功"));
+    }
+
+
 }

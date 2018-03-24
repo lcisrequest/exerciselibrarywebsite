@@ -59,4 +59,8 @@ public interface UserTestService {
     JSONArray getTodayAllRank();
 
     Map<String, Object> getSubjectById(int subjectId);
+
+    String getPeekMoney();
+
+    List<UserTest> getTheUserTestRecord(int userId);
 }

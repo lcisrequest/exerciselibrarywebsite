@@ -12,16 +12,14 @@ import com.example.lcdemo.config.properties.HiguProperties;
 import com.example.lcdemo.modular.admin.dao.ImgMapper;
 import com.example.lcdemo.modular.admin.dto.Base64DTO;
 import com.example.lcdemo.modular.admin.model.*;
-import com.example.lcdemo.modular.admin.service.ClockService;
-import com.example.lcdemo.modular.admin.service.HomepageService;
-import com.example.lcdemo.modular.admin.service.MessageService;
-import com.example.lcdemo.modular.admin.service.UserInfoService;
+import com.example.lcdemo.modular.admin.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -39,6 +37,10 @@ public class UserController extends BaseController {
     ClockService clockService;
     @Autowired
     MessageService messageService;
+    @Autowired
+    UserTestService userTestService;
+    @Autowired
+    ForumsService forumsService;
 
     /**
      * 用户注册
@@ -209,5 +211,114 @@ public class UserController extends BaseController {
     public ResponseEntity updatePassword(String newPassword) {
         userInfoService.updatePassword(newPassword, getUserId());
         return ResponseEntity.ok(SuccessTip.create("修改成功"));
+    }
+
+    /**
+     * 关注用户或取消关注用户
+     *
+     * @param userId
+     * @return
+     */
+    @RequestMapping("/followUser")
+    public ResponseEntity followUser(int userId) {
+        userInfoService.followUser(userId, getUserId());
+        return ResponseEntity.ok(SuccessTip.create("关注成功"));
+    }
+
+    /**
+     * 获取我的关注数量和关注我的数量
+     *
+     * @return
+     */
+    @RequestMapping("/getFollowNum")
+    public ResponseEntity getFollowNum() {
+        JSONObject jsonObject = userInfoService.getFollowNum(getUserId());
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "获取成功"));
+    }
+
+
+    /**
+     * 获取所有该用户关注的用户信息
+     *
+     * @return
+     */
+    @RequestMapping("/getIFollowUser")
+    public ResponseEntity getIFollowUser(int userId) {
+        List<Map<String, Object>> list = userInfoService.getIFollowUser(userId);
+        return ResponseEntity.ok(SuccessTip.create(list, "获取成功"));
+    }
+
+
+    /**
+     * 获取所有关注该用户的用户信息
+     *
+     * @return
+     */
+    @RequestMapping("/getFollowMeUser")
+    public ResponseEntity getFollowMeUser(int userId) {
+        List<Map<String, Object>> list = userInfoService.getFollowMeUser(userId);
+        return ResponseEntity.ok(SuccessTip.create(list, "获取成功"));
+    }
+
+
+    /**
+     * 获取指定用户的练习记录
+     *
+     * @param userId
+     * @return
+     */
+    @RequestMapping("/getTheUserTestRecord")
+    public ResponseEntity getTheUserTestRecord(int userId) {
+        List<UserTest> list = userTestService.getTheUserTestRecord(userId);
+        return ResponseEntity.ok(SuccessTip.create(list, "获取成功"));
+    }
+
+
+    /**
+     * 获取指定用户的打卡记录
+     *
+     * @param userId
+     * @return
+     */
+    @RequestMapping("/getTheUserClockRecord")
+    public ResponseEntity getTheUserClockRecord(int userId) {
+        List<Clock> list = userInfoService.getTheUserClockRecord(userId);
+        return ResponseEntity.ok(SuccessTip.create(list, "获取成功"));
+    }
+
+    /**
+     * 获取指定用户的个人信息
+     *
+     * @param userId
+     * @return
+     */
+    @RequestMapping("/getTheUser")
+    public ResponseEntity getTheUser(int userId) {
+        JSONObject jsonObject = userInfoService.getOtherUserInfo(userId, getUserId());
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "获取成功"));
+    }
+
+    /**
+     * 获取该用户的所有讨论记录
+     *
+     * @param userId
+     * @return
+     */
+    @RequestMapping("/getTheUserForums")
+    public ResponseEntity getTheUserForums(int userId) {
+        List<Forums> list = forumsService.getTheUserForums(userId);
+        return ResponseEntity.ok(SuccessTip.create(list, "获取成功"));
+    }
+
+    /**
+     * 获取该讨论的内容及所有回复
+     *
+     * @param forumsId
+     * @return
+     */
+    @RequestMapping("/getTheUserReply")
+    public ResponseEntity getTheForumsReply(int forumsId) {
+        List<Map<String, Object>> list = forumsService.getTheForums(forumsId);
+        return ResponseEntity.ok(SuccessTip.create(list, "获取成功"));
     }
 }

@@ -64,6 +64,7 @@ public class CommentServiceImpl implements CommentService {
     public List<Map<String, Object>> getComment(int subjectId, int page, int limit) {
         Wrapper<Comment> wrapper = new EntityWrapper<>();
         wrapper.eq("subject_id", subjectId);
+        wrapper.orderBy("create_time", false);
         RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
         List<Comment> list = commentMapper.selectPage(rowBounds, wrapper);//分页获取评论
         List<Map<String, Object>> listmap = new ArrayList<>();

@@ -12,4 +12,6 @@ public interface ClockService {
     List<Clock> getMyClockRecord(int userId);
 
     void clockBalance(int userId, int xp, int gold);
+
+    Integer getMyClockNum(int userId);
 }

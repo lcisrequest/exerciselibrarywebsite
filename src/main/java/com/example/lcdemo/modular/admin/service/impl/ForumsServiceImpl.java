@@ -202,5 +202,57 @@ public class ForumsServiceImpl implements ForumsService {
         return forumsMapper.selectCount(wrapper);
     }
 
+    /**
+     * 获取该用户发布的讨论数量
+     * @param userId
+     * @return
+     */
+    @Override
+    public Integer getUserForumsNum(int userId){
+        Wrapper<Forums> wrapper = new EntityWrapper<>();
+        wrapper.eq("user_id",userId);
+        return forumsMapper.selectCount(wrapper);
+    }
+
+    /**
+     * 获取该用户发布的所有讨论
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<Forums> getTheUserForums(int userId){
+        Wrapper<Forums> wrapper = new EntityWrapper<>();
+        wrapper.eq("user_id",userId);
+        List<Forums> list = forumsMapper.selectList(wrapper);
+        return list;
+    }
+
+    /**
+     * 获取该讨论的内容及所有回复
+     * @param forumsId
+     */
+    @Override
+    public List<Map<String, Object>> getTheForums(int forumsId){
+        Forums forums = forumsMapper.selectById(forumsId);
+        Wrapper<Reply> wrapper = new EntityWrapper<>();
+        wrapper.eq("type","forums");
+        wrapper.eq("forums_id", forumsId);
+        List<Reply> list = replyMapper.selectList(wrapper);//根据评论id查找回复
+        List<Map<String, Object>> listmap = new ArrayList<>();
+        for (Reply reply : list) {
+            Map<String, Object> map = reply.getMap();
+            int userId = reply.getUserId();  //得到用户id
+            UserInfo userInfo = userInfoMapper.selectById(userId);
+            String img = userInfo.getUserimg();
+            String username = userInfo.getUsername();
+            map.put("username", username); //得到用户名
+            map.put("userImg", img);       //得到用户头像
+            if (img == null) {
+                map.put("userImg", "");
+            }
+            listmap.add(map);
+        }
+        return listmap;
+    }
 
 }

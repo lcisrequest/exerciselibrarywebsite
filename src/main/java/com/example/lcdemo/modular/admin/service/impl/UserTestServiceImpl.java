@@ -785,4 +785,34 @@ public class UserTestServiceImpl implements UserTestService {
         return map;
     }
 
+    /**
+     * 获取偷看金币数量
+     *
+     * @return
+     */
+    @Override
+    public String getPeekMoney() {
+        Config config = new Config();
+        config.setKey("peek_frice");
+        config = configMapper.selectOne(config);
+        if (config == null) {
+            throw new LcException(LcExceptionEnum.CONFIG_DB_WRONG);
+        }
+        return config.getValue();
+    }
+
+    /**
+     * 根据用户id 获取该用户的所有练习记录
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<UserTest> getTheUserTestRecord(int userId) {
+        Wrapper<UserTest> wrapper = new EntityWrapper<>();
+        wrapper.eq("user_id", userId);
+        wrapper.orderBy("start_time", false);
+        List<UserTest> list = userTestMapper.selectList(wrapper);
+        return list;
+    }
 }
