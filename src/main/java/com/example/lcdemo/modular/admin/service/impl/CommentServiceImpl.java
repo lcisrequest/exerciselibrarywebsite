@@ -81,12 +81,11 @@ public class CommentServiceImpl implements CommentService {
             }
 
             int commentId = c.getId();
-            Like userLike = new Like();
-            userLike.setUserId(myId);
-            userLike.setCommentId(commentId);
-            userLike.setType("comment");
-            Like iLike = userLikeMapper.selectOne(userLike); //判断我是否对该评论点过赞
-            if (iLike == null) {
+            Wrapper<Like> wrapperLike = new EntityWrapper<>();
+            wrapperLike.eq("user_id", myId);
+            wrapperLike.eq("comment_id", commentId);
+            int countLike = userLikeMapper.selectCount(wrapperLike);//判断我是否对该评论点过赞
+            if (countLike == 0) {
                 map.put("isLike", false); //没点过
             } else {
                 map.put("isLike", true); //点过

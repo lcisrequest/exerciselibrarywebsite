@@ -15,6 +15,7 @@ import java.io.Serializable;
  * @author itspeed
  * @since 2018-03-14
  */
+@TableName("user_like")
 public class Like extends Model<Like> {
 
     private static final long serialVersionUID = 1L;
