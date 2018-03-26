@@ -10,9 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/admin")
-public class BackEndCourseController extends BaseController {
+public class BackendCourseController extends BaseController {
     @Autowired
     CourseService courseService;
 
@@ -34,12 +36,25 @@ public class BackEndCourseController extends BaseController {
 
     /**
      * 删除课程 （慎用）
+     *
      * @param courseId
      * @return
      */
     @RequestMapping("/deleteCourse")
-    public ResponseEntity deleteCourse(int courseId){
+    public ResponseEntity deleteCourse(int courseId) {
         courseService.deleteCourse(courseId);
         return ResponseEntity.ok(SuccessTip.create("删除成功"));
+    }
+
+
+    /**
+     * 后台获取所有课程
+     *
+     * @return
+     */
+    @RequestMapping("/getAllCourse")
+    public ResponseEntity getAllCourse() {
+        List<Course> list = courseService.getAllCourse();
+        return ResponseEntity.ok(SuccessTip.create(list, "请求成功"));
     }
 }

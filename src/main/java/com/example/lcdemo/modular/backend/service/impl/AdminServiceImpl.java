@@ -80,7 +80,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     /**
-     * 指定搜索的管理员的数量
+     * 搜索的管理员的数量
      *
      * @param username
      * @return
