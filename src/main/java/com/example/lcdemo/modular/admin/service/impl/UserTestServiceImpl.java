@@ -192,7 +192,6 @@ public class UserTestServiceImpl implements UserTestService {
         }
         double rightRate = (double) isRightNum / (double) aNum; //计算出正确率
         double score = (double) 100 * rightRate;             //计算出最终得分
-        this.updateUserRightNum(userId, isRightNum);   //更新用户正确数量
         DecimalFormat df = new DecimalFormat("#.0");
         score = Double.valueOf(df.format(score));
         userTest.setUserId(userId);
@@ -204,6 +203,7 @@ public class UserTestServiceImpl implements UserTestService {
         userTest.setScore(score + "");
         userTest.setStartTime(DateUtil.getTime());
         userTestMapper.insert(userTest);            //新增练习记录
+        this.updateUserRightNum(userId, isRightNum, userTest.getId());   //更新用户正确数量
         int newTestId = userTest.getId();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", listbool);
@@ -250,7 +250,6 @@ public class UserTestServiceImpl implements UserTestService {
         }
         double rightRate = (double) rightNum / (double) aNum;           //计算出正确率
         double Score = Double.valueOf(test.getTestFraction()) * rightRate; //计算出最终得分
-        this.updateUserRightNum(userId, rightNum);   //更新用户正确数量
         DecimalFormat df = new DecimalFormat("#.0");
         Score = Double.valueOf(df.format(Score));                       //精确到小数点后一位
         StringBuilder returnStr = new StringBuilder();
@@ -289,6 +288,7 @@ public class UserTestServiceImpl implements UserTestService {
             }
         }
         userTestMapper.insert(userTest);            //新增练习记录
+        this.updateUserRightNum(userId, rightNum, userTest.getId());   //更新用户正确数量
         int newTestId = userTest.getId();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", listbool);
@@ -414,7 +414,6 @@ public class UserTestServiceImpl implements UserTestService {
         }
         double rightRate = (double) rightNum / (double) aNum;           //计算出正确率
         double score = (double) 100 * rightRate;                        //计算出最终得分
-        this.updateUserRightNum(userId, rightNum);   //更新用户正确数量
         DecimalFormat df = new DecimalFormat("#.0");            //精确到小数点后一位
         score = Double.valueOf(df.format(score));
         userTest.setUserId(userId);
@@ -426,6 +425,7 @@ public class UserTestServiceImpl implements UserTestService {
         userTest.setScore(score + "");
         userTest.setStartTime(DateUtil.getTime());
         userTestMapper.insert(userTest);            //新增练习记录
+        this.updateUserRightNum(userId, rightNum, userTest.getId());   //更新用户正确数量
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", listbool);
         jsonObject.put("userTestId", userTest.getId());
@@ -747,7 +747,7 @@ public class UserTestServiceImpl implements UserTestService {
      * @param userId
      * @param rightNum
      */
-    public void updateUserRightNum(int userId, int rightNum) {
+    public void updateUserRightNum(int userId, int rightNum, int userTestId) {
      /*   UserSubjectnum userSubjectnum = new UserSubjectnum();
         userSubjectnum.setUserId(userId);
         userSubjectnum = userSubjectnumMapper.selectOne(userSubjectnum); //查询是否有做过题
@@ -768,6 +768,7 @@ public class UserTestServiceImpl implements UserTestService {
         userSubjectnum.setUserId(userId);
         userSubjectnum.setCreateTime(DateUtil.getTime());
         userSubjectnum.setSubjectNum(rightNum);
+        userSubjectnum.setUsertestId(userTestId);
         userSubjectnumMapper.insert(userSubjectnum);  //新增记录
     }
 

@@ -8,6 +8,7 @@
         <result column="subject_num" property="subjectNum" />
         <result column="user_id" property="userId" />
         <result column="create_time" property="createTime" />
+        <result column="usertest_id" property="usertestId" />
     </resultMap>
 
     <select id="selectSubjectRank" resultType="java.util.Map">

@@ -5,11 +5,12 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+
 import java.io.Serializable;
 
 /**
  * <p>
- * 
+ * <p>
  * </p>
  *
  * @author itspeed
@@ -37,7 +38,11 @@ public class UserSubjectnum extends Model<UserSubjectnum> {
      */
     @TableField("create_time")
     private String createTime;
-
+    /**
+     * 练习记录的id
+     */
+    @TableField("usertest_id")
+    private Integer usertestId;
 
     public Integer getId() {
         return id;
@@ -71,6 +76,14 @@ public class UserSubjectnum extends Model<UserSubjectnum> {
         this.createTime = createTime;
     }
 
+    public Integer getUsertestId() {
+        return usertestId;
+    }
+
+    public void setUsertestId(Integer usertestId) {
+        this.usertestId = usertestId;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -79,10 +92,10 @@ public class UserSubjectnum extends Model<UserSubjectnum> {
     @Override
     public String toString() {
         return "UserSubjectnum{" +
-        ", id=" + id +
-        ", subjectNum=" + subjectNum +
-        ", userId=" + userId +
-        ", createTime=" + createTime +
-        "}";
+                ", id=" + id +
+                ", subjectNum=" + subjectNum +
+                ", userId=" + userId +
+                ", createTime=" + createTime +
+                "}";
     }
 }
