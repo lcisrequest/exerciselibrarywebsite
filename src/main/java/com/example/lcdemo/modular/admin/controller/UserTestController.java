@@ -121,7 +121,7 @@ public class UserTestController extends BaseController {
      */
     @RequestMapping("/selectTest")
     public ResponseEntity selectTest(@RequestParam(value = "problemType", required = false, defaultValue = "all") String problemType, int page, int limit) {
-        List<Map<String, Object>> list = userTestService.getAllUserTest(problemType, page, limit);
+        List<Map<String, Object>> list = userTestService.getAllUserTest(problemType, page, limit,getUserId());
         int count = userTestService.getTestNum(problemType);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", list);
@@ -220,7 +220,7 @@ public class UserTestController extends BaseController {
      */
     @RequestMapping("/getSubjectById")
     public ResponseEntity getSubjectById(int subjectId) {
-        Map<String, Object> map = userTestService.getSubjectById(subjectId);
+        Map<String, Object> map = userTestService.getSubjectById(subjectId,getUserId());
         return ResponseEntity.ok(SuccessTip.create(map, "获取成功"));
     }
 

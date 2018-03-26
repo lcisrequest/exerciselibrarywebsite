@@ -116,7 +116,9 @@ public class ForumsServiceImpl implements ForumsService {
         Forums forums = forumsMapper.selectById(forumsId);
         int getUserId = forums.getUserId();
         reply.setGetUserId(getUserId);
-        replyMapper.insert(reply);
+        replyMapper.insert(reply); //添加讨论的回复
+        forums.setReply(forums.getReply() + 1); //回复数量+1
+        forumsMapper.updateById(forums); //更新讨论
     }
 
     /**

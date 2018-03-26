@@ -30,7 +30,7 @@ public interface UserTestService {
 
     JSONObject submitErrorSubject(UserTestDTO userTestDTO, int userId);
 
-    List<Map<String, Object>> getAllUserTest(String problemType, int page, int limit);
+    List<Map<String, Object>> getAllUserTest(String problemType, int page, int limit,int userId);
 
     int getTestNum(String problemType);
 
@@ -58,9 +58,11 @@ public interface UserTestService {
 
     JSONArray getTodayAllRank();
 
-    Map<String, Object> getSubjectById(int subjectId);
+    Map<String, Object> getSubjectById(int subjectId,int userId);
 
     String getPeekMoney();
 
     List<UserTest> getTheUserTestRecord(int userId);
+
+    boolean isCollectSubject(int userId, int subjectId);
 }

@@ -125,7 +125,9 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentMapper.selectById(commentId);
         int getUserId = comment.getUserId();
         reply.setGetUserId(getUserId);
-        replyMapper.insert(reply);
+        replyMapper.insert(reply); //新增回复
+        comment.setReply(comment.getReply() + 1); //评论回复数量+1
+        commentMapper.updateById(comment);  //更新评论
     }
 
     /**

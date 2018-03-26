@@ -39,6 +39,8 @@ public class UserTestServiceImpl implements UserTestService {
     ConfigMapper configMapper;
     @Autowired
     UserSubjectnumMapper userSubjectnumMapper;
+    @Autowired
+    CollectMapper collectMapper;
 
     /**
      * 获取一套顺序测试
@@ -441,7 +443,7 @@ public class UserTestServiceImpl implements UserTestService {
      * @return
      */
     @Override
-    public List<Map<String, Object>> getAllUserTest(String problemType, int page, int limit) {
+    public List<Map<String, Object>> getAllUserTest(String problemType, int page, int limit, int userId) {
         Wrapper<Test> wrapper = new EntityWrapper<>();
         if (!problemType.equals("all")) {                      //当类型为all时，为不指定类型
             wrapper.eq("problem_type", problemType);                       //指定题目类型
@@ -455,7 +457,7 @@ public class UserTestServiceImpl implements UserTestService {
             String[] subjectIds = sId.split(",");//获取到该练习的所有题目id
             List<Map<String, Object>> listSubject = new ArrayList<>();
             for (String id : subjectIds) {
-                Map<String, Object> subjectMap = this.getSubjectById(Integer.valueOf(id));//根据题目id取得题目信息
+                Map<String, Object> subjectMap = this.getSubjectById(Integer.valueOf(id), userId);//根据题目id取得题目信息
                 listSubject.add(subjectMap);
             }
             map.put("subjectList", listSubject);
@@ -776,12 +778,14 @@ public class UserTestServiceImpl implements UserTestService {
      * @return
      */
     @Override
-    public Map<String, Object> getSubjectById(int subjectId) {
+    public Map<String, Object> getSubjectById(int subjectId, int userId) {
         Subject subject = subjectMapper.selectById(subjectId);
         if (subject == null) {
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
         Map<String, Object> map = subject.getMap();
+        boolean isCollect = this.isCollectSubject(userId, subjectId);
+        map.put("isCollect", isCollect);
         return map;
     }
 
@@ -814,5 +818,25 @@ public class UserTestServiceImpl implements UserTestService {
         wrapper.orderBy("start_time", false);
         List<UserTest> list = userTestMapper.selectList(wrapper);
         return list;
+    }
+
+    /**
+     * 判断是否收藏过改题目
+     *
+     * @param userId
+     * @param subjectId
+     * @return
+     */
+    @Override
+    public boolean isCollectSubject(int userId, int subjectId) {
+        Wrapper<Collect> wrapper = new EntityWrapper<>();
+        wrapper.eq("user_id", userId);
+        wrapper.eq("subject_id", subjectId);
+        int count = collectMapper.selectCount(wrapper);
+        if (count > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
