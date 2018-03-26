@@ -22,4 +22,6 @@ public interface ConfigService {
     void updateMaxGold(int num);
 
     List<Config> getAllConfig();
+
+    void updatePeekGold(int num);
 }

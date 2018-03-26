@@ -144,4 +144,24 @@ public class ConfigServiceImpl implements ConfigService {
         List<Config> list = configMapper.selectList(wrapper);
         return list;
     }
+
+    /**
+     * 设置偷看所需金币数量
+     *
+     * @param num
+     */
+    @Override
+    public void updatePeekGold(int num) {
+        if (num < 0) {
+            throw new LcException(LcExceptionEnum.PARAM_ERROR);
+        }
+        Config config = new Config();
+        config.setKey("peek_frice");
+        config = configMapper.selectOne(config);    //设置偷看金币数量
+        if (config == null) {
+            throw new LcException(LcExceptionEnum.DB_DATA_ERROR);
+        }
+        config.setValue(num + "");
+        configMapper.updateById(config);
+    }
 }

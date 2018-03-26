@@ -321,4 +321,6 @@ public class UserController extends BaseController {
         List<Map<String, Object>> list = forumsService.getTheForums(forumsId);
         return ResponseEntity.ok(SuccessTip.create(list, "获取成功"));
     }
+
+
 }
