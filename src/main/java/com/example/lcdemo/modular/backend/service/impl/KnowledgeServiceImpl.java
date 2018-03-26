@@ -44,7 +44,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
     public boolean addKnowledge(Knowledge knowledge) {
         knowledge.setCreateTime(DateUtil.getTime());
         knowledge.setUpdateTime(DateUtil.getTime());
-        int num = knowledgeMapper.insert(knowledge);
+        int num = knowledgeMapper.insert(knowledge); //新增知识点
         String problemType = knowledge.getProblemType();
         if (num > 0) {
             Course course = new Course();
@@ -87,7 +87,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
         }
         Knowledge k = knowledgeMapper.selectById(knowledgeId);
         String problemType = k.getProblemType();
-        int num = knowledgeMapper.deleteById(knowledgeId);
+        int num = knowledgeMapper.deleteById(knowledgeId); //删除知识点
         if (num > 0) {
             Course course = new Course();
             course.setName(problemType);
@@ -171,7 +171,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
                 e.printStackTrace();
                 return null;
             }
-            String filename = higuProperties.getImgUrlPath() + "/" + dateDir + serviceName;
+            String filename = higuProperties.getImgUrlPath() + "/" + dateDir + serviceName; //文件路径
             return filename;
         } else {
             System.out.println("上传失败，因为文件是空的");

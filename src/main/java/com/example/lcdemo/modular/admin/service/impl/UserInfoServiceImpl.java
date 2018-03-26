@@ -50,15 +50,15 @@ public class UserInfoServiceImpl implements UserInfoService {
         user.setUsername(username);
         user = userInfoMapper.selectOne(user);
         if (user != null) {
-            throw new LcException(LcExceptionEnum.HAS_REGISTER);
+            throw new LcException(LcExceptionEnum.HAS_REGISTER);//用户名不可以重复
         }
         user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
-        user.setNickname(DateUtil.getTime() + UUID.randomUUID());
+        user.setNickname(DateUtil.getTime() + UUID.randomUUID()); //随机初始昵称
         user.setCreateTime(DateUtil.getTime());
         user.setLastLoginTime(DateUtil.getTime());
-        return userInfoMapper.insert(user) > 0;
+        return userInfoMapper.insert(user) > 0; //新增用户
     }
 
 
@@ -86,7 +86,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(userId);
         userInfo = userInfoMapper.selectById(userId);
-        if (userInfo == null) {
+        if (userInfo == null) { //判断用户是否存在
             throw new LcException(LcExceptionEnum.HAS_NOT_USER);
         }
         userInfo.setNickname(nickName);

@@ -102,7 +102,7 @@ public class UserTestServiceImpl implements UserTestService {
         int num = 0;
         while (num < testNum) {
             num++;
-            Subject subject = this.getARandomSubject(testType);
+            Subject subject = this.getARandomSubject(testType); //随机获取一道题
             list.add(subject.getMap());
         }
         return list;
@@ -148,7 +148,7 @@ public class UserTestServiceImpl implements UserTestService {
         }
         for (UserTest ut : list) {
             String subjectStr = ut.getSubjectId();
-            String subjectIds[] = subjectStr.split(",");
+            String subjectIds[] = subjectStr.split(",");//拆分题目
             for (String subjectId : subjectIds) {
                 listInt.add(Integer.valueOf(subjectId));
             }
@@ -330,14 +330,14 @@ public class UserTestServiceImpl implements UserTestService {
         if (courseType == null || "".equals(courseType) || page == 0 || limit == 0) {
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
-        if (courseType.equals("all")) {
+        if (courseType.equals("all")) {//参数为all时是全部类型
             courseType = "%";
         }
-        List<ErrorSubject> listErr = errorSubjectMapper.getMyError(courseType, userId, (page - 1) * limit, limit);
+        List<ErrorSubject> listErr = errorSubjectMapper.getMyError(courseType, userId, (page - 1) * limit, limit);//分页查询
         List<Map<String, Object>> list = new ArrayList<>();
         for (ErrorSubject es : listErr) {
             int subjectId = es.getSubjectId();
-            Subject subject = subjectMapper.selectById(subjectId);
+            Subject subject = subjectMapper.selectById(subjectId);//循环查询出所有对应题目
             Map<String, Object> map = subject.getMap();
             list.add(map);
         }
@@ -357,7 +357,7 @@ public class UserTestServiceImpl implements UserTestService {
         if (courseType.equals("all")) {
             courseType = "%";
         }
-        Integer num = errorSubjectMapper.getMyErrorNum(courseType, userId);
+        Integer num = errorSubjectMapper.getMyErrorNum(courseType, userId); //得到错题数量
         return num;
     }
 
@@ -516,7 +516,7 @@ public class UserTestServiceImpl implements UserTestService {
     @Override
     public Integer selectMyUserTestCount(String problemType, int userId) {
         Wrapper<UserTest> wrapper = new EntityWrapper<>();
-        if (!problemType.equals("all")) {
+        if (!problemType.equals("all")) {                   //当参数为all时，类型为全部
             wrapper.eq("problem_type", problemType);
         }
         wrapper.eq("user_id", userId);
@@ -535,13 +535,13 @@ public class UserTestServiceImpl implements UserTestService {
         wrapper.eq("test_id", testId);
         wrapper.orderBy("score", false);
         wrapper.eq("is_top_score", 1);
-        RowBounds rowBounds = new RowBounds(0, 10);//分页
+        RowBounds rowBounds = new RowBounds(0, 10);//分页排行榜前10
         List<UserTest> list = userTestMapper.selectPage(rowBounds, wrapper);
         List<Map<String, Object>> listMap = new ArrayList<>();
         for (UserTest ut : list) {
             Map<String, Object> map = new HashMap<>();
             int userId = ut.getUserId();
-            UserInfo user = userInfoMapper.selectById(userId);
+            UserInfo user = userInfoMapper.selectById(userId);//获取用户信息
             map.put("nickname", user.getNickname());
             map.put("userimg", user.getUserimg());
             map.put("startTime", ut.getStartTime());
@@ -566,7 +566,7 @@ public class UserTestServiceImpl implements UserTestService {
         for (UserTest ut : listMap) {
             Map<String, Object> map = new HashMap<>();
             int userId = ut.getUserId();
-            UserInfo user = userInfoMapper.selectById(userId);
+            UserInfo user = userInfoMapper.selectById(userId);//获取用户信息
             map.put("nickname", user.getNickname());
             map.put("userimg", user.getUserimg());
             map.put("startTime", ut.getStartTime());
@@ -648,7 +648,7 @@ public class UserTestServiceImpl implements UserTestService {
     @Override
     public UserTest getUserTestById(int userTestId) {
         UserTest userTest = userTestMapper.selectById(userTestId);
-        if (userTest == null) {
+        if (userTest == null) {     //判断该练习记录是否存在
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
         return userTest;
@@ -682,7 +682,7 @@ public class UserTestServiceImpl implements UserTestService {
         config.setKey("peek_frice");
         config = configMapper.selectOne(config);
         if (config == null) {
-            throw new LcException(LcExceptionEnum.CONFIG_DB_WRONG);
+            throw new LcException(LcExceptionEnum.CONFIG_DB_WRONG);//config表查询不到，此时需要修改数据库
         }
         UserInfo userInfo = userInfoMapper.selectById(userId);
         if (userInfo == null) {
@@ -713,7 +713,7 @@ public class UserTestServiceImpl implements UserTestService {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("userSubjectNum", map);
             jsonObject.put("userimg", userInfo.getUserimg());
-            jsonObject.put("nickname", userInfo.getNickname());
+            jsonObject.put("nickname", userInfo.getNickname());//获取用户信息
             jsonArray.add(jsonObject);
         }
         return jsonArray;
@@ -727,7 +727,7 @@ public class UserTestServiceImpl implements UserTestService {
     @Override
     public JSONArray getTodayAllRank() {
         String today = DateUtil.getDay() + " 00:00:00";
-        List<Map<String, Object>> listMap = userSubjectnumMapper.selectTodaySubhectRank(today);
+        List<Map<String, Object>> listMap = userSubjectnumMapper.selectTodaySubhectRank(today);//获取今日排行榜
         JSONArray jsonArray = new JSONArray();
         for (Map<String, Object> map : listMap) { //遍历获取用户头像和昵称
             int userId = (int) map.get("user_id");
@@ -785,7 +785,7 @@ public class UserTestServiceImpl implements UserTestService {
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
         Map<String, Object> map = subject.getMap();
-        boolean isCollect = this.isCollectSubject(userId, subjectId);
+        boolean isCollect = this.isCollectSubject(userId, subjectId); //判断是否收藏过该题目
         map.put("isCollect", isCollect);
         return map;
     }
@@ -801,7 +801,7 @@ public class UserTestServiceImpl implements UserTestService {
         config.setKey("peek_frice");
         config = configMapper.selectOne(config);
         if (config == null) {
-            throw new LcException(LcExceptionEnum.CONFIG_DB_WRONG);
+            throw new LcException(LcExceptionEnum.CONFIG_DB_WRONG); //config获取失败，请检查数据库config表
         }
         return config.getValue();
     }
@@ -816,7 +816,7 @@ public class UserTestServiceImpl implements UserTestService {
     public List<UserTest> getTheUserTestRecord(int userId) {
         Wrapper<UserTest> wrapper = new EntityWrapper<>();
         wrapper.eq("user_id", userId);
-        wrapper.orderBy("start_time", false);
+        wrapper.orderBy("start_time", false); //按时间排序
         List<UserTest> list = userTestMapper.selectList(wrapper);
         return list;
     }
@@ -833,7 +833,7 @@ public class UserTestServiceImpl implements UserTestService {
         Wrapper<Collect> wrapper = new EntityWrapper<>();
         wrapper.eq("user_id", userId);
         wrapper.eq("subject_id", subjectId);
-        int count = collectMapper.selectCount(wrapper);
+        int count = collectMapper.selectCount(wrapper);//查询数量
         if (count > 0) {
             return true;
         } else {

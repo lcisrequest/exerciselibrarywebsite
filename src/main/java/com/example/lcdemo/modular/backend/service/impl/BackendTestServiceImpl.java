@@ -271,7 +271,7 @@ public class BackendTestServiceImpl implements BackendTestService {
      */
     @Override
     public List<Map<String, Object>> selectUserTest(String testType, String problemType, String username, int page, int limit) {
-        if (testType.equals("all")) {
+        if (testType.equals("all")) { //当参数为all时类型为全部
             testType = "%";
         }
         if (problemType.equals("all")) {
@@ -294,7 +294,7 @@ public class BackendTestServiceImpl implements BackendTestService {
      */
     @Override
     public Integer selectUserTestCount(String testType, String problemType, String username) {
-        if (testType.equals("all")) {
+        if (testType.equals("all")) {  //当参数为all时类型为全部
             testType = "%";
         }
         if (problemType.equals("all")) {

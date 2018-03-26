@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setLike(0);     //点赞数为0
         comment.setReply(0);    //回复数为0
         comment.setUserId(userId);
-        commentMapper.insert(comment);
+        commentMapper.insert(comment); //新增评论
     }
 
     /**
@@ -192,7 +192,7 @@ public class CommentServiceImpl implements CommentService {
         like.setUserId(userId);
         like.setCommentId(commentId);
         like.setType("comment");
-        Like flag = userLikeMapper.selectOne(like);
+        Like flag = userLikeMapper.selectOne(like); //判断是否点过赞
         if (flag != null) {
             Wrapper<Like> wrapper = new EntityWrapper<>();
             wrapper.eq("user_id", userId);
@@ -218,14 +218,14 @@ public class CommentServiceImpl implements CommentService {
     public List<Map<String, Object>> getMyReply(int userId) {
         Wrapper<Reply> wrapper = new EntityWrapper<>();
         wrapper.eq("get_user_id", userId);
-        wrapper.eq("is_read", 0);
+        wrapper.eq("is_read", 0);  //is_read为0时表示未读
         wrapper.orderBy("create_time", false);
         List<Reply> list = replyMapper.selectList(wrapper);
         List<Map<String, Object>> listMap = new ArrayList<>();
         for (Reply reply : list) {
             Map<String, Object> map = reply.getMap();
             int sendUserId = reply.getUserId();
-            UserInfo userInfo = userInfoMapper.selectById(sendUserId);
+            UserInfo userInfo = userInfoMapper.selectById(sendUserId); //循环查询出对应用户信息
             map.put("nickname", userInfo.getNickname());
             map.put("userimg", userInfo.getUserimg());
             listMap.add(map);
@@ -245,6 +245,6 @@ public class CommentServiceImpl implements CommentService {
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
         reply.setIsRead(1);     //1为已读
-        replyMapper.updateById(reply);
+        replyMapper.updateById(reply);//更改状态
     }
 }

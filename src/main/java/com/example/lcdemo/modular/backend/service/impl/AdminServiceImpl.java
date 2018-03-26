@@ -57,7 +57,7 @@ public class AdminServiceImpl implements AdminService {
     public List<Map<String, Object>> getAllAdmin(int userId, int page, int limit, String username) {
         Admin zheAdmin = adminMapper.selectById(userId);
         boolean isSuperAdmin = false;
-        if (zheAdmin.getUsername().equals("admin")) {
+        if (zheAdmin.getUsername().equals("admin")) {   //用户名为admin的管理员为超级管理员
             isSuperAdmin = true;
         }
         Wrapper<Admin> wrapper = new EntityWrapper<>();
@@ -69,10 +69,10 @@ public class AdminServiceImpl implements AdminService {
         List<Map<String, Object>> list = new ArrayList<>();
         for (Admin a : listAdmin) {
             if (isSuperAdmin) {
-                Map<String, Object> map = a.getMapForSuperAdmin();
+                Map<String, Object> map = a.getMapForSuperAdmin(); //超级管理员可以查看密码
                 list.add(map);
             } else {
-                Map<String, Object> map = a.getMapForAdmin();
+                Map<String, Object> map = a.getMapForAdmin();   //普通管理员不能查看密码
                 list.add(map);
             }
         }
@@ -103,14 +103,14 @@ public class AdminServiceImpl implements AdminService {
     public void deleteAdmin(int adminId, int userId) {
         Admin zheAdmin = adminMapper.selectById(adminId);
         if(zheAdmin==null){
-            throw new LcException(LcExceptionEnum.ADMIN_NOT_EXIST);
+            throw new LcException(LcExceptionEnum.ADMIN_NOT_EXIST);//管理员不存在
         }
         if (zheAdmin.getUsername().equals("admin")) {
-            throw new LcException(LcExceptionEnum.SUPERADMIN_CANNOT_DELETE);
+            throw new LcException(LcExceptionEnum.SUPERADMIN_CANNOT_DELETE);//不能删除超级管理员
         }
         Admin zheAdmins = adminMapper.selectById(userId);
         if (!zheAdmins.getUsername().equals("admin")) {
-            throw new LcException(LcExceptionEnum.DONNOT_HAVE_PAWER);
+            throw new LcException(LcExceptionEnum.DONNOT_HAVE_PAWER); //只有超级管理员才能删除管理员
         }
         adminMapper.deleteById(adminId);
     }

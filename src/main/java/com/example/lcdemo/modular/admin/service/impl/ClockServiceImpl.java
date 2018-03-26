@@ -40,7 +40,7 @@ public class ClockServiceImpl implements ClockService {
         clock.setCreateTime(today);
         clock.setUserId(userId);
         Clock c = clockMapper.selectOne(clock);
-        if (c != null) {
+        if (c != null) {    //判断今天是否已经打过卡了
             throw new LcException(LcExceptionEnum.TODAY_IS_HAVE_CLOCK);
         }
         clock.setContent(content);
@@ -57,7 +57,7 @@ public class ClockServiceImpl implements ClockService {
         clockMapper.insert(clock);//新增打卡记录
         StringBuilder sb = new StringBuilder();
         sb.append("打卡成功！您获得").append(xp).append("点经验值和").append(gold).append("金币！");
-        this.clockBalance(userId, xp, gold);
+        this.clockBalance(userId, xp, gold);    //打卡结算
         return sb.toString();
     }
 

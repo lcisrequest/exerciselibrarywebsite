@@ -41,8 +41,8 @@ public class ForumsServiceImpl implements ForumsService {
      */
     @Override
     public void addForums(Forums forums) {
-        forums.setIsTop("no");      //置顶默认为no
-        forums.setCreateTime(DateUtil.getTime());
+        forums.setIsTop("0");      //置顶默认为0，表示未置顶
+        forums.setCreateTime(DateUtil.getTime()); //添加时间
     }
 
     /**
@@ -81,10 +81,10 @@ public class ForumsServiceImpl implements ForumsService {
     @Override
     public void addForumsLike(int forumsId, int userId) {
         Forums forums = forumsMapper.selectById(forumsId);
-        if (forums == null) {
+        if (forums == null) {   //判断该讨论是否存在
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
-        int likeNum = forums.getLike();
+        int likeNum = forums.getLike(); //得到点赞数
         Like userLike = new Like();
         userLike.setType("forums");
         userLike.setUserId(userId);
@@ -178,15 +178,15 @@ public class ForumsServiceImpl implements ForumsService {
     @Override
     public List<Map<String, Object>> getAllForums(int page, int limit, int myId) {
         Wrapper<Forums> wrapper = new EntityWrapper<>();
-        wrapper.orderBy("is_top", false);
-        wrapper.orderBy("create_time", false);
-        RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
+        wrapper.orderBy("is_top", false);   //置顶的排在前
+        wrapper.orderBy("create_time", false); //再按时间排序
+        RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);//分页查询
         List<Forums> list = forumsMapper.selectPage(rowBounds, wrapper);
         List<Map<String, Object>> listMap = new ArrayList<>();
         for (Forums f : list) {
             Map<String, Object> map = new HashMap<>();
             int userId = f.getUserId();
-            UserInfo userInfo = userInfoMapper.selectById(userId);
+            UserInfo userInfo = userInfoMapper.selectById(userId); //查询出对应的用户信息
             map.put("nickName", userInfo.getNickname());
             map.put("userImg", userInfo.getUserimg());
             map.put("forums", f);
@@ -195,7 +195,7 @@ public class ForumsServiceImpl implements ForumsService {
             like.setType("forums");
             like.setUserId(myId);
             like.setForumsId(forumsId);
-            Like isLike = userLikeMapper.selectOne(like);
+            Like isLike = userLikeMapper.selectOne(like); //判断是否点过赞
             if (isLike == null) {
                 map.put("isLike", false);
             } else {
@@ -240,7 +240,7 @@ public class ForumsServiceImpl implements ForumsService {
     public List<Forums> getTheUserForums(int userId, int myId) {
         Wrapper<Forums> wrapper = new EntityWrapper<>();
         wrapper.eq("user_id", userId);
-        wrapper.orderBy("create_time", false);
+        wrapper.orderBy("create_time", false); //时间排序
         List<Forums> list = forumsMapper.selectList(wrapper);
         List<Map<String, Object>> listMap = new ArrayList<>();
         for (Forums f : list) {
@@ -251,7 +251,7 @@ public class ForumsServiceImpl implements ForumsService {
             like.setType("forums");
             like.setUserId(myId);
             like.setForumsId(forumsId);
-            Like isLike = userLikeMapper.selectOne(like);
+            Like isLike = userLikeMapper.selectOne(like); //判断是否点过赞
             if (isLike == null) {
                 map.put("isLike", false);
             } else {

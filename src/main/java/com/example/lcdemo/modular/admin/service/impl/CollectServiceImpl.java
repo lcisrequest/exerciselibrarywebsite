@@ -66,16 +66,16 @@ public class CollectServiceImpl implements CollectService {
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
         Wrapper<Collect> wrapper = new EntityWrapper<>();
-        if (!problemType.equals("all")) {
+        if (!problemType.equals("all")) {   //当参数为all时，课程类型为所有
             wrapper.eq("problem_type", problemType);
         }
         wrapper.eq("user_id", userId);
         RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
-        List<Collect> list = collectMapper.selectPage(rowBounds, wrapper);
+        List<Collect> list = collectMapper.selectPage(rowBounds, wrapper);//分页查询
         List<Map<String, Object>> listMap = new ArrayList<>();
         for (Collect c : list) {
             Map<String, Object> map = c.getMap();
-            Subject subject = subjectMapper.selectById(c.getSubjectId());
+            Subject subject = subjectMapper.selectById(c.getSubjectId()); //循环查询出题目
             map.put("subject", subject.getMap());
             listMap.add(map);
         }

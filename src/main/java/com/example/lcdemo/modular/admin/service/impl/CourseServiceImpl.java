@@ -47,7 +47,7 @@ public class CourseServiceImpl implements CourseService {
         course.setTestNum(0);
         course.setPeopleNum(0);
         course.setKnowledgeNum(0);
-        courseMapper.insert(course);
+        courseMapper.insert(course); //新增课程类型
     }
 
     /**
@@ -58,9 +58,9 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void deleteCourse(int courseId) {
         Course course = courseMapper.selectById(courseId);
-        if (course == null) {
+        if (course == null) {                                       //判断该课程是否存在
             throw new LcException(LcExceptionEnum.COURSE_NOT_EXIST);
         }
-        courseMapper.deleteById(course);
+        courseMapper.deleteById(course); //删除课程
     }
 }

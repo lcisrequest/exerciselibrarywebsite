@@ -27,7 +27,7 @@ public class HomePageServiceImpl implements HomepageService {
         if (homepage.getInfoType() == null || "".equals(homepage.getInfoType()) || homepage.getTitle() == null || "".equals(homepage.getTitle())) {
             throw new LcException(LcExceptionEnum.PARAM_ERROR);
         }
-        homepageMapper.insert(homepage);
+        homepageMapper.insert(homepage); //新增首页
     }
 
     /**
@@ -69,7 +69,7 @@ public class HomePageServiceImpl implements HomepageService {
         if(title.equals("")){
             title = "%";
         }
-        List<Homepage> list = homepageMapper.selectTitleHomePage(infoType, title, (page - 1) * limit, limit);
+        List<Homepage> list = homepageMapper.selectTitleHomePage(infoType, title, (page - 1) * limit, limit);//分页搜索
         return list;
     }
 
@@ -97,7 +97,7 @@ public class HomePageServiceImpl implements HomepageService {
     @Override
     public List<Homepage> getAllHomepage(){
         Wrapper<Homepage> wrapper = new EntityWrapper<>();
-        List<Homepage> list = homepageMapper.selectList(wrapper);
+        List<Homepage> list = homepageMapper.selectList(wrapper); //获取所有
         return list;
     }
 }

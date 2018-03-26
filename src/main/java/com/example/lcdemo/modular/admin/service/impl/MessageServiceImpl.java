@@ -52,11 +52,11 @@ public class MessageServiceImpl implements MessageService {
     public void userCanSendMessage(int userId) {
         boolean inTime = this.sendInTime(userId);
         if (inTime) {
-            throw new LcException(LcExceptionEnum.TIME_NOT_ENOUGH);
+            throw new LcException(LcExceptionEnum.TIME_NOT_ENOUGH);//1分钟之内不可重复发送验证码
         }
         boolean inCount = this.inTimes(userId);
         if (inCount) {
-            throw new LcException(LcExceptionEnum.COUNT_IS_OVER);
+            throw new LcException(LcExceptionEnum.COUNT_IS_OVER);//每天只能发送五次验证码
         }
     }
 
@@ -83,7 +83,7 @@ public class MessageServiceImpl implements MessageService {
         Date endDate = new Date(endLong);
         String end = DateUtil.getTime(endDate);
         String now = DateUtil.getTime();    //获取现在时间
-        boolean inTime = DateUtil.isInTheTimeRange(time, end, now);
+        boolean inTime = DateUtil.isInTheTimeRange(time, end, now); //判断是否在有效时间内
         if (inTime) {
             return true;
         }
@@ -100,7 +100,7 @@ public class MessageServiceImpl implements MessageService {
         Wrapper<VarCode> wrapper = new EntityWrapper<>();
         wrapper.eq("user_id", userId);
         int count = varCodeMapper.selectCount(wrapper);
-        if (count >= 5) {
+        if (count >= 5) {   //次数大于5不能发送
             return true;
         } else {
             return false;
@@ -120,7 +120,7 @@ public class MessageServiceImpl implements MessageService {
         code.setUserId(userId);
         code.setVarCode(varCode);
         code = varCodeMapper.selectOne(code);
-        if (code == null) {
+        if (code == null) {     //判断验证码是否正确
             throw new LcException(LcExceptionEnum.VAR_CODE_IS_WRONG);
         }
         String time = code.getCreateTime(); //获取发送验证码的时间
@@ -130,7 +130,7 @@ public class MessageServiceImpl implements MessageService {
         Date endDate = new Date(endLong);
         String end = DateUtil.getTime(endDate);
         String now = DateUtil.getTime();    //获取现在时间
-        boolean inTime = DateUtil.isInTheTimeRange(time, end, now);
+        boolean inTime = DateUtil.isInTheTimeRange(time, end, now); //是否在有效时间内
         if (inTime) {
             return true;
         }

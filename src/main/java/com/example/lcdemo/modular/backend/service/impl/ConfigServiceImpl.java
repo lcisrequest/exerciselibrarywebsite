@@ -59,7 +59,7 @@ public class ConfigServiceImpl implements ConfigService {
         config.setKey("min_xp");
         config = configMapper.selectOne(config);
         if (config == null) {
-            throw new LcException(LcExceptionEnum.DB_DATA_ERROR);
+            throw new LcException(LcExceptionEnum.DB_DATA_ERROR); //数据库为设置默认配置，此时要添加数据库中config表的数据
         }
         config.setValue(num + "");
         configMapper.updateById(config);
@@ -77,13 +77,13 @@ public class ConfigServiceImpl implements ConfigService {
         min = configMapper.selectOne(min);
         int minXP = Integer.valueOf(min.getValue());
         if (num < minXP) {
-            throw new LcException(LcExceptionEnum.MIN_BIGTHAN_MAX);
+            throw new LcException(LcExceptionEnum.MIN_BIGTHAN_MAX);//最大值不能比最小值小
         }
         Config config = new Config();
         config.setKey("max_xp");
         config = configMapper.selectOne(config);
         if (config == null) {
-            throw new LcException(LcExceptionEnum.DB_DATA_ERROR);
+            throw new LcException(LcExceptionEnum.DB_DATA_ERROR);//数据库为设置默认配置，此时要添加数据库中config表的数据
         }
         config.setValue(num + "");
         configMapper.updateById(config);
@@ -103,7 +103,7 @@ public class ConfigServiceImpl implements ConfigService {
         config.setKey("min_gold");
         config = configMapper.selectOne(config);
         if (config == null) {
-            throw new LcException(LcExceptionEnum.DB_DATA_ERROR);
+            throw new LcException(LcExceptionEnum.DB_DATA_ERROR);//数据库为设置默认配置，此时要添加数据库中config表的数据
         }
         config.setValue(num + "");
         configMapper.updateById(config);
@@ -121,13 +121,13 @@ public class ConfigServiceImpl implements ConfigService {
         min = configMapper.selectOne(min);
         int minXP = Integer.valueOf(min.getValue());
         if (num < minXP) {
-            throw new LcException(LcExceptionEnum.MIN_BIGTHAN_MAX);
+            throw new LcException(LcExceptionEnum.MIN_BIGTHAN_MAX); //最大值不能比最小值小
         }
         Config config = new Config();
         config.setKey("max_gold");
         config = configMapper.selectOne(config);
         if (config == null) {
-            throw new LcException(LcExceptionEnum.DB_DATA_ERROR);
+            throw new LcException(LcExceptionEnum.DB_DATA_ERROR);//数据库为设置默认配置，此时要添加数据库中config表的数据
         }
         config.setValue(num + "");
         configMapper.updateById(config);
@@ -159,7 +159,7 @@ public class ConfigServiceImpl implements ConfigService {
         config.setKey("peek_frice");
         config = configMapper.selectOne(config);    //设置偷看金币数量
         if (config == null) {
-            throw new LcException(LcExceptionEnum.DB_DATA_ERROR);
+            throw new LcException(LcExceptionEnum.DB_DATA_ERROR);//数据库为设置默认配置，此时要添加数据库中config表的数据
         }
         config.setValue(num + "");
         configMapper.updateById(config);

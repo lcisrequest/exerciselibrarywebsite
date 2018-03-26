@@ -85,7 +85,7 @@ public class InterestServiceImpl implements InterestService {
     public boolean havaInterest(int userId) {
         Wrapper<Interest> wrapper = new EntityWrapper<>();
         wrapper.eq("user_id", userId);
-        return interestMapper.selectCount(wrapper) > 0;
+        return interestMapper.selectCount(wrapper) > 0; //若大于0则拥有兴趣
     }
 
     /**
@@ -115,7 +115,7 @@ public class InterestServiceImpl implements InterestService {
         List<Knowledge> listKnowledge = new ArrayList<>();
         if (list.size() == 0) { //若没有设置兴趣
             for (int x = 0; x < num; x++) {
-                Knowledge k = this.getAKnowledgeByInterest("all");
+                Knowledge k = this.getAKnowledgeByInterest("all"); //获取所有课程类型
                 listKnowledge.add(k);
             }
         } else {
@@ -124,7 +124,7 @@ public class InterestServiceImpl implements InterestService {
             for (int x = 0; x < num; x++) {
                 int randNum = rand.nextInt(listNum); //生成一个0-num的随机数
                 Interest interest = list.get(randNum);
-                Knowledge knowledge = this.getAKnowledgeByInterest(interest.getInterestType());
+                Knowledge knowledge = this.getAKnowledgeByInterest(interest.getInterestType());//根据兴趣随机获取
                 listKnowledge.add(knowledge);
             }
         }
@@ -152,7 +152,7 @@ public class InterestServiceImpl implements InterestService {
             for (int x = 0; x < num; x++) {
                 int randNum = rand.nextInt(listNum); //生成一个0-num的随机数
                 Interest interest = list.get(randNum);
-                Test test = this.getATestByInterest(interest.getInterestType());
+                Test test = this.getATestByInterest(interest.getInterestType());//根据兴趣随机获取
                 listKnowledge.add(test);
             }
         }
@@ -170,7 +170,7 @@ public class InterestServiceImpl implements InterestService {
     public Knowledge getAKnowledgeByInterest(String problemType) {
         Wrapper<Knowledge> wrapper = new EntityWrapper<>();
         if (!problemType.equals("all")) {
-            wrapper.eq("problem_type", problemType);
+            wrapper.eq("problem_type", problemType); //指定课程类型
         }
         List<Knowledge> list = knowledgeMapper.selectList(wrapper); //获取该类型的所有知识点
         int num = list.size();

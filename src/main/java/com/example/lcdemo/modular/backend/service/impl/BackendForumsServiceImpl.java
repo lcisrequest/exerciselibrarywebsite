@@ -36,16 +36,16 @@ public class BackendForumsServiceImpl implements BackendForumsService {
     @Override
     public List<Map<String, Object>> getAllForums(int page, int limit) {
         Wrapper<Forums> wrapper = new EntityWrapper<>();
-        wrapper.orderBy("is_top", false);
-        wrapper.orderBy("create_time", false);
+        wrapper.orderBy("is_top", false);   //置顶优先
+        wrapper.orderBy("create_time", false); //再按时间排序
         RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
-        List<Forums> list = forumsMapper.selectPage(rowBounds, wrapper);
+        List<Forums> list = forumsMapper.selectPage(rowBounds, wrapper); //分页获取
         List<Map<String, Object>> listMap = new ArrayList<>();
         for (Forums f : list) {
             Map<String, Object> map = new HashMap<>();
             int userId = f.getUserId();
             UserInfo userInfo = userInfoMapper.selectById(userId);
-            map.put("nickName", userInfo.getNickname());
+            map.put("nickName", userInfo.getNickname()); //获取用户信息
             map.put("userImg", userInfo.getUserimg());
             map.put("forums", f);
             listMap.add(map);

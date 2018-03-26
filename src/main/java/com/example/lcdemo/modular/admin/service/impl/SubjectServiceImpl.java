@@ -21,9 +21,9 @@ public class SubjectServiceImpl implements SubjectService {
     public boolean subjectIsRight(int subjectId, int answerId) {
         Subject subject = subjectMapper.selectById(subjectId);
         if (subject == null) {
-            throw new LcException(LcExceptionEnum.SUBJECT_IS_NOT_EXIST);
+            throw new LcException(LcExceptionEnum.SUBJECT_IS_NOT_EXIST);//习题不存在
         }
-        int answer = subject.getRightKey();
+        int answer = subject.getRightKey();//正确答案
         if (answer == answerId) {
             return true;
         } else {
