@@ -80,6 +80,12 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!-- websocket -->
+		<dependency>
+			<groupId>org.java-websocket</groupId>
+			<artifactId>Java-WebSocket</artifactId>
+			<version>1.3.0</version>
+		</dependency>
 		<!-- 短信 -->
 		<dependency>
 			<groupId>aliyun-message-sdk-mns</groupId>

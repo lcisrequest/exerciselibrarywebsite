@@ -43,6 +43,9 @@ public class ForumsServiceImpl implements ForumsService {
     public void addForums(Forums forums) {
         forums.setIsTop("0");      //置顶默认为0，表示未置顶
         forums.setCreateTime(DateUtil.getTime()); //添加时间
+        forums.setLike(0);
+        forums.setReply(0);
+        forumsMapper.insert(forums);
     }
 
     /**
