@@ -704,7 +704,7 @@ public class UserTestServiceImpl implements UserTestService {
      * @return
      */
     @Override
-    public JSONArray getAllRank() {
+    public JSONArray  getAllRank() {
         List<Map<String, Object>> listMap = userSubjectnumMapper.selectSubjectRank();
         JSONArray jsonArray = new JSONArray();
         for (Map<String, Object> map : listMap) { //遍历获取用户头像和昵称

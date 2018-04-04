@@ -55,7 +55,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
-        user.setNickname(DateUtil.getTime() + UUID.randomUUID()); //随机初始昵称
+    //    user.setNickname(DateUtil.getTime() + UUID.randomUUID()); //随机初始昵称
+        user.setNickname(username);
         user.setCreateTime(DateUtil.getTime());
         user.setLastLoginTime(DateUtil.getTime());
         return userInfoMapper.insert(user) > 0; //新增用户

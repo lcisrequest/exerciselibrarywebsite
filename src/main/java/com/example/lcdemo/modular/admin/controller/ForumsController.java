@@ -73,7 +73,7 @@ public class ForumsController extends BaseController {
      * @return
      */
     @RequestMapping("/addForumsReply")
-    public ResponseEntity addForumsReply(Reply reply) {
+    public ResponseEntity addForumsReply(@RequestBody Reply reply) {
         forumsService.addForumsReply(reply, getUserId());
         return ResponseEntity.ok(SuccessTip.create("请求成功"));
     }
