@@ -12,10 +12,12 @@
     </resultMap>
 
     <select id="selectSubjectRank" resultType="java.util.Map">
+  set sql_mode ='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
          SELECT id,SUM(subject_num),user_id,create_time FROM user_subjectnum GROUP BY user_id ORDER BY SUM(subject_num) DESC  LIMIT 0,10 ;
     </select>
 
     <select id="selectTodaySubhectRank" resultType="java.util.Map">
+set sql_mode ='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
         SELECT id,SUM(subject_num),user_id FROM user_subjectnum  WHERE   create_time > #{startTime}   GROUP BY user_id ORDER BY SUM(subject_num) DESC
         LIMIT 0,10;
     </select>
