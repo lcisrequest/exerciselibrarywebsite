@@ -705,6 +705,7 @@ public class UserTestServiceImpl implements UserTestService {
      */
     @Override
     public JSONArray  getAllRank() {
+        userSubjectnumMapper.makeGroupBy();
         List<Map<String, Object>> listMap = userSubjectnumMapper.selectSubjectRank();
         JSONArray jsonArray = new JSONArray();
         for (Map<String, Object> map : listMap) { //遍历获取用户头像和昵称
@@ -727,6 +728,7 @@ public class UserTestServiceImpl implements UserTestService {
     @Override
     public JSONArray getTodayAllRank() {
         String today = DateUtil.getDay() + " 00:00:00";
+        userSubjectnumMapper.makeGroupBy();
         List<Map<String, Object>> listMap = userSubjectnumMapper.selectTodaySubhectRank(today);//获取今日排行榜
         JSONArray jsonArray = new JSONArray();
         for (Map<String, Object> map : listMap) { //遍历获取用户头像和昵称

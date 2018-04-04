@@ -18,6 +18,7 @@ import java.util.Map;
  */
 @Repository
 public interface UserSubjectnumMapper extends BaseMapper<UserSubjectnum> {
+    void makeGroupBy();
     List<Map<String, Object>> selectSubjectRank();
 
     List<Map<String, Object>> selectTodaySubhectRank(@Param("startTime")String startTime);
