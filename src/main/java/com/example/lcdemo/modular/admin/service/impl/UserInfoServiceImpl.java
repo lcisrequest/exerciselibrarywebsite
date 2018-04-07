@@ -55,7 +55,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
-    //    user.setNickname(DateUtil.getTime() + UUID.randomUUID()); //随机初始昵称
+        //    user.setNickname(DateUtil.getTime() + UUID.randomUUID()); //随机初始昵称
         user.setNickname(username);
         user.setCreateTime(DateUtil.getTime());
         user.setLastLoginTime(DateUtil.getTime());
@@ -108,9 +108,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         int testNum = userTestService.selectMyUserTestCount("all", userId);  //获取我的所有练习数量
         int collectKnowledgeNum = knowledgeService.getAllMyCollectKnowledgeCount(0, userId); //获取我的收藏的课程的数量
         boolean isClock = clockService.todayIsClock(userId);//获取我今天是否已经打卡
-        UserSubjectnum userSubjectnum = new UserSubjectnum();
-        userSubjectnum.setUserId(userId);
-        userSubjectnum = userSubjectnumMapper.selectOne(userSubjectnum); //获取我的所有正确题目数量
+        int userSubjectNum = this.getTheUserSubjectNum(userId);     //获取我的所有正确题目数量
         JSONObject followNum = this.getFollowNum(userId);
         int IFollowNum = followNum.getInteger("iFollowNum");    //获取我关注的数量
         int followMeNum = followNum.getInteger("followMeNum");  //获取关注我的数量
@@ -123,11 +121,32 @@ public class UserInfoServiceImpl implements UserInfoService {
         jsonObject.put("testNum", testNum);
         jsonObject.put("collectKnowledgeNum", collectKnowledgeNum);
         jsonObject.put("isClock", isClock);
-        jsonObject.put("rightSubjectNum", userSubjectnum.getSubjectNum());
+        jsonObject.put("rightSubjectNum", userSubjectNum);
         jsonObject.put("iFollowNum", IFollowNum);
         jsonObject.put("followMeNum", followMeNum);
         jsonObject.put("forumsNum", forumsNum);
         return jsonObject;
+    }
+
+    /**
+     * 获取该用户的正确题目数量
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public int getTheUserSubjectNum(int userId) {
+        Wrapper<UserSubjectnum> wrapper = new EntityWrapper<>();
+        wrapper.eq("user_id", userId);
+        List<UserSubjectnum> listSubjectNum = userSubjectnumMapper.selectList(wrapper);
+        if (listSubjectNum.size() == 0) {
+            return 0;
+        }
+        int num = 0;
+        for (UserSubjectnum usn : listSubjectNum) {
+            num = num + usn.getSubjectNum();
+        }
+        return num;
     }
 
     /**
@@ -145,9 +164,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         int testNum = userTestService.selectMyUserTestCount("all", userId);  //获取该用户的所有练习数量
         int clockNum = clockService.getMyClockNum(userId);                      //获取该用户的打卡天数
-        UserSubjectnum userSubjectnum = new UserSubjectnum();
-        userSubjectnum.setUserId(userId);
-        userSubjectnum = userSubjectnumMapper.selectOne(userSubjectnum); //获取该用户的所有正确题目数量
+        int userSubjectNum = this.getTheUserSubjectNum(userId);     //获取我的所有正确题目数量
         JSONObject followNum = this.getFollowNum(userId);
         int IFollowNum = followNum.getInteger("iFollowNum");    //获取该用户关注的数量
         int followMeNum = followNum.getInteger("followMeNum");  //获取关注该用户的数量
@@ -161,7 +178,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         jsonObject.put("testNum", testNum);
         jsonObject.put("clockNum", clockNum);
         jsonObject.put("collectKnowledgeNum", collectKnowledgeNum);
-        jsonObject.put("rightSubjectNum", userSubjectnum.getSubjectNum());
+        jsonObject.put("rightSubjectNum", userSubjectNum);
         jsonObject.put("iFollowNum", IFollowNum);
         jsonObject.put("followMeNum", followMeNum);
         jsonObject.put("forumsNum", forumsNum);

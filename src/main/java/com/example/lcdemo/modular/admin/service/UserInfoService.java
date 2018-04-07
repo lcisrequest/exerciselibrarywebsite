@@ -31,4 +31,6 @@ public interface UserInfoService {
     JSONObject getOtherUserInfo(int userId, int myId);
 
     boolean IFollowTheUser(int userId, int myId);
+
+    int getTheUserSubjectNum(int userId);
 }
