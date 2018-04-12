@@ -35,6 +35,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     FollowMapper followMapper;
     @Autowired
     ForumsService forumsService;
+    @Autowired
+    CommentService commentService;
 
     /**
      * 用户注册
@@ -108,6 +110,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         int testNum = userTestService.selectMyUserTestCount("all", userId);  //获取我的所有练习数量
         int collectKnowledgeNum = knowledgeService.getAllMyCollectKnowledgeCount(0, userId); //获取我的收藏的课程的数量
         boolean isClock = clockService.todayIsClock(userId);//获取我今天是否已经打卡
+        int todaySubjectNun = userTestService.getTodayMySubjectNum(userId);  //获取今日用户做题数量
+        int todayCommentAllNum = commentService.getTodayMyCommentNum(userId);   //获取今日用户评论的总数,其中包括圈子中讨论的数量
         int userSubjectNum = this.getTheUserSubjectNum(userId);     //获取我的所有正确题目数量
         JSONObject followNum = this.getFollowNum(userId);
         int IFollowNum = followNum.getInteger("iFollowNum");    //获取我关注的数量
@@ -116,6 +120,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfo userInfo = userInfoMapper.selectById(userId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("userInfo", userInfo);
+        jsonObject.put("todaySubjectNum", todaySubjectNun);
+        jsonObject.put("todayCommentAllNum", todayCommentAllNum);
         jsonObject.put("collectSubjectNum", collectSubjectNum);
         jsonObject.put("errorSubjectNum", errorSubjectNum);
         jsonObject.put("testNum", testNum);
@@ -161,10 +167,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         int collectSubjectNum = collectService.getAllMyCollectNum("all", userId); //获取该用户的所有收藏的题目的数量
         int collectKnowledgeNum = knowledgeService.getAllMyCollectKnowledgeCount(0, userId); //获取该用户的收藏的课程的数量
         int errorSubjectNum = userTestService.getAllMyErrorSubjectNum("all", userId); //获取该用户的所有的错题数量
-
         int testNum = userTestService.selectMyUserTestCount("all", userId);  //获取该用户的所有练习数量
         int clockNum = clockService.getMyClockNum(userId);                      //获取该用户的打卡天数
         int userSubjectNum = this.getTheUserSubjectNum(userId);     //获取我的所有正确题目数量
+        int todaySubjectNun = userTestService.getTodayMySubjectNum(userId);  //获取今日用户做题数量
+        int todayCommentAllNum = commentService.getTodayMyCommentNum(userId);   //获取今日用户评论的总数,其中包括圈子中讨论的数量
         JSONObject followNum = this.getFollowNum(userId);
         int IFollowNum = followNum.getInteger("iFollowNum");    //获取该用户关注的数量
         int followMeNum = followNum.getInteger("followMeNum");  //获取关注该用户的数量
@@ -173,6 +180,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfo userInfo = userInfoMapper.selectById(userId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("userInfo", userInfo);
+        jsonObject.put("todaySubjectNum", todaySubjectNun);
+        jsonObject.put("todayCommentAllNum", todayCommentAllNum);
         jsonObject.put("collectSubjectNum", collectSubjectNum);
         jsonObject.put("errorSubjectNum", errorSubjectNum);
         jsonObject.put("testNum", testNum);

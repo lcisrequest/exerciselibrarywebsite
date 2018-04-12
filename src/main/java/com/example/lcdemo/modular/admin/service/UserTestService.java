@@ -65,4 +65,6 @@ public interface UserTestService {
     List<UserTest> getTheUserTestRecord(int userId);
 
     boolean isCollectSubject(int userId, int subjectId);
+
+    int getTodayMySubjectNum(int userId);
 }

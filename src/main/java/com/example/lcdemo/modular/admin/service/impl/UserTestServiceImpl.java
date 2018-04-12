@@ -704,7 +704,7 @@ public class UserTestServiceImpl implements UserTestService {
      * @return
      */
     @Override
-    public JSONArray  getAllRank() {
+    public JSONArray getAllRank() {
         userSubjectnumMapper.makeGroupBy();
         List<Map<String, Object>> listMap = userSubjectnumMapper.selectSubjectRank();
         JSONArray jsonArray = new JSONArray();
@@ -841,5 +841,28 @@ public class UserTestServiceImpl implements UserTestService {
         } else {
             return false;
         }
+    }
+
+    /**
+     * 得到用户今日的做题数量
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public int getTodayMySubjectNum(int userId) {
+        String today = DateUtil.getDay() + " 00:00:00";
+        Wrapper<UserTest> wrapper = new EntityWrapper<>();
+        wrapper.eq("user_id", userId);
+        wrapper.gt("start_time", today); //开始时间要大于00:00:00,则记入今日题目数量，若时间刚好为00:00:00, 则该题目数量无法被计入今日数量中
+        List<UserTest> listUserTest = userTestMapper.selectList(wrapper);
+        int userTestNum = 0;
+        if (listUserTest.size() == 0) {
+            return 0;
+        }
+        for (UserTest ut : listUserTest) {
+            userTestNum += ut.getSubjectNum();
+        }
+        return userTestNum;
     }
 }

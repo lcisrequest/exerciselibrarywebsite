@@ -9,10 +9,7 @@ import com.example.lcdemo.modular.admin.dao.ForumsMapper;
 import com.example.lcdemo.modular.admin.dao.ReplyMapper;
 import com.example.lcdemo.modular.admin.dao.UserInfoMapper;
 import com.example.lcdemo.modular.admin.dao.LikeMapper;
-import com.example.lcdemo.modular.admin.model.Forums;
-import com.example.lcdemo.modular.admin.model.Reply;
-import com.example.lcdemo.modular.admin.model.UserInfo;
-import com.example.lcdemo.modular.admin.model.Like;
+import com.example.lcdemo.modular.admin.model.*;
 import com.example.lcdemo.modular.admin.service.ForumsService;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -292,6 +289,22 @@ public class ForumsServiceImpl implements ForumsService {
             listmap.add(map);
         }
         return listmap;
+    }
+
+    /**
+     * 获取今日用户讨论的数量
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public int getTodayForumsNum(int userId) {
+        String today = DateUtil.getDay() + " 00:00:00";
+        Wrapper<Forums> wrapper = new EntityWrapper<>();
+        wrapper.eq("user_id", userId);
+        wrapper.gt("create_time", today);
+        List<Forums> list = forumsMapper.selectList(wrapper);
+        return list.size();
     }
 
 }

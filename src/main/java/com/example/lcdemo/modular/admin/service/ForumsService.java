@@ -28,4 +28,6 @@ public interface ForumsService {
     List<Forums> getTheUserForums(int userId,int myId);
 
     List<Map<String, Object>> getTheForums(int forumsId);
+
+    int getTodayForumsNum(int userId);
 }

@@ -96,7 +96,7 @@ public class ClockServiceImpl implements ClockService {
     }
 
     /**
-     * 获取我的打开天数
+     * 获取我的打卡天数
      *
      * @param userId
      * @return

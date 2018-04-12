@@ -24,4 +24,6 @@ public interface CommentService {
     List<Map<String, Object>> getMyReply(int userId);
 
     void MakeReplyIsRead(int replyId);
+
+    int getTodayMyCommentNum(int userId);
 }

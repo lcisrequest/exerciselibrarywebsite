@@ -15,6 +15,7 @@ import com.example.lcdemo.modular.admin.model.Reply;
 import com.example.lcdemo.modular.admin.model.UserInfo;
 import com.example.lcdemo.modular.admin.model.Like;
 import com.example.lcdemo.modular.admin.service.CommentService;
+import com.example.lcdemo.modular.admin.service.ForumsService;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,8 @@ public class CommentServiceImpl implements CommentService {
     UserInfoMapper userInfoMapper;
     @Autowired
     LikeMapper userLikeMapper;
+    @Autowired
+    ForumsService forumsService;
 
     /**
      * 添加评论
@@ -247,4 +250,24 @@ public class CommentServiceImpl implements CommentService {
         reply.setIsRead(1);     //1为已读
         replyMapper.updateById(reply);//更改状态
     }
+
+    /**
+     * 获取今日评论的总数量
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public int getTodayMyCommentNum(int userId) {
+        String today = DateUtil.getDay() + " 00:00:00";
+        Wrapper<Comment> wrapper = new EntityWrapper<>();
+        wrapper.eq("user_id", userId);
+        wrapper.gt("create_time", today);
+        List<Comment> listComment = commentMapper.selectList(wrapper);
+        int commentNum = listComment.size();
+        int forumsNum = forumsService.getTodayForumsNum(userId);
+        int allNum = commentNum + forumsNum;
+        return allNum;
+    }
+
 }
