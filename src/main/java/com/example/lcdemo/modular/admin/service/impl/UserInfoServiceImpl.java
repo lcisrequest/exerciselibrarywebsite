@@ -108,6 +108,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         int collectSubjectNum = collectService.getAllMyCollectNum("all", userId); //获取我的所有收藏的题目的数量
         int errorSubjectNum = userTestService.getAllMyErrorSubjectNum("all", userId); //获取我的所有的错题数量
         int testNum = userTestService.selectMyUserTestCount("all", userId);  //获取我的所有练习数量
+        int clockNum = clockService.getMyClockNum(userId);                      //获取该用户的打卡天数
         int collectKnowledgeNum = knowledgeService.getAllMyCollectKnowledgeCount(0, userId); //获取我的收藏的课程的数量
         boolean isClock = clockService.todayIsClock(userId);//获取我今天是否已经打卡
         int todaySubjectNun = userTestService.getTodayMySubjectNum(userId);  //获取今日用户做题数量
@@ -125,6 +126,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         jsonObject.put("collectSubjectNum", collectSubjectNum);
         jsonObject.put("errorSubjectNum", errorSubjectNum);
         jsonObject.put("testNum", testNum);
+        jsonObject.put("clockNum", clockNum);
         jsonObject.put("collectKnowledgeNum", collectKnowledgeNum);
         jsonObject.put("isClock", isClock);
         jsonObject.put("rightSubjectNum", userSubjectNum);
