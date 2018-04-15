@@ -56,4 +56,16 @@ public class CourseController extends BaseController {
         jsonObject.put("count", count);
         return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
     }
+
+    /**
+     * 根据知识点id获取知识点
+     *
+     * @param knowledgeId
+     * @return
+     */
+    @RequestMapping("/getKnowledgeById")
+    public ResponseEntity getKnowledgeById(@RequestParam(value = "knowledgeId", required = false, defaultValue = "0") int knowledgeId) {
+        Knowledge knowledge = knowledgeService.getKnowledgeById(knowledgeId);
+        return ResponseEntity.ok(SuccessTip.create(knowledge, "请求成功"));
+    }
 }

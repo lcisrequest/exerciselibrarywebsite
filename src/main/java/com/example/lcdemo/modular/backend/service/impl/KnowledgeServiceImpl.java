@@ -111,7 +111,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
      */
     @Override
     public List<Knowledge> getKnowledge(int type, String kind, int page, int limit) {
-        if(kind==null||"".equals(kind)){
+        if (kind == null || "".equals(kind)) {
             throw new LcException(LcExceptionEnum.PARAM_NULL);
         }
         Wrapper<Knowledge> wrapper = new EntityWrapper<>();
@@ -123,6 +123,9 @@ public class KnowledgeServiceImpl implements KnowledgeService {
         }
         RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);//分页
         List<Knowledge> list = knowledgeMapper.selectPage(rowBounds, wrapper);
+        for (Knowledge k : list) {
+            k.setBody("");
+        }
         return list;
     }
 
@@ -281,6 +284,22 @@ public class KnowledgeServiceImpl implements KnowledgeService {
             }
         }
         return list.size();
+    }
+
+
+    /**
+     * 根据知识点id获取指定知识点
+     *
+     * @param knowledgeId
+     * @return
+     */
+    @Override
+    public Knowledge getKnowledgeById(int knowledgeId) {
+        if (knowledgeId == 0) {
+            throw new LcException(LcExceptionEnum.PARAM_NULL);
+        }
+        Knowledge knowledge = knowledgeMapper.selectById(knowledgeId);
+        return knowledge;
     }
 
 }
