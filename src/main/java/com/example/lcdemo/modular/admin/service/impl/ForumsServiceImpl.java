@@ -144,8 +144,10 @@ public class ForumsServiceImpl implements ForumsService {
             UserInfo userInfo = userInfoMapper.selectById(userId);
             String img = userInfo.getUserimg();
             String username = userInfo.getUsername();
+            String nickname = userInfo.getNickname();
             map.put("username", username); //得到用户名
             map.put("userImg", img);       //得到用户头像
+            map.put("nickname", nickname);  //得到昵称
             if (img == null) {
                 map.put("userImg", "");
             }

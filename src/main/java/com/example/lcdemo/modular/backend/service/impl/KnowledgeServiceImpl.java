@@ -111,6 +111,9 @@ public class KnowledgeServiceImpl implements KnowledgeService {
      */
     @Override
     public List<Knowledge> getKnowledge(int type, String kind, int page, int limit) {
+        if(kind==null||"".equals(kind)){
+            throw new LcException(LcExceptionEnum.PARAM_NULL);
+        }
         Wrapper<Knowledge> wrapper = new EntityWrapper<>();
         if (!kind.equals("all")) {                      //当类型为all时，为不指定类型
             wrapper.eq("problem_type", kind);                       //指定题目类型

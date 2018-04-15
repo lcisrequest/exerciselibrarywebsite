@@ -105,6 +105,7 @@ public class InterestServiceImpl implements InterestService {
 
     /**
      * 根据兴趣随机获得指定数量的知识点
+     *
      * @param userId
      * @param num
      * @return
@@ -133,12 +134,16 @@ public class InterestServiceImpl implements InterestService {
 
     /**
      * 根据兴趣随机获得指定数量的模拟练习
+     *
      * @param userId
      * @param num
      * @return
      */
     @Override
-    public List<Test> getHomePageTest(int userId, int num){
+    public List<Test> getHomePageTest(int userId, int num) {
+        if (num == 0) {
+            throw new LcException(LcExceptionEnum.PARAM_NULL);
+        }
         List<Interest> list = this.getAllMyInterest(userId);
         List<Test> listKnowledge = new ArrayList<>();
         if (list.size() == 0) { //若没有设置兴趣
@@ -174,6 +179,9 @@ public class InterestServiceImpl implements InterestService {
         }
         List<Knowledge> list = knowledgeMapper.selectList(wrapper); //获取该类型的所有知识点
         int num = list.size();
+        if (num == 0) {
+            return null;
+        }
         Random rand = new Random();
         int randNum = rand.nextInt(num); //生成一个0-num的随机数
         return list.get(randNum);
@@ -181,6 +189,7 @@ public class InterestServiceImpl implements InterestService {
 
     /**
      * 生成一个指定课程的模拟练习
+     *
      * @param problemType
      * @return
      */
