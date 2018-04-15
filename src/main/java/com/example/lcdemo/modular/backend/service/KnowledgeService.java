@@ -23,4 +23,6 @@ public interface KnowledgeService {
     List<Knowledge> getAllMyCollectKnowledge(int type, int userId, int page, int limit);
 
     Integer getAllMyCollectKnowledgeCount(int type, int userId);
+
+    Knowledge getKnowledgeById(int knowledgeId);
 }
