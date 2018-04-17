@@ -180,7 +180,7 @@ public class Test extends Model<Test> {
         "}";
     }
 
-    public Map<String, Object> getMap() {
+    public Map<String, Object> makeMap() {
         Map<String, Object> mapSubject = new HashMap<>();
         mapSubject.put("id", this.id);
         mapSubject.put("img", this.img);

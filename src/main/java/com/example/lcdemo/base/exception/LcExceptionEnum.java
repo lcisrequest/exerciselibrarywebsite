@@ -54,6 +54,7 @@ public enum LcExceptionEnum {
     SUBJECT_IS_NOT_EXIST(201, "该习题不存在"),
     SUBJECCT_IS_NULL(201, "该类型习题库为空"),
     ANSWER_NUM_IS_WRONG(201, "答案数量与题目数量不匹配"),
+    SUBJECT_IS_IN_TEST(201,"该习题在模拟练习中,不能删除！"),
     PARAM_NULL(201, "参数为空");
 
     LcExceptionEnum(int code, String message) {

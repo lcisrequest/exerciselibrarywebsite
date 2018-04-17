@@ -77,6 +77,9 @@ public class BackendTestServiceImpl implements BackendTestService {
      */
     @Override
     public boolean deleteSubject(int subjectId) {
+        if (this.theSubjectIsInTest(subjectId)) {       //判断该习题是否在模拟练习中，若在则不能删除
+            throw new LcException(LcExceptionEnum.SUBJECT_IS_IN_TEST);
+        }
         Subject subject = subjectMapper.selectById(subjectId);
         String problemType = subject.getProblemType();
         int num = subjectMapper.deleteById(subjectId);
@@ -91,6 +94,24 @@ public class BackendTestServiceImpl implements BackendTestService {
             return false;
         }
     }
+
+    /**
+     * 判断该习题是否在模拟练习中
+     *
+     * @param subjectId
+     * @return
+     */
+    public boolean theSubjectIsInTest(int subjectId) {
+        String subjectIdStr = "%" + subjectId + "%";
+        List<Integer> listId = testMapper.subjectIsInTest(subjectIdStr);
+        System.out.println(listId);
+        if (listId.size() == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
     /**
      * 根据题目id获取题目详情
@@ -228,7 +249,7 @@ public class BackendTestServiceImpl implements BackendTestService {
         List<Test> list = testMapper.selectPage(rowBounds, wrapper);
         List<Map<String, Object>> listMap = new ArrayList<>();
         for (Test t : list) {
-            Map<String, Object> map = t.getMap();
+            Map<String, Object> map = t.makeMap();
             String sId = t.getTestSubject();
             String[] subjectIds = sId.split(",");//获取到该练习的所有题目id
             List<Map<String, Object>> listSubject = new ArrayList<>();

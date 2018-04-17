@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/interest")
@@ -59,15 +60,17 @@ public class InterestController extends BaseController {
 
     /**
      * 根据兴趣获取指定数量首页推荐练习和知识点
+     *
      * @param num
      * @return
      */
     @RequestMapping("/getHomepageRecommend")
-    public ResponseEntity getHomepageRecommend(int num){
-        List<Test> listTest = interestService.getHomePageTest(getUserId(),num);
-        List<Knowledge> listKnowledge = interestService.getHomePageKnowledge(getUserId(),num);
+    public ResponseEntity getHomepageRecommend(int num) {
+        List<Map<String, Object>> listTest = interestService.getHomePageTest(getUserId(), num);
+        List<Knowledge> listKnowledge = interestService.getHomePageKnowledge(getUserId(), num);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("listTest",listTest);
-        jsonObject.put("listKnowledge",listKnowledge);
-        return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));    }
+        jsonObject.put("listTest", listTest);
+        jsonObject.put("listKnowledge", listKnowledge);
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
+    }
 }

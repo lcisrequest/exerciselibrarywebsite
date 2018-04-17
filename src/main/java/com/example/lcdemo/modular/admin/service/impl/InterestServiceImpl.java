@@ -11,14 +11,13 @@ import com.example.lcdemo.modular.admin.model.Course;
 import com.example.lcdemo.modular.admin.model.Interest;
 import com.example.lcdemo.modular.admin.model.Test;
 import com.example.lcdemo.modular.admin.service.InterestService;
+import com.example.lcdemo.modular.admin.service.UserTestService;
 import com.example.lcdemo.modular.backend.dao.KnowledgeMapper;
 import com.example.lcdemo.modular.backend.model.Knowledge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class InterestServiceImpl implements InterestService {
@@ -30,6 +29,8 @@ public class InterestServiceImpl implements InterestService {
     KnowledgeMapper knowledgeMapper;
     @Autowired
     TestMapper testMapper;
+    @Autowired
+    UserTestService userTestService;
 
     /**
      * 修改我的兴趣
@@ -140,7 +141,7 @@ public class InterestServiceImpl implements InterestService {
      * @return
      */
     @Override
-    public List<Test> getHomePageTest(int userId, int num) {
+    public List<Map<String, Object>> getHomePageTest(int userId, int num) {
         if (num == 0) {
             throw new LcException(LcExceptionEnum.PARAM_NULL);
         }
@@ -161,7 +162,21 @@ public class InterestServiceImpl implements InterestService {
                 listKnowledge.add(test);
             }
         }
-        return listKnowledge;
+        List<Map<String, Object>> listTest = new ArrayList<>();
+        for (Test t : listKnowledge) {
+            Map<String, Object> mapTest = t.makeMap();
+            String testSubject = t.getTestSubject();
+            String[] testSubjects = testSubject.split(",");     //获取练习中的所有题目id
+            List<Map<String, Object>> listMap = new ArrayList<>();
+            for (String subjectIdStr : testSubjects) {
+                int subjectId = Integer.valueOf(subjectIdStr);
+                Map<String, Object> mapSubject = userTestService.getSubjectById(subjectId, userId);  //根据题目id获取题目详情
+                listMap.add(mapSubject);
+            }
+            mapTest.put("subjectList", listMap);
+            listTest.add(mapTest);
+        }
+        return listTest;
     }
 
 

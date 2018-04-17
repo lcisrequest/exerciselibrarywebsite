@@ -16,5 +16,7 @@
         <result column="start_time" property="startTime" />
         <result column="end_time" property="endTime" />
     </resultMap>
-
+    <select id="subjectIsInTest" resultType="java.lang.Integer">
+        SELECT id FROM test where test_subject LIKE #{subjectId};
+    </select>
 </mapper>

@@ -15,6 +15,7 @@ import com.example.lcdemo.modular.admin.service.UserTestService;
 import com.example.lcdemo.modular.backend.dao.ConfigMapper;
 import com.example.lcdemo.modular.backend.model.Config;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -452,7 +453,7 @@ public class UserTestServiceImpl implements UserTestService {
         List<Test> list = testMapper.selectPage(rowBounds, wrapper);
         List<Map<String, Object>> listMap = new ArrayList<>();
         for (Test t : list) {
-            Map<String, Object> map = t.getMap();
+            Map<String, Object> map = t.makeMap();
             String sId = t.getTestSubject();
             String[] subjectIds = sId.split(",");//获取到该练习的所有题目id
             List<Map<String, Object>> listSubject = new ArrayList<>();
@@ -784,7 +785,7 @@ public class UserTestServiceImpl implements UserTestService {
     public Map<String, Object> getSubjectById(int subjectId, int userId) {
         Subject subject = subjectMapper.selectById(subjectId);
         if (subject == null) {
-            throw new LcException(LcExceptionEnum.PARAM_ERROR);
+            throw new LcException(LcExceptionEnum.SUBJECT_IS_NOT_EXIST);
         }
         Map<String, Object> map = subject.getMap();
         boolean isCollect = this.isCollectSubject(userId, subjectId); //判断是否收藏过该题目
