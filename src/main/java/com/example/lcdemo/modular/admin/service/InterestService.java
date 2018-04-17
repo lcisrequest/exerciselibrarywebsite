@@ -18,7 +18,7 @@ public interface InterestService {
 
     Test getATestByInterest(String problemType);
 
-    List<Knowledge> getHomePageKnowledge(int userId, int num);
+    List<Map<String, Object>> getHomePageKnowledge(int userId, int num);
 
     List<Map<String, Object>> getHomePageTest(int userId, int num);
 }

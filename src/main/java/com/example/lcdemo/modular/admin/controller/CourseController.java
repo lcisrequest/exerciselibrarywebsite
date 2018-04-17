@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/course")
@@ -49,7 +50,7 @@ public class CourseController extends BaseController {
                                        String problemType,
                                        @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                        @RequestParam(value = "limit", required = false, defaultValue = "10") int limit) {
-        List<Knowledge> list = knowledgeService.getKnowledge(type, problemType, page, limit);
+        List<Map<String, Object>> list = knowledgeService.getKnowledgeForUser(getUserId(), type, problemType, page, limit);
         int count = knowledgeService.getKnowledgeNum(type, problemType);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("list", list);
@@ -66,6 +67,9 @@ public class CourseController extends BaseController {
     @RequestMapping("/getKnowledgeById")
     public ResponseEntity getKnowledgeById(@RequestParam(value = "knowledgeId", required = false, defaultValue = "0") int knowledgeId) {
         Knowledge knowledge = knowledgeService.getKnowledgeById(knowledgeId);
-        return ResponseEntity.ok(SuccessTip.create(knowledge, "请求成功"));
+        Map<String, Object> map = knowledge.makeMap();
+        boolean isCollect = knowledgeService.isCollectKnowledge(knowledgeId, getUserId());
+        map.put("isCollect", isCollect);
+        return ResponseEntity.ok(SuccessTip.create(map, "请求成功"));
     }
 }

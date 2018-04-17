@@ -14,6 +14,7 @@ import com.example.lcdemo.modular.admin.service.InterestService;
 import com.example.lcdemo.modular.admin.service.UserTestService;
 import com.example.lcdemo.modular.backend.dao.KnowledgeMapper;
 import com.example.lcdemo.modular.backend.model.Knowledge;
+import com.example.lcdemo.modular.backend.service.KnowledgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,8 @@ public class InterestServiceImpl implements InterestService {
     TestMapper testMapper;
     @Autowired
     UserTestService userTestService;
+    @Autowired
+    KnowledgeService knowledgeService;
 
     /**
      * 修改我的兴趣
@@ -112,7 +115,7 @@ public class InterestServiceImpl implements InterestService {
      * @return
      */
     @Override
-    public List<Knowledge> getHomePageKnowledge(int userId, int num) {
+    public List<Map<String, Object>> getHomePageKnowledge(int userId, int num) {
         List<Interest> list = this.getAllMyInterest(userId);
         List<Knowledge> listKnowledge = new ArrayList<>();
         if (list.size() == 0) { //若没有设置兴趣
@@ -130,7 +133,15 @@ public class InterestServiceImpl implements InterestService {
                 listKnowledge.add(knowledge);
             }
         }
-        return listKnowledge;
+        List<Map<String, Object>> listMap = new ArrayList<>();
+        for (Knowledge k : listKnowledge) {
+            k.setBody("");
+            Map<String, Object> map = k.makeMap();
+            boolean isCollect = knowledgeService.isCollectKnowledge(k.getId(), userId);
+            map.put("isCollect", isCollect);
+            listMap.add(map);
+        }
+        return listMap;
     }
 
     /**

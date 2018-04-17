@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -128,6 +129,42 @@ public class KnowledgeServiceImpl implements KnowledgeService {
         }
         return list;
     }
+
+
+    /**
+     * 分页获取指定类型的考试大纲或课本知识
+     *
+     * @param type
+     * @param kind
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getKnowledgeForUser(int userId, int type, String kind, int page, int limit) {
+        if (kind == null || "".equals(kind)) {
+            throw new LcException(LcExceptionEnum.PARAM_NULL);
+        }
+        Wrapper<Knowledge> wrapper = new EntityWrapper<>();
+        if (!kind.equals("all")) {                      //当类型为all时，为不指定类型
+            wrapper.eq("problem_type", kind);                       //指定题目类型
+        }
+        if (type != 0) {
+            wrapper.eq("type", type);                       //指定知识类型
+        }
+        RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);//分页
+        List<Knowledge> list = knowledgeMapper.selectPage(rowBounds, wrapper);
+        List<Map<String, Object>> listMap = new ArrayList<>();
+        for (Knowledge k : list) {
+            k.setBody("");
+            Map<String, Object> map = k.makeMap();
+            boolean isCollect = this.isCollectKnowledge(k.getId(), userId);
+            map.put("isCollect", isCollect);
+            listMap.add(map);
+        }
+        return listMap;
+    }
+
 
     /**
      * 获取指定类型的考试大纲或课本知识的数量
@@ -300,6 +337,27 @@ public class KnowledgeServiceImpl implements KnowledgeService {
         }
         Knowledge knowledge = knowledgeMapper.selectById(knowledgeId);
         return knowledge;
+    }
+
+    /**
+     * 判断该知识点是否有收藏
+     *
+     * @param knowledgeId
+     * @param userId
+     * @return
+     */
+    @Override
+    public boolean isCollectKnowledge(int knowledgeId, int userId) {
+        Collect collect = new Collect();
+        collect.setProblemType("knowledge");
+        collect.setUserId(userId);
+        collect.setSubjectId(knowledgeId);
+        Collect c = collectMapper.selectOne(collect); //判断该用户是否收藏了该知识
+        if (c == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 }

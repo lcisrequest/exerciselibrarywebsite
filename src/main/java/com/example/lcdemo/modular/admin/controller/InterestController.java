@@ -67,7 +67,7 @@ public class InterestController extends BaseController {
     @RequestMapping("/getHomepageRecommend")
     public ResponseEntity getHomepageRecommend(int num) {
         List<Map<String, Object>> listTest = interestService.getHomePageTest(getUserId(), num);
-        List<Knowledge> listKnowledge = interestService.getHomePageKnowledge(getUserId(), num);
+        List<Map<String, Object>> listKnowledge = interestService.getHomePageKnowledge(getUserId(), num);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("listTest", listTest);
         jsonObject.put("listKnowledge", listKnowledge);

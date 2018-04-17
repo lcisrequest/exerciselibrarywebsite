@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -160,5 +162,20 @@ public class Knowledge extends Model<Knowledge> {
                 ", updateTime=" + updateTime +
                 ", filepath=" + filepath +
                 "}";
+    }
+
+    public Map makeMap(){
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("title",title);
+        map.put("body",body);
+        map.put("type",type);
+        map.put("description",description);
+        map.put("imgs",imgs);
+        map.put("createTime",createTime);
+        map.put("updateTime",updateTime);
+        map.put("filepath",filepath);
+        map.put("problemType",problemType);
+        return map;
     }
 }

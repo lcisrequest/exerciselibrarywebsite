@@ -4,6 +4,7 @@ import com.example.lcdemo.modular.backend.model.Knowledge;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 public interface KnowledgeService {
     boolean addKnowledge(Knowledge knowledge);
@@ -25,4 +26,8 @@ public interface KnowledgeService {
     Integer getAllMyCollectKnowledgeCount(int type, int userId);
 
     Knowledge getKnowledgeById(int knowledgeId);
+
+    boolean isCollectKnowledge(int knowledgeId, int userId);
+
+    List<Map<String, Object>> getKnowledgeForUser(int userId, int type, String kind, int page, int limit);
 }
