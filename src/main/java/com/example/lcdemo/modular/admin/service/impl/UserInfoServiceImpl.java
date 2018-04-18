@@ -46,6 +46,9 @@ public class UserInfoServiceImpl implements UserInfoService {
      */
     @Override
     public boolean register(UserInfo userInfo) {
+        if (userInfo.getTelphone() == null) {
+            throw new LcException(LcExceptionEnum.PARAM_ERROR);
+        }
         String username = userInfo.getUsername();
         String password = userInfo.getPassword();
         UserInfo user = new UserInfo();
@@ -213,11 +216,13 @@ public class UserInfoServiceImpl implements UserInfoService {
      * 修改密码
      *
      * @param newPassword
-     * @param userId
+     * @param telphone
      */
     @Override
-    public void updatePassword(String newPassword, int userId) {
-        UserInfo user = userInfoMapper.selectById(userId);
+    public void updatePassword(String newPassword, String telphone) {
+        UserInfo userinfo = new UserInfo();
+        userinfo.setTelphone(telphone);
+        UserInfo user = userInfoMapper.selectOne(userinfo);
         user.setPassword(newPassword);
         userInfoMapper.updateById(user);    //更改密码
     }

@@ -16,7 +16,7 @@ public interface UserInfoService {
 
     JSONObject getAllMyNumInfo(int userId);
 
-    void updatePassword(String newPassword,int userId);
+    void updatePassword(String newPassword, String telphone);
 
     void followUser(int followUser,int userId);
 

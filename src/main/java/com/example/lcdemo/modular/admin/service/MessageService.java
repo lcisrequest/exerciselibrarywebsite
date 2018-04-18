@@ -2,10 +2,12 @@ package com.example.lcdemo.modular.admin.service;
 
 public interface MessageService {
 
-    void sendMessage(String tel, int userId);
+    void sendMessage(String telphone);
 
-    boolean VarCodeIsTrue(int userId, String varCode);
+    boolean VarCodeIsTrue(String telphone, String varCode);
 
-    boolean sendInTime(int userId);
+    boolean sendInTime(String telphone);
+
+    void sendRegisterMessage(String telphone);
 
 }

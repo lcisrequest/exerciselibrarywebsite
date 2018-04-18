@@ -3,6 +3,7 @@ package com.example.lcdemo.modular.admin.controller;
 
 import com.example.lcdemo.base.controller.BaseController;
 import com.example.lcdemo.base.tips.SuccessTip;
+import com.example.lcdemo.modular.backend.service.BackendUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/")
 public class demoController extends BaseController {
+    @Autowired
+    BackendUserService backendUserService;
 
     @RequestMapping("/test")
     public ResponseEntity test(HttpServletRequest request,String urls) {
@@ -27,9 +30,9 @@ public class demoController extends BaseController {
         return ResponseEntity.ok(SuccessTip.create(tempContextUrl, ""));
     }
 
-    @RequestMapping("/")
-    public ResponseEntity getIt(String url){
-        System.out.println(url);
+    @RequestMapping("/demo")
+    public ResponseEntity getIt(){
+        backendUserService.getDays();
         return ResponseEntity.ok(SuccessTip.create("登录成功"));
     }
 }

@@ -14,6 +14,11 @@
         <result column="level" property="level" />
         <result column="xp" property="xp" />
         <result column="gold" property="gold" />
+        <result column="telphone" property="telphone" />
+        <result column="ban" property="ban" />
     </resultMap>
+    <select id="selectRegisterNum"  resultType="java.lang.Integer">
+        SELECT count(*) FROM user_info  WHERE create_time >= #{startTime} AND create_time &lt;= #{endTime} ;
+    </select>
 
 </mapper>

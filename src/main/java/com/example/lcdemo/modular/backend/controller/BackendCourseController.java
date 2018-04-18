@@ -57,4 +57,5 @@ public class BackendCourseController extends BaseController {
         List<Course> list = courseService.getAllCourse();
         return ResponseEntity.ok(SuccessTip.create(list, "请求成功"));
     }
+
 }

@@ -180,17 +180,28 @@ public class UserController extends BaseController {
     }
 
     /**
-     * 发送验证码
+     * 发送找回密码验证码
      *
-     * @param tel
+     * @param telphone
      * @return
      */
-    @RequestMapping("/sendMessage")
-    public ResponseEntity sendMessage(String tel) {
-        messageService.sendMessage(tel, getUserId());
+    @RequestMapping("/sendMessageFountPassword")
+    public ResponseEntity sendMessageFountPassword(String telphone) {
+        messageService.sendMessage(telphone);
         return ResponseEntity.ok(SuccessTip.create("请求成功"));
     }
 
+    /**
+     * 发送用户注册验证码
+     *
+     * @param telphone
+     * @return
+     */
+    @RequestMapping("/sendMessageRegister")
+    public ResponseEntity sendRegisterMessage(String telphone) {
+        messageService.sendMessage(telphone);
+        return ResponseEntity.ok(SuccessTip.create("请求成功"));
+    }
 
     /**
      * 判断验证码
@@ -200,12 +211,12 @@ public class UserController extends BaseController {
      * @return
      */
     @RequestMapping("/judgeVarCode")
-    public ResponseEntity judgeVarCode(String varCode) {
-        boolean isRight = messageService.VarCodeIsTrue(getUserId(), varCode);
+    public ResponseEntity judgeVarCode(String telphone, String varCode) {
+        boolean isRight = messageService.VarCodeIsTrue(telphone, varCode);
         if (!isRight) {
             throw new LcException(LcExceptionEnum.VAR_CODE_OVERTIME); //验证码超时
         }
-        return ResponseEntity.ok(SuccessTip.create(isRight, "请求成功"));
+        return ResponseEntity.ok(SuccessTip.create(isRight, "判断成功"));
     }
 
     /**
@@ -215,8 +226,8 @@ public class UserController extends BaseController {
      * @return
      */
     @RequestMapping("/updatePassword")
-    public ResponseEntity updatePassword(String newPassword) {
-        userInfoService.updatePassword(newPassword, getUserId());
+    public ResponseEntity updatePassword(String telphone, String newPassword) {
+        userInfoService.updatePassword(newPassword, telphone);
         return ResponseEntity.ok(SuccessTip.create("修改成功"));
     }
 

@@ -15,4 +15,7 @@
         <result column="is_top" property="isTop" />
     </resultMap>
 
+    <select id="selectTodayForumsNum"  resultType="java.lang.Integer">
+        SELECT count(*) FROM forums WHERE create_time >= #{startTime} AND create_time &lt;= #{endTime} ;
+    </select>
 </mapper>

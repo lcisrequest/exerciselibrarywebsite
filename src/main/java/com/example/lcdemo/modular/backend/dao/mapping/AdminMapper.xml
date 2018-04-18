@@ -3,10 +3,13 @@
 <mapper namespace="com.example.lcdemo.modular.backend.dao.AdminMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.example.lcdemo.modular.backend.model.Admin">
+    <resultMap id="BaseResultMap" type="com.itspeed.higu.modular.app.persistence.model.Admin">
         <id column="id" property="id" />
         <result column="username" property="username" />
         <result column="password" property="password" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_super" property="isSuper" />
     </resultMap>
 
 </mapper>

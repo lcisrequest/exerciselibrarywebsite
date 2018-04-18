@@ -5,11 +5,12 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+
 import java.io.Serializable;
 
 /**
  * <p>
- * 
+ * <p>
  * </p>
  *
  * @author itspeed
@@ -23,10 +24,9 @@ public class VarCode extends Model<VarCode> {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     /**
-     * 用户id
+     * 电话号码
      */
-    @TableField("user_id")
-    private Integer userId;
+    private String telphone;
     /**
      * 验证码
      */
@@ -47,12 +47,12 @@ public class VarCode extends Model<VarCode> {
         this.id = id;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public String getTelphone() {
+        return telphone;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setTelphone(String telphone) {
+        this.telphone = telphone;
     }
 
     public String getVarCode() {
@@ -79,10 +79,10 @@ public class VarCode extends Model<VarCode> {
     @Override
     public String toString() {
         return "VarCode{" +
-        ", id=" + id +
-        ", userId=" + userId +
-        ", varCode=" + varCode +
-        ", createTime=" + createTime +
-        "}";
+                ", id=" + id +
+                ", telphone=" + telphone +
+                ", varCode=" + varCode +
+                ", createTime=" + createTime +
+                "}";
     }
 }

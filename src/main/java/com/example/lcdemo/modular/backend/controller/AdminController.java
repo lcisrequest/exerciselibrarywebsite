@@ -63,4 +63,16 @@ public class AdminController extends BaseController {
         adminService.deleteAdmin(adminId, getUserId());
         return ResponseEntity.ok(SuccessTip.create("请求成功"));
     }
+
+    /**
+     * 更新管理员信息
+     *
+     * @param admin
+     * @return
+     */
+    @RequestMapping("/updateAdmin")
+    public ResponseEntity updateAdmin(@RequestBody Admin admin) {
+        adminService.updateAdmin(admin, getUserId());
+        return ResponseEntity.ok(SuccessTip.create("请求成功"));
+    }
 }

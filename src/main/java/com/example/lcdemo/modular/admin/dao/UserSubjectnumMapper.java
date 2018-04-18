@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author itspeed
@@ -19,7 +19,10 @@ import java.util.Map;
 @Repository
 public interface UserSubjectnumMapper extends BaseMapper<UserSubjectnum> {
     void makeGroupBy();
+
     List<Map<String, Object>> selectSubjectRank();
 
-    List<Map<String, Object>> selectTodaySubhectRank(@Param("startTime")String startTime);
+    List<Map<String, Object>> selectTodaySubhectRank(@Param("startTime") String startTime);
+
+    Integer selectTodaySubjectNum(@Param("startTime") String startTime, @Param("endTime") String endTime);
 }

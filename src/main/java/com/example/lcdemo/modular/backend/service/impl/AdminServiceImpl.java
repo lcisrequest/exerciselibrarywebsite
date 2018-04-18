@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.example.lcdemo.base.exception.LcException;
 import com.example.lcdemo.base.exception.LcExceptionEnum;
+import com.example.lcdemo.base.util.DateUtil;
 import com.example.lcdemo.modular.backend.dao.AdminMapper;
 import com.example.lcdemo.modular.backend.model.Admin;
 import com.example.lcdemo.modular.backend.service.AdminService;
@@ -41,6 +42,8 @@ public class AdminServiceImpl implements AdminService {
         if (a != null) {
             throw new LcException(LcExceptionEnum.HAS_REGISTER);
         }
+        admin.setCreateTime(DateUtil.getTime());    //设置创建时间
+        admin.setUpdateTime(DateUtil.getTime());    //设置更新时间
         adminMapper.insert(admin);
     }
 
@@ -58,6 +61,9 @@ public class AdminServiceImpl implements AdminService {
         Admin zheAdmin = adminMapper.selectById(userId);
         boolean isSuperAdmin = false;
         if (zheAdmin.getUsername().equals("admin")) {   //用户名为admin的管理员为超级管理员
+            isSuperAdmin = true;
+        }
+        if (zheAdmin.getIsSuper() == 1) {
             isSuperAdmin = true;
         }
         Wrapper<Admin> wrapper = new EntityWrapper<>();
@@ -102,7 +108,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void deleteAdmin(int adminId, int userId) {
         Admin zheAdmin = adminMapper.selectById(adminId);
-        if(zheAdmin==null){
+        if (zheAdmin == null) {
             throw new LcException(LcExceptionEnum.ADMIN_NOT_EXIST);//管理员不存在
         }
         if (zheAdmin.getUsername().equals("admin")) {
@@ -113,5 +119,36 @@ public class AdminServiceImpl implements AdminService {
             throw new LcException(LcExceptionEnum.DONNOT_HAVE_PAWER); //只有超级管理员才能删除管理员
         }
         adminMapper.deleteById(adminId);
+    }
+
+    /**
+     * 更新管理员信息
+     *
+     * @param admin
+     * @param userId
+     */
+    @Override
+    public void updateAdmin(Admin admin, int userId) {
+        Admin zheAdmin = adminMapper.selectById(userId);
+        boolean isSuperAdmin = false;
+        if (zheAdmin.getUsername().equals("admin")) {   //用户名为admin的管理员为超级管理员
+            isSuperAdmin = true;
+        }
+        if (zheAdmin.getIsSuper() == 1) {
+            isSuperAdmin = true;
+        }
+        if (!isSuperAdmin) {
+            throw new LcException(LcExceptionEnum.DONNOT_HAVE_PAWER);
+        }
+        int selectAdminId = admin.getId();
+        Admin updateAdmin = adminMapper.selectById(selectAdminId);
+        if (updateAdmin == null) {  //判断管理员是否存在
+            throw new LcException(LcExceptionEnum.ADMIN_NOT_EXIST);
+        }
+        if (updateAdmin.getIsSuper() == 1) {    //判断更新的管理员是否是超级管理员
+            throw new LcException(LcExceptionEnum.SUPERADMIN_CANNOT_UPDATE);
+        }
+        admin.setUpdateTime(DateUtil.getTime());     //设置修改时间
+        adminMapper.updateById(admin);      //更新管理员
     }
 }

@@ -21,4 +21,8 @@
         SELECT id,SUM(subject_num),user_id FROM user_subjectnum  WHERE   create_time > #{startTime}   GROUP BY user_id ORDER BY SUM(subject_num) DESC
         LIMIT 0,10;
     </select>
+
+    <select id="selectTodaySubjectNum" resultType="java.lang.Integer">
+        SELECT count(*) FROM user_subjectnum  WHERE create_time >= #{startTime} AND create_time &lt;= #{endTime} ;
+    </select>
 </mapper>

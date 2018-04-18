@@ -45,7 +45,14 @@ public class UserInfo extends Model<UserInfo> {
      * 金币
      */
     private Integer gold;
-
+    /**
+    *  电话号码
+    **/
+    private String telphone;
+    /**
+     * 是否禁用
+     */
+    private int ban;
 
     public Integer getId() {
         return id;
@@ -125,6 +132,22 @@ public class UserInfo extends Model<UserInfo> {
 
     public void setGold(Integer gold) {
         this.gold = gold;
+    }
+
+    public String getTelphone() {
+        return telphone;
+    }
+
+    public void setTelphone(String telphone) {
+        this.telphone = telphone;
+    }
+
+    public int getBan() {
+        return ban;
+    }
+
+    public void setBan(int ban) {
+        this.ban = ban;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.lcdemo.modular.backend.model;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.activerecord.Model;
@@ -13,7 +14,7 @@ import java.util.Map;
  * <p>
  * </p>
  *
- * @author itspeed
+ * @author lc
  * @since 2018-03-05
  */
 public class Admin extends Model<Admin> {
@@ -30,6 +31,21 @@ public class Admin extends Model<Admin> {
      * 密码
      */
     private String password;
+    /**
+     * 创建时间
+     */
+    @TableField("create_time")
+    private String createTime;
+    /**
+     * 修改时间
+     */
+    @TableField("update_time")
+    private String updateTime;
+    /**
+     * 是否是超级管理员 1是 0不是
+     */
+    @TableField("is_super")
+    private Integer isSuper;
 
 
     public Integer getId() {
@@ -56,6 +72,30 @@ public class Admin extends Model<Admin> {
         this.password = password;
     }
 
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Integer getIsSuper() {
+        return isSuper;
+    }
+
+    public void setIsSuper(Integer isSuper) {
+        this.isSuper = isSuper;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -67,6 +107,9 @@ public class Admin extends Model<Admin> {
                 ", id=" + id +
                 ", username=" + username +
                 ", password=" + password +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", isSuper=" + isSuper +
                 "}";
     }
 
@@ -75,6 +118,9 @@ public class Admin extends Model<Admin> {
         map.put("id", id);
         map.put("username", username);
         map.put("password", password);
+        map.put("createTime", createTime);
+        map.put("updateTime", updateTime);
+        map.put("isSuper", isSuper);
         return map;
     }
 
@@ -83,6 +129,9 @@ public class Admin extends Model<Admin> {
         map.put("id", id);
         map.put("username", username);
         map.put("password", "您的权限不足");
+        map.put("createTime", createTime);
+        map.put("updateTime", updateTime);
+        map.put("isSuper", isSuper);
         return map;
     }
 }

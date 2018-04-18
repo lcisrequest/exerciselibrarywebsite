@@ -13,4 +13,6 @@ public interface AdminService {
     void deleteAdmin(int adminId,int userId);
 
     Integer getAdminCount(String username);
+
+    void updateAdmin(Admin admin, int userId);
 }

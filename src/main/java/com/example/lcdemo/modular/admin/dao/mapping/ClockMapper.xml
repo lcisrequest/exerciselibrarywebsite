@@ -11,5 +11,7 @@
         <result column="gold" property="gold" />
         <result column="content" property="content" />
     </resultMap>
-
+    <select id="selectTodayClockNum" resultType="java.lang.Integer">
+        SELECT count(*) FROM clock  WHERE create_time >= #{startTime} AND create_time &lt;= #{endTime}
+    </select>
 </mapper>
