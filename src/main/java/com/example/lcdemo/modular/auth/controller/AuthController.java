@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
@@ -47,14 +48,17 @@ public class AuthController {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody UserInfo userInfo) {
         String username = userInfo.getUsername();
         String password = userInfo.getPassword();
-        if(username==null||"".equals(username)||password==null||"".equals(password)){
+        if (username == null || "".equals(username) || password == null || "".equals(password)) {
             throw new LcException(LcExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
         }
         UserInfo user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
         user = userInfoMapper.selectOne(user);
-        if(user!=null){
+        if (user.getBan() == 1) {
+            throw new LcException(LcExceptionEnum.USER_IS_BAN);
+        }
+        if (user != null) {
             System.out.println("登陆成功");
         }
         if (null != user) {
@@ -70,6 +74,7 @@ public class AuthController {
 
     /**
      * 管理员登录
+     *
      * @param admin
      * @return
      */
@@ -77,11 +82,11 @@ public class AuthController {
     public ResponseEntity<?> adminLogin(@RequestBody Admin admin) {
         String username = admin.getUsername();
         String password = admin.getPassword();
-        if(username==null||"".equals(username)||password==null||"".equals(password)){
+        if (username == null || "".equals(username) || password == null || "".equals(password)) {
             throw new LcException(LcExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
         }
         admin = adminMapper.selectOne(admin);
-        if (admin!=null) {
+        if (admin != null) {
             final String adminrandomKey = jwtTokenUtil.getRandomKey();
             final Map<String, Object> tokenMapper = jwtTokenUtil.generateToken(admin.getId() + "", adminrandomKey);
             return ResponseEntity.ok(com.itspeed.higu.base.tips.SuccessTip.create(new AuthResponse(tokenMapper.get("token").toString(), adminrandomKey), null));

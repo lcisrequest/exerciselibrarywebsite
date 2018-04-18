@@ -39,6 +39,9 @@ public class MessageServiceImpl implements MessageService {
         if (userInfo == null) {                           //判断该手机号码是否注册过用户，若没有注册过，则不能找回
             throw new LcException(LcExceptionEnum.TEL_USER_NOT_EXIST);
         }
+        if (userInfo.getBan() == 1) {   //判断该用户是否被禁用
+            throw new LcException(LcExceptionEnum.USER_IS_BAN);
+        }
         String varCodeStr = MessageUtil.sendMessage(telphone);  //发送验证码
         if (varCodeStr == null) {
             throw new LcException(LcExceptionEnum.VARCODE_ERROR);

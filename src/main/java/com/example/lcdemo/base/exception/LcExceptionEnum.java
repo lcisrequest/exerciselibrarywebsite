@@ -52,6 +52,7 @@ public enum LcExceptionEnum {
     TEL_USER_IS_EXIST(201, "该手机号码已经注册"),
     PASSWORD_NOT_VALIDATE(201, "密码错误,请重新输入"),
     USERNAME_OR_PASSWORD_ERROR(201, "用户名或密码错误"),
+    USER_IS_BAN(201,"该用户已被禁用"),
     OTHER_ERROR(201, "您的网络有问题,请稍后重试"),
     PARAM_ERROR(201, "参数错误"),
     TEST_IS_NOT_EXIST(201, "该测试不存在"),
