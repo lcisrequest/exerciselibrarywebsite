@@ -199,7 +199,7 @@ public class UserController extends BaseController {
      */
     @RequestMapping("/sendMessageRegister")
     public ResponseEntity sendRegisterMessage(String telphone) {
-        messageService.sendMessage(telphone);
+        messageService.sendRegisterMessage(telphone);
         return ResponseEntity.ok(SuccessTip.create("请求成功"));
     }
 

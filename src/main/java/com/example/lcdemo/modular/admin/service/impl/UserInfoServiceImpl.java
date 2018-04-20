@@ -223,6 +223,9 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfo userinfo = new UserInfo();
         userinfo.setTelphone(telphone);
         UserInfo user = userInfoMapper.selectOne(userinfo);
+        if(user==null){
+            throw new LcException(LcExceptionEnum.TEL_USER_NOT_EXIST);
+        }
         user.setPassword(newPassword);
         userInfoMapper.updateById(user);    //更改密码
     }
