@@ -24,7 +24,7 @@ import java.util.Map;
  *         5. nbf -- 在此时间段之前,不会被处理
  *         6. iat -- jwt发布时间
  *         7. jti -- jwt唯一标识,防止重复使用
- * Created by tsy
+ *
  */
 @Component
 public class JwtTokenUtil {

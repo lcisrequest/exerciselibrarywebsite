@@ -81,7 +81,11 @@ public class BackendUserController extends BaseController {
     @RequestMapping("/getAllUser")
     public ResponseEntity getAllUser(int page, int limit) {
         List<UserInfo> list = backendUserService.getAllUser(page, limit);
-        return ResponseEntity.ok(SuccessTip.create(list, "请求成功"));
+        int count = backendUserService.getAllUserCount();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("list", list);
+        jsonObject.put("count", count);
+        return ResponseEntity.ok(SuccessTip.create(jsonObject, "请求成功"));
     }
 
 

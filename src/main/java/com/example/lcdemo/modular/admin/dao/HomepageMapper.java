@@ -12,7 +12,7 @@ import java.util.List;
  *  Mapper 接口
  * </p>
  *
- * @author itspeed
+ * @author lc
  * @since 2018-03-09
  */
 @Repository

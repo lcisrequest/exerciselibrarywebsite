@@ -47,7 +47,7 @@ public class MessageUtil {
         System.out.println(tpl);
         Map params = new HashMap();//请求参数
         params.put("mobile", tel);//接收短信的手机号码
-        params.put("tpl_id", "67627");//短信模板ID，请参考个人中心短信模板设置
+        params.put("tpl_id", "74737");//短信模板ID，请参考个人中心短信模板设置
         params.put("tpl_value", tpl);//变量名和变量值对。如果你的变量名或者变量值中带有#&=中的任意一个特殊符号，请先分别进行urlencode编码后再传递，<a href="http://www.juhe.cn/news/index/id/50" target="_blank">详细说明></a>
         params.put("key", "fc7a7987490e444f2e05dcad5d6561af");//应用APPKEY(应用详细页查询)
         params.put("dtype", "json");//返回数据的格式,xml或json，默认json

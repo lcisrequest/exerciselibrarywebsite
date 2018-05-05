@@ -34,4 +34,6 @@ public interface BackendUserService {
     JSONArray getAllMonthClockNum();
 
     JSONArray getAllMonthForumsNum();
+
+    Integer getAllUserCount();
 }

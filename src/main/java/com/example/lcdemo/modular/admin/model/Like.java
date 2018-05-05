@@ -5,14 +5,15 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+
 import java.io.Serializable;
 
 /**
  * <p>
- * 
+ * <p>
  * </p>
  *
- * @author itspeed
+ * @author lc
  * @since 2018-03-14
  */
 @TableName("user_like")
@@ -91,11 +92,11 @@ public class Like extends Model<Like> {
     @Override
     public String toString() {
         return "UserLike{" +
-        ", id=" + id +
-        ", userId=" + userId +
-        ", commentId=" + commentId +
-        ", forumsId=" + forumsId +
-        ", type=" + type +
-        "}";
+                ", id=" + id +
+                ", userId=" + userId +
+                ", commentId=" + commentId +
+                ", forumsId=" + forumsId +
+                ", type=" + type +
+                "}";
     }
 }

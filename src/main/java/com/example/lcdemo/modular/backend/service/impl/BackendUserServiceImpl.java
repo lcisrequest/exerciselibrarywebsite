@@ -133,6 +133,16 @@ public class BackendUserServiceImpl implements BackendUserService {
     }
 
     /**
+     * 获取所有用人数
+     * @return
+     */
+    @Override
+    public Integer getAllUserCount(){
+        Wrapper<UserInfo> wrapper = new EntityWrapper<>();
+        return userInfoMapper.selectCount(wrapper);
+    }
+
+    /**
      * 获取三十天前到今天的所有日期
      */
     @Override

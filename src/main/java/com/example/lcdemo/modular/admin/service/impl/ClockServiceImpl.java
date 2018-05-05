@@ -35,12 +35,12 @@ public class ClockServiceImpl implements ClockService {
      */
     @Override
     public String clockUser(String content, int userId) {
-        String today = DateUtil.getDay();
+        String today = DateUtil.getTime();
         Clock clock = new Clock();
         clock.setCreateTime(today);
         clock.setUserId(userId);
-        Clock c = clockMapper.selectOne(clock);
-        if (c != null) {    //判断今天是否已经打过卡了
+        boolean isClokc = this.todayIsClock(userId);
+        if (isClokc) {    //判断今天是否已经打过卡了
             throw new LcException(LcExceptionEnum.TODAY_IS_HAVE_CLOCK);
         }
         clock.setContent(content);
@@ -70,14 +70,13 @@ public class ClockServiceImpl implements ClockService {
     @Override
     public boolean todayIsClock(int userId) {
         String today = DateUtil.getDay();
-        Clock clock = new Clock();
-        clock.setCreateTime(today);
-        clock.setUserId(userId);
-        Clock c = clockMapper.selectOne(clock);
-        if (c == null) {
-            return false;
-        } else {
+        String startTime = today + " 00:00:00";
+        String endTime = today + " 23:59:59";
+        int count = clockMapper.selectTodayClockNum(startTime, endTime);
+        if (count > 0) {
             return true;
+        } else {
+            return false;
         }
     }
 

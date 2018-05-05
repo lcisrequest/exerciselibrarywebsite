@@ -15,7 +15,7 @@
         SELECT id,info_type,img,title,test_id FROM homepage WHERE info_type LIKE  #{infoType} AND title LIKE #{title}  LIMIT #{offset},#{limit}
     </select>
 
-    <select id="selectTitleHomePageCount">
+    <select id="selectTitleHomePageCount" resultType="java.lang.Integer">
         SELECT COUNT(*)   FROM homepage WHERE info_type LIKE  #{infoType} AND title LIKE #{title}
     </select>
 </mapper>
