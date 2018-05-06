@@ -72,7 +72,7 @@ public class ClockServiceImpl implements ClockService {
         String today = DateUtil.getDay();
         String startTime = today + " 00:00:00";
         String endTime = today + " 23:59:59";
-        int count = clockMapper.selectTodayClockNum(startTime, endTime);
+        int count = clockMapper.selectTodaymIsClock(startTime, endTime, userId);
         if (count > 0) {
             return true;
         } else {

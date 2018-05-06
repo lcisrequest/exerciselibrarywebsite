@@ -60,6 +60,8 @@ public class AuthController {
         }
         if (user != null) {
             System.out.println("登陆成功");
+        }else{
+            throw new LcException(LcExceptionEnum.ERR_PASSWORD);
         }
         if (null != user) {
             final String randomKey = jwtTokenUtil.getRandomKey();

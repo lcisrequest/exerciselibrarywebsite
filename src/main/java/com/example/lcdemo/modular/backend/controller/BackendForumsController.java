@@ -59,4 +59,17 @@ public class BackendForumsController extends BaseController {
         backendForumsService.notTopForums(forumsId);
         return ResponseEntity.ok(SuccessTip.create("取消置顶成功"));
     }
+
+    /**
+     * 删除讨论
+     *
+     * @param forumsId
+     * @return
+     */
+    @RequestMapping("/deleteForums")
+    public ResponseEntity deleteForums(int forumsId) {
+        backendForumsService.deleteForums(forumsId);
+        return ResponseEntity.ok(SuccessTip.create("删除成功"));
+    }
+
 }

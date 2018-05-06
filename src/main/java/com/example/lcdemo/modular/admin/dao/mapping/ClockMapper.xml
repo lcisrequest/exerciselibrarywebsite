@@ -14,4 +14,7 @@
     <select id="selectTodayClockNum" resultType="java.lang.Integer">
         SELECT count(*) FROM clock  WHERE create_time >= #{startTime} AND create_time &lt;= #{endTime}
     </select>
+    <select id="selectTodaymIsClock" resultType="java.lang.Integer">
+        SELECT count(*) FROM clock  WHERE create_time >= #{startTime} AND create_time &lt;= #{endTime} AND user_id = #{userId}
+    </select>
 </mapper>

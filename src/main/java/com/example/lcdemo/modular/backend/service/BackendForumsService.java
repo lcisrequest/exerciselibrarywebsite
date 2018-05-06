@@ -12,4 +12,6 @@ public interface BackendForumsService {
     void notTopForums(int forumsId);
 
     Integer getAllForumsNum();
+
+    void deleteForums(int forumsId);
 }

@@ -95,4 +95,18 @@ public class BackendForumsServiceImpl implements BackendForumsService {
         forumsMapper.updateById(forums);
     }
 
+
+    /**
+     * 删除讨论
+     * @param forumsId
+     */
+    @Override
+    public void deleteForums(int forumsId) {
+        Forums forums = forumsMapper.selectById(forumsId);
+        if (forums == null) {
+            throw new LcException(LcExceptionEnum.PARAM_ERROR);
+        }
+        forumsMapper.deleteById(forumsId);
+    }
+
 }
