@@ -64,6 +64,10 @@ public class UserInfoServiceImpl implements UserInfoService {
         user.setNickname(username);
         user.setCreateTime(DateUtil.getTime());
         user.setLastLoginTime(DateUtil.getTime());
+        user.setGold(0);
+        user.setLevel(1);
+        user.setXp(0);
+        user.setBan(0);
         return userInfoMapper.insert(user) > 0; //新增用户
     }
 
@@ -223,7 +227,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfo userinfo = new UserInfo();
         userinfo.setTelphone(telphone);
         UserInfo user = userInfoMapper.selectOne(userinfo);
-        if(user==null){
+        if (user == null) {
             throw new LcException(LcExceptionEnum.TEL_USER_NOT_EXIST);
         }
         user.setPassword(newPassword);

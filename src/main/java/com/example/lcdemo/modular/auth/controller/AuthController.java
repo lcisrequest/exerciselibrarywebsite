@@ -36,11 +36,11 @@ import java.util.Map;
 @RestController
 public class AuthController {
     @Autowired
-    private JwtProperties jwtProperties;
+    JwtProperties jwtProperties;
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    JwtTokenUtil jwtTokenUtil;
     @Autowired
-    private UserInfoMapper userInfoMapper;
+    UserInfoMapper userInfoMapper;
     @Autowired
     AdminMapper adminMapper;
 
@@ -51,24 +51,21 @@ public class AuthController {
         if (username == null || "".equals(username) || password == null || "".equals(password)) {
             throw new LcException(LcExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
         }
+        int ban = userInfoMapper.selectUserIsBan(username);
+        if (ban == 1) {
+            throw new LcException(LcExceptionEnum.USER_IS_BAN);
+        }
         UserInfo user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
         user = userInfoMapper.selectOne(user);
-        if (user.getBan() == 1) {
-            throw new LcException(LcExceptionEnum.USER_IS_BAN);
-        }
         if (user != null) {
             System.out.println("登陆成功");
-        }else{
-            throw new LcException(LcExceptionEnum.ERR_PASSWORD);
-        }
-        if (null != user) {
             final String randomKey = jwtTokenUtil.getRandomKey();
             //生成token
             final Map<String, Object> tokenMapper = jwtTokenUtil.generateToken(user.getId() + "", randomKey);
 
-            return ResponseEntity.ok(com.itspeed.higu.base.tips.SuccessTip.create(new AuthResponse(tokenMapper.get("token").toString(), randomKey), null));
+            return ResponseEntity.ok(SuccessTip.create(new AuthResponse(tokenMapper.get("token").toString(), randomKey), null));
         } else {
             throw new LcException(LcExceptionEnum.USERNAME_OR_PASSWORD_ERROR);
         }
@@ -97,15 +94,17 @@ public class AuthController {
         }
     }
 
-    @RequestMapping(value = "/auth/logout/v1")
-    public ResponseEntity<?> logout() {
-        Claims tokenClaims = jwtTokenUtil.getClaimFromToken(HttpKit.getRequest().getHeader(jwtProperties.getHeader()).substring(7));
+    @RequestMapping(value = "/user/logout/v1")
+    public ResponseEntity logout() {
+        System.out.println("3");
+        Claims tokenClaims = jwtTokenUtil.getClaimFromToken(HttpKit.getRequest().getHeader(jwtProperties.getHeader()).substring(9).replace("}", ""));
+        System.out.println("3");
         return ResponseEntity.ok(SuccessTip.create("注销成功"));
     }
 
     @RequestMapping(value = "/admin/logout/v1")
-    public ResponseEntity<?> logoutAdmin() {
-        Claims tokenClaims = jwtTokenUtil.getClaimFromToken(HttpKit.getRequest().getHeader(jwtProperties.getHeader()).substring(7));
+    public ResponseEntity logoutAdmin() {
+        Claims tokenClaims = jwtTokenUtil.getClaimFromToken(HttpKit.getRequest().getHeader(jwtProperties.getHeader()).substring(9).replace("}", ""));
         return ResponseEntity.ok(SuccessTip.create("注销成功"));
     }
 }

@@ -20,5 +20,7 @@
     <select id="selectRegisterNum"  resultType="java.lang.Integer">
         SELECT count(*) FROM user_info  WHERE create_time >= #{startTime} AND create_time &lt;= #{endTime} ;
     </select>
-
+    <select id="selectUserIsBan" resultType="java.lang.Integer">
+        SELECT ban from user_info WHERE username = #{username};
+    </select>
 </mapper>

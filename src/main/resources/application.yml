@@ -68,7 +68,7 @@ jwt:
   auth-path: user/login/v1         #认证请求的路径
   admin-auth-path: admin/login/v1  #后台管理登录请求路径
   md5-key: randomKey      #md5加密混淆key
-  url-scheme: /user/register,/user/sendMessageFountPassword,/user/sendMessageRegister,/user/judgeVarCode,/user/
+  url-scheme: /user/register,/user/sendMessageFountPassword,/user/sendMessageRegister,/user/judgeVarCode,
   #url白名单
 
 logging:

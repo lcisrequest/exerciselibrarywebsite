@@ -17,4 +17,6 @@ import org.springframework.stereotype.Repository;
 public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
     Integer selectRegisterNum(@Param("startTime") String startTime, @Param("endTime") String endTime);
+
+    Integer selectUserIsBan(@Param("username") String username);
 }
