@@ -18,5 +18,5 @@ public interface ClockMapper extends BaseMapper<Clock> {
 
     Integer selectTodayClockNum(@Param("startTime") String startTime, @Param("endTime") String endTime);
 
-    Integer selectTodaymIsClock(@Param("startTime") String startTime, @Param("endTime") String endTime,int userId);
+    Integer selectTodaymIsClock(@Param("startTime") String startTime, @Param("endTime") String endTime,@Param("userId") Integer userId);
 }

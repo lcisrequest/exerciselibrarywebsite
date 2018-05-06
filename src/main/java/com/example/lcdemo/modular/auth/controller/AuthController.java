@@ -36,11 +36,11 @@ import java.util.Map;
 @RestController
 public class AuthController {
     @Autowired
-    JwtProperties jwtProperties;
+    private JwtProperties jwtProperties;
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    private JwtTokenUtil jwtTokenUtil;
     @Autowired
-    UserInfoMapper userInfoMapper;
+    private UserInfoMapper userInfoMapper;
     @Autowired
     AdminMapper adminMapper;
 
@@ -96,15 +96,13 @@ public class AuthController {
 
     @RequestMapping(value = "/auth/logout/v1")
     public ResponseEntity<?> logout() {
-        System.out.println("3");
-        Claims tokenClaims = jwtTokenUtil.getClaimFromToken(HttpKit.getRequest().getHeader(jwtProperties.getHeader()).substring(9).replace("}", ""));
-        System.out.println("3");
+        Claims tokenClaims = jwtTokenUtil.getClaimFromToken(HttpKit.getRequest().getHeader(jwtProperties.getHeader()).substring(7));
         return ResponseEntity.ok(SuccessTip.create("注销成功"));
     }
 
     @RequestMapping(value = "/admin/logout/v1")
     public ResponseEntity<?> logoutAdmin() {
-        Claims tokenClaims = jwtTokenUtil.getClaimFromToken(HttpKit.getRequest().getHeader(jwtProperties.getHeader()).substring(9).replace("}", ""));
+        Claims tokenClaims = jwtTokenUtil.getClaimFromToken(HttpKit.getRequest().getHeader(jwtProperties.getHeader()).substring(7));
         return ResponseEntity.ok(SuccessTip.create("注销成功"));
     }
 }

@@ -93,6 +93,7 @@ public class AuthFilter extends OncePerRequestFilter {
                 }
             } catch (JwtException e) {
                 //有异常就是token解析失败
+                System.out.println(e);
                 RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
                 return;
             }

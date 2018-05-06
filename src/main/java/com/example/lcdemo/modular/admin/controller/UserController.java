@@ -42,13 +42,6 @@ public class UserController extends BaseController {
     @Autowired
     ForumsService forumsService;
 
-    @RequestMapping(value = "newTest")
-    public ResponseEntity newTest() {
-        int num = userTestService.getTodayMySubjectNum(1);
-        return ResponseEntity.ok(SuccessTip.create(num, "请求成功"));
-    }
-
-
     /**
      * 用户注册
      *
