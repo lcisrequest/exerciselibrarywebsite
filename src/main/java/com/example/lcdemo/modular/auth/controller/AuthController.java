@@ -94,8 +94,8 @@ public class AuthController {
         }
     }
 
-    @RequestMapping(value = "/user/logout/v1")
-    public ResponseEntity logout() {
+    @RequestMapping(value = "/auth/logout/v1")
+    public ResponseEntity<?> logout() {
         System.out.println("3");
         Claims tokenClaims = jwtTokenUtil.getClaimFromToken(HttpKit.getRequest().getHeader(jwtProperties.getHeader()).substring(9).replace("}", ""));
         System.out.println("3");
@@ -103,7 +103,7 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/admin/logout/v1")
-    public ResponseEntity logoutAdmin() {
+    public ResponseEntity<?> logoutAdmin() {
         Claims tokenClaims = jwtTokenUtil.getClaimFromToken(HttpKit.getRequest().getHeader(jwtProperties.getHeader()).substring(9).replace("}", ""));
         return ResponseEntity.ok(SuccessTip.create("注销成功"));
     }
