@@ -12,5 +12,4 @@ public class ErrorTip extends Tip {
         this.message = message;
     }
 
-
 }

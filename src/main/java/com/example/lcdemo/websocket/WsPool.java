@@ -1,4 +1,4 @@
-package com.example.lcdemo.modular.admin.websocket;
+package com.example.lcdemo.websocket;
 
 import java.util.ArrayList;
 import java.util.Collection;

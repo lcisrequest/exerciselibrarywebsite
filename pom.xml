@@ -94,6 +94,8 @@
 			<scope>compile</scope>
 		</dependency>
 
+
+
 		<!-- https://mvnrepository.com/artifact/com.aliyun/aliyun-java-sdk-core -->
 		<dependency>
 			<groupId>com.aliyun</groupId>
@@ -277,6 +279,13 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.7</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.imagej/ij     DICOM-->
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>ij</artifactId>
+			<version>1.52e</version>
+		</dependency>
+
 	</dependencies>
 
 		<!-- 缓存 -->

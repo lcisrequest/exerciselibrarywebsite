@@ -48,7 +48,7 @@ public class EntityGenerator {
         dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("root");
-        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/lc??characterEncoding=utf8");
+        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/yaerlou??characterEncoding=utf8");
         mpg.setDataSource(dsc);
 
         // 策略配置
@@ -57,7 +57,7 @@ public class EntityGenerator {
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
 //        strategy.setInclude(new String[]{"strategy_config"});//数据库表名
 //        strategy.setInclude(new String[]{"admin_role"});//数据库表名
-        strategy.setInclude(new String[]{"admin"});
+        strategy.setInclude(new String[]{"user"});
         mpg.setStrategy(strategy);
 
         // 包配置

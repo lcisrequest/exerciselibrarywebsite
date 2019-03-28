@@ -2,7 +2,6 @@ package com.example.lcdemo.base.exception;
 
 /**
  * 业务异常的封装
- * Created by tsy
  */
 public class LcException extends RuntimeException {
     //友好提示的code码

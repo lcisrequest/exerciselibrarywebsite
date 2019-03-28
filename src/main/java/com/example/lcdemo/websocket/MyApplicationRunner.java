@@ -1,10 +1,9 @@
-package com.example.lcdemo.modular.admin.websocket;
+package com.example.lcdemo.websocket;
 
 
 import org.java_websocket.WebSocketImpl;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 

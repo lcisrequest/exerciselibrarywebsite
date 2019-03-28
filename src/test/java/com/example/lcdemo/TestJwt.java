@@ -7,8 +7,7 @@ import com.example.lcdemo.modular.auth.security.impl.Base64SecurityAction;
 import io.jsonwebtoken.Jwts;
 import org.junit.Test;
 import test.TestObject;
-/**
- * Created by tsy
+/*
  * 头文件 ：
  * Authorization : Bearer {token}
  * 加密过程

@@ -1,8 +1,9 @@
 package com.example.lcdemo.base.controller;
 
+import com.example.lcdemo.base.support.HttpKit;
 import com.example.lcdemo.config.properties.JwtProperties;
 import com.example.lcdemo.modular.auth.util.JwtTokenUtil;
-import com.itspeed.higu.base.support.HttpKit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 

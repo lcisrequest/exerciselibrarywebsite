@@ -11,7 +11,7 @@ import java.io.Serializable;
  * 
  * </p>
  *
- * @author itspeed
+ * @author lc
  * @since 2018-03-15
  */
 public class Interest extends Model<Interest> {
